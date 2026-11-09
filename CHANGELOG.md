@@ -3,6 +3,12 @@
 All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+- Minimum Python is now 3.10 (3.9 is end-of-life and unavailable on current CI runners); CI tests 3.10–3.14.
+- CI actions updated to their Node 24 releases.
+
 ## [1.0.0] - 2026-11-08
 
 ### Added

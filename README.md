@@ -9,7 +9,7 @@
 Ping, trace, scan, capture, measure and inspect — from a fast local web UI instead of a dozen terminal windows.
 
 [![CI](https://github.com/randynorthrup/netdeck/actions/workflows/ci.yml/badge.svg)](https://github.com/randynorthrup/netdeck/actions/workflows/ci.yml)
-![Python](https://img.shields.io/badge/python-3.9%2B-3776ab)
+![Python](https://img.shields.io/badge/python-3.10%2B-3776ab)
 ![Dependencies](https://img.shields.io/badge/dependencies-none-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Linux-informational)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
@@ -48,7 +48,7 @@ Linux already has world-class network tools — `mtr`, `nmap`, `tcpdump`, `dig`,
 
 ## Install
 
-**Requirements:** Linux, Python 3.9+. Tools are optional — NetDeck shows what's missing and the exact command to install it.
+**Requirements:** Linux, Python 3.10+. Tools are optional — NetDeck shows what's missing and the exact command to install it.
 
 ### One-liner
 

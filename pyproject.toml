@@ -9,7 +9,7 @@ description = "A polished local web dashboard that brings open-source network tr
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 authors = [{ name = "Randy Northrup" }]
 keywords = ["network", "troubleshooting", "dashboard", "nmap", "tcpdump", "mtr", "iperf3", "diagnostics"]
 classifiers = [
@@ -47,7 +47,7 @@ netdeck = ["static/*"]
 
 [tool.ruff]
 line-length = 120
-target-version = "py39"
+target-version = "py310"
 src = ["src", "tests"]
 
 [tool.ruff.lint]
@@ -56,7 +56,7 @@ ignore = [
   "S603",   # subprocess without shell: that is exactly the safe pattern we use
   "S607",   # partial executable paths are resolved through which() before exec
   "S104",   # binding to all interfaces is gated behind --allow-remote
-  "UP006", "UP007", "UP035", "UP045",  # keep typing.List/Optional for Python 3.9 support
+  "UP006", "UP007", "UP035", "UP045",  # typing.List/Optional kept for consistency across modules
   "RUF005",  # argv lists read best as explicit concatenation
   "RUF001", "RUF003",  # intentional unicode glyphs (✓ ✗ …) in user-facing text
 ]

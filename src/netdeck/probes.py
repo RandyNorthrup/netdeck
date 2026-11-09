@@ -52,7 +52,7 @@ def tcp_check(p: Dict, emit: Emit, stop) -> int:
             ms = (time.monotonic() - start) * 1000
             ok_times.append(ms)
             emit(f"  #{i:<3} ✓ open      {ms:8.2f} ms")
-        except socket.timeout:
+        except TimeoutError:
             emit(f"  #{i:<3} ✗ timeout   (no answer in {timeout}s — filtered by a firewall?)")
         except ConnectionRefusedError:
             emit(f"  #{i:<3} ✗ refused   (host reachable, nothing listening on {port})")

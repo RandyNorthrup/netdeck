@@ -10,7 +10,7 @@ set -euo pipefail
 
 REPO_URL="${NETDECK_REPO:-https://github.com/randynorthrup/netdeck.git}"
 REF="${NETDECK_REF:-main}"
-MIN_PY="3.9"
+MIN_PY="3.10"
 WITH_TOOLS=0
 SERVICE=0
 SYSTEM=0
@@ -41,7 +41,7 @@ done
 # ── Python ──────────────────────────────────────────────────────────────────
 PY="$(command -v python3 || true)"
 [ -n "$PY" ] || die "python3 is required (>= $MIN_PY). Install it with your package manager first."
-"$PY" -c "import sys; sys.exit(0 if sys.version_info >= (3, 9) else 1)" \
+"$PY" -c "import sys; sys.exit(0 if sys.version_info >= (3, 10) else 1)" \
   || die "Python >= $MIN_PY is required; found $("$PY" -V 2>&1)."
 "$PY" -c "import venv, ensurepip" 2>/dev/null \
   || die "Python's venv module is missing. On Debian/Ubuntu: sudo apt install python3-venv"

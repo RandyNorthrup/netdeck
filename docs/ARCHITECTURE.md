@@ -30,7 +30,7 @@
 
 ## Why no framework?
 
-Zero runtime dependencies means NetDeck installs on any distribution with Python 3.9+, works offline, and has
+Zero runtime dependencies means NetDeck installs on any distribution with Python 3.10+, works offline, and has
 a tiny supply-chain surface for a tool that can run privileged commands. `ThreadingHTTPServer` + SSE is ample
 for a single local user.
 
