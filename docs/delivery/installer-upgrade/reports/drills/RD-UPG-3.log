@@ -1,0 +1,41 @@
+# drill RD-UPG-3: scripts/install.sh
+mutation: 'if not exe.startswith(sys.argv[1]):\n' -> 'if False:\n'
+result: PASS  observed: 'foreign NetDeck was stopped'
+
+## baseline (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 19.82s
+
+
+## mutated (disposable copy)
+exit 1
+F                                                                        [100%]
+=================================== FAILURES ===================================
+______________ test_upgrade_leaves_a_netdeck_from_elsewhere_alone ______________
+
+clean = {'NETDECK_TEST_INSTALL': '1', 'SHELL': '/bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', ...}
+
+    def test_upgrade_leaves_a_netdeck_from_elsewhere_alone(clean):
+        env = clean
+        source = start_detached(env, [sys.executable, "-m", "netdeck", "serve", "--no-browser"],
+                                {"PYTHONPATH": str(REPO / "src")})
+        result = install(env)
+        assert result.returncode == 0, result.stdout + result.stderr
+>       assert alive(source), "foreign NetDeck was stopped"
+E       AssertionError: foreign NetDeck was stopped
+E       assert False
+E        +  where False = alive(71064)
+
+tests/test_install.py:163: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_install.py::test_upgrade_leaves_a_netdeck_from_elsewhere_alone
+1 failed in 21.05s
+
+
+
+## restored (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 19.52s
+

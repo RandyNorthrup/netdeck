@@ -72,6 +72,47 @@ else
   ICON_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/icons/hicolor/scalable/apps"
 fi
 
+# ── Stop a running NetDeck from this installation before replacing its files ──
+# A running server keeps its old code in memory but reads the web UI from disk, so upgrading underneath it
+# would serve pages its code does not support. NetDeck run from elsewhere (a source tree, another install)
+# is left alone; a systemd-managed NetDeck is stopped and started through systemd.
+installed_pid() {
+  [ -x "$PREFIX/venv/bin/python" ] || return 1
+  # The installed copy knows where its instance file lives; reuse it rather than re-implementing that here.
+  "$PREFIX/venv/bin/python" - "$PREFIX/venv/" 2>/dev/null <<'PY'
+import sys
+from netdeck.cli import read_instance
+
+inst = read_instance()
+if not inst:
+    sys.exit(1)
+pid = int(inst["pid"])
+with open(f"/proc/{pid}/cmdline", "rb") as fh:
+    exe = fh.read().split(b"\0")[0].decode()
+if not exe.startswith(sys.argv[1]):
+    sys.exit(1)  # running from somewhere else
+print(pid)
+PY
+}
+
+RESTART=""
+if command -v systemctl >/dev/null && systemctl --user is-active --quiet netdeck.service 2>/dev/null; then
+  info "Stopping the NetDeck service for the upgrade…"
+  systemctl --user stop netdeck.service
+  RESTART=service
+elif OLD_PID="$(installed_pid)"; then
+  info "Stopping the running NetDeck (pid $OLD_PID) for the upgrade…"
+  "$PREFIX/venv/bin/netdeck" stop >/dev/null 2>&1 || true
+  for _ in $(seq 1 100); do  # older versions' `netdeck stop` does not wait, so wait here
+    kill -0 "$OLD_PID" 2>/dev/null || break
+    sleep 0.2
+  done
+  if kill -0 "$OLD_PID" 2>/dev/null; then
+    die "NetDeck (pid $OLD_PID) did not stop. Close it (netdeck stop) and run the installer again."
+  fi
+  RESTART=instance
+fi
+
 # ── Install into an isolated virtualenv ─────────────────────────────────────
 info "Installing NetDeck into $PREFIX"
 $SUDO mkdir -p "$PREFIX" "$BIN_DIR" "$APP_DIR" "$ICON_DIR"
@@ -134,6 +175,33 @@ if [ "$SERVICE" = 1 ]; then
     ok "NetDeck starts automatically at login (systemctl --user status netdeck)"
   else
     ok "User unit installed; each user can enable it with: systemctl --user enable --now netdeck"
+  fi
+fi
+
+# ── Restart what was running before the upgrade ──────────────────────────────
+if [ "$RESTART" = service ]; then
+  if systemctl --user start netdeck.service; then
+    ok "Restarted the NetDeck service"
+  else
+    warn "Could not restart the NetDeck service; check: systemctl --user status netdeck"
+  fi
+elif [ "$RESTART" = instance ]; then
+  START_ARGS=()
+  [ -n "${WAYLAND_DISPLAY:-}${DISPLAY:-}" ] || START_ARGS=(--no-browser)  # never open a console browser
+  if command -v setsid >/dev/null; then
+    setsid -f "$BIN_DIR/netdeck" ${START_ARGS[@]+"${START_ARGS[@]}"} >/dev/null 2>&1 </dev/null
+  else
+    nohup "$BIN_DIR/netdeck" ${START_ARGS[@]+"${START_ARGS[@]}"} >/dev/null 2>&1 </dev/null &
+  fi
+  STARTED=""
+  for _ in $(seq 1 50); do
+    if "$BIN_DIR/netdeck" url >/dev/null 2>&1; then STARTED=1; break; fi
+    sleep 0.2
+  done
+  if [ -n "$STARTED" ]; then
+    ok "Restarted NetDeck with the new version"
+  else
+    warn "NetDeck did not restart by itself; start it with: netdeck"
   fi
 fi
 

@@ -1,0 +1,40 @@
+# drill RD-UPG-1: scripts/install.sh
+mutation: 'elif OLD_PID="$(installed_pid)"; then\n' -> 'elif false; then\n'
+result: PASS  observed: 'old NetDeck still running after upgrade'
+
+## baseline (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 21.28s
+
+
+## mutated (disposable copy)
+exit 1
+F                                                                        [100%]
+=================================== FAILURES ===================================
+______________ test_upgrade_restarts_a_running_installed_netdeck _______________
+
+clean = {'NETDECK_TEST_INSTALL': '1', 'SHELL': '/bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', ...}
+
+    def test_upgrade_restarts_a_running_installed_netdeck(clean):
+        env = clean
+        old = start_detached(env, [netdeck_bin(env), "serve", "--no-browser"])
+        result = install(env)
+        assert result.returncode == 0, result.stdout + result.stderr
+>       assert not alive(old), "old NetDeck still running after upgrade"
+E       AssertionError: old NetDeck still running after upgrade
+E       assert not True
+E        +  where True = alive(70216)
+
+tests/test_install.py:140: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_install.py::test_upgrade_restarts_a_running_installed_netdeck
+1 failed in 19.54s
+
+
+
+## restored (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 21.23s
+

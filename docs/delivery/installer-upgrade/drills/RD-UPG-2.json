@@ -1,0 +1,3 @@
+{"id": "RD-UPG-2", "path": "scripts/install.sh",
+ "old": "elif [ \"$RESTART\" = instance ]; then\n", "new": "elif [ \"$RESTART\" != service ]; then\n",
+ "test": ["tests/test_install.py::test_upgrade_with_nothing_running_starts_nothing"], "expect": "installer started NetDeck although none was running"}

@@ -1,0 +1,3 @@
+{"id": "RD-UPG-1b", "path": "scripts/install.sh",
+ "old": "elif [ \"$RESTART\" = instance ]; then\n", "new": "elif [ \"$RESTART\" = never ]; then\n",
+ "test": ["tests/test_install.py::test_upgrade_restarts_a_running_installed_netdeck"], "expect": "no NetDeck running after upgrade"}

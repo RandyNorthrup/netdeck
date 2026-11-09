@@ -1,4 +1,4 @@
-"""Red-drill harness for WORK-EXIT-SHUTDOWN: green -> red (disposable copy) -> restored green.
+"""Red-drill harness for NetDeck delivery plans: green -> red (disposable copy) -> restored green.
 
 usage: python drill.py <drill.json>
 
@@ -19,7 +19,7 @@ import sys
 import tempfile
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
-REPORTS = os.path.join(os.path.dirname(__file__), "reports", "drills")
+REPORTS = None  # set from the drill spec: <plan dir>/reports/drills, next to the spec's drills/ directory
 IGNORE = shutil.ignore_patterns(".git", ".venv", "__pycache__", ".pytest_cache", ".ruff_cache", "reports")
 
 
@@ -35,8 +35,10 @@ def run_tests(root: str, tests: list) -> subprocess.CompletedProcess:
 
 
 def main() -> int:
+    global REPORTS
     with open(sys.argv[1], encoding="utf-8") as fh:
         spec = json.load(fh)
+    REPORTS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(sys.argv[1]))), "reports", "drills")
     target = os.path.join(ROOT, spec["path"])
     before = digest(target)
     log = [f"# drill {spec['id']}: {spec['path']}", f"mutation: {spec['old']!r} -> {spec['new']!r}", ""]

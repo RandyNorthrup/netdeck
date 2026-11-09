@@ -1,0 +1,41 @@
+# drill RD-UPG-4: scripts/install.sh
+mutation: 'if command -v systemctl >/dev/null && systemctl --user is-active --quiet netdeck.service 2>/dev/null; then\n' -> 'if false; then\n'
+result: PASS  observed: 'service was not stopped'
+
+## baseline (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 17.95s
+
+
+## mutated (disposable copy)
+exit 1
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____________ test_upgrade_restarts_the_user_service_through_systemd ____________
+
+clean = {'NETDECK_TEST_INSTALL': '1', 'SHELL': '/bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', ...}
+
+    def test_upgrade_restarts_the_user_service_through_systemd(clean):
+        env = clean
+        pathlib.Path(env["STUB_ACTIVE"]).touch()
+        result = install(env)
+        assert result.returncode == 0, result.stdout + result.stderr
+        log = pathlib.Path(env["STUB_LOG"])
+        calls = log.read_text().splitlines() if log.exists() else []  # no log: systemctl was never called
+>       assert "--user stop netdeck.service" in calls, "service was not stopped"
+E       AssertionError: service was not stopped
+E       assert '--user stop netdeck.service' in []
+
+tests/test_install.py:174: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_install.py::test_upgrade_restarts_the_user_service_through_systemd
+1 failed in 17.86s
+
+
+
+## restored (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 17.90s
+

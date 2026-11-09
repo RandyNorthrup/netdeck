@@ -1,0 +1,31 @@
+{
+ "id": "RD-UPG-3",
+ "ok": true,
+ "log": "docs/delivery/installer-upgrade/reports/drills/RD-UPG-3.log",
+ "baseline_exit": 0,
+ "mutated_exit": 1,
+ "restored_exit": 0,
+ "observed": "foreign NetDeck was stopped",
+ "before": {
+  "path": "scripts/install.sh",
+  "sha256": "3cf8910ff271db4f798ca1d47b3434f6750a4c685697c90f9c6837cb4a3c5725"
+ },
+ "mutated": {
+  "path": "scripts/install.sh",
+  "sha256": "5ff7e5499ae8fbbc6b59f8f00baaace8afd8d24133a17477ed91eaff941b5237"
+ },
+ "after": {
+  "path": "scripts/install.sh",
+  "sha256": "3cf8910ff271db4f798ca1d47b3434f6750a4c685697c90f9c6837cb4a3c5725"
+ },
+ "mutation": "scripts/install.sh: 'if not exe.startswith(sys.argv[1]):\\n' -> 'if False:\\n'",
+ "command": [
+  "/usr/bin/python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests/test_install.py::test_upgrade_leaves_a_netdeck_from_elsewhere_alone"
+ ]
+}

@@ -1,0 +1,3 @@
+{"id": "RD-UPG-3", "path": "scripts/install.sh",
+ "old": "if not exe.startswith(sys.argv[1]):\n", "new": "if False:\n",
+ "test": ["tests/test_install.py::test_upgrade_leaves_a_netdeck_from_elsewhere_alone"], "expect": "foreign NetDeck was stopped"}

@@ -44,6 +44,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - run: pip install pytest
+      - name: Upgrade tests (installer stops and restarts a running NetDeck)
+        run: python -m pytest -v tests/test_install.py
+        env:
+          NETDECK_TEST_INSTALL: "1"
       - name: Install with the user installer
         run: ./scripts/install.sh
       - name: Smoke test

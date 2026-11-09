@@ -1,0 +1,13 @@
+============================= test session starts ==============================
+platform linux -- Python 3.14.9, pytest-9.2.0, pluggy-1.7.0 -- /usr/bin/python3
+rootdir: /home/randy/netdeck
+configfile: pyproject.toml
+plugins: platformdirs-4.14.3
+collecting ... collected 4 items
+
+tests/test_install.py::test_upgrade_restarts_a_running_installed_netdeck PASSED [ 25%]
+tests/test_install.py::test_upgrade_with_nothing_running_starts_nothing PASSED [ 50%]
+tests/test_install.py::test_upgrade_leaves_a_netdeck_from_elsewhere_alone PASSED [ 75%]
+tests/test_install.py::test_upgrade_restarts_the_user_service_through_systemd PASSED [100%]
+
+============================== 4 passed in 43.95s ==============================

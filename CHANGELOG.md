@@ -17,6 +17,9 @@ All notable changes to this project are documented here. The format follows
 - Live output streams end promptly on shutdown with a goodbye event instead of waiting up to 15 s.
 - `netdeck stop` waits for the server to exit and reports failure if it does not, and a stale `instance.json`
   left by a crash is removed.
+- Re-running the installer while NetDeck was running left the old server serving the new web UI (for example,
+  an Exit button its code could not handle). The installer now stops NetDeck from that installation first and
+  starts the new version afterwards, or restarts the systemd user service.
 
 ### Changed
 - Minimum Python is now 3.10 (3.9 is end-of-life and unavailable on current CI runners); CI tests 3.10–3.14.

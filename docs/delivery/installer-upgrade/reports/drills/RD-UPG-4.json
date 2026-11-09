@@ -1,0 +1,31 @@
+{
+ "id": "RD-UPG-4",
+ "ok": true,
+ "log": "docs/delivery/installer-upgrade/reports/drills/RD-UPG-4.log",
+ "baseline_exit": 0,
+ "mutated_exit": 1,
+ "restored_exit": 0,
+ "observed": "service was not stopped",
+ "before": {
+  "path": "scripts/install.sh",
+  "sha256": "3cf8910ff271db4f798ca1d47b3434f6750a4c685697c90f9c6837cb4a3c5725"
+ },
+ "mutated": {
+  "path": "scripts/install.sh",
+  "sha256": "fb648fe0a88278ce36b0a104d31347406ee47e81c00c6de5d133091d9f083589"
+ },
+ "after": {
+  "path": "scripts/install.sh",
+  "sha256": "3cf8910ff271db4f798ca1d47b3434f6750a4c685697c90f9c6837cb4a3c5725"
+ },
+ "mutation": "scripts/install.sh: 'if command -v systemctl >/dev/null && systemctl --user is-active --quiet netdeck.service 2>/dev/null; then\\n' -> 'if false; then\\n'",
+ "command": [
+  "/usr/bin/python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests/test_install.py::test_upgrade_restarts_the_user_service_through_systemd"
+ ]
+}

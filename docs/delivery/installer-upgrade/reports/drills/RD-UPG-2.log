@@ -1,0 +1,40 @@
+# drill RD-UPG-2: scripts/install.sh
+mutation: 'elif [ "$RESTART" = instance ]; then\n' -> 'elif [ "$RESTART" != service ]; then\n'
+result: PASS  observed: 'installer started NetDeck although none was running'
+
+## baseline (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 18.67s
+
+
+## mutated (disposable copy)
+exit 1
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______________ test_upgrade_with_nothing_running_starts_nothing _______________
+
+clean = {'NETDECK_TEST_INSTALL': '1', 'SHELL': '/bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', ...}
+
+    def test_upgrade_with_nothing_running_starts_nothing(clean):
+        env = clean
+        assert registered_pid(env) is None
+        result = install(env)
+        assert result.returncode == 0, result.stdout + result.stderr
+>       assert registered_pid(env) is None, "installer started NetDeck although none was running"
+E       AssertionError: installer started NetDeck although none was running
+E       assert 70711 is None
+E        +  where 70711 = registered_pid({'NETDECK_TEST_INSTALL': '1', 'SHELL': '/bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', ...})
+
+tests/test_install.py:154: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_install.py::test_upgrade_with_nothing_running_starts_nothing
+1 failed in 21.31s
+
+
+
+## restored (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 18.50s
+

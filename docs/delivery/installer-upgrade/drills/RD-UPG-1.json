@@ -1,0 +1,3 @@
+{"id": "RD-UPG-1", "path": "scripts/install.sh",
+ "old": "elif OLD_PID=\"$(installed_pid)\"; then\n", "new": "elif false; then\n",
+ "test": ["tests/test_install.py::test_upgrade_restarts_a_running_installed_netdeck"], "expect": "old NetDeck still running after upgrade"}

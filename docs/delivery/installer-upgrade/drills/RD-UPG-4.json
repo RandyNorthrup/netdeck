@@ -1,0 +1,3 @@
+{"id": "RD-UPG-4", "path": "scripts/install.sh",
+ "old": "if command -v systemctl >/dev/null && systemctl --user is-active --quiet netdeck.service 2>/dev/null; then\n", "new": "if false; then\n",
+ "test": ["tests/test_install.py::test_upgrade_restarts_the_user_service_through_systemd"], "expect": "service was not stopped"}

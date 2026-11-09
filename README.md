@@ -81,6 +81,8 @@ cd netdeck
 
 The installer creates an isolated virtualenv, a `netdeck` command in `~/.local/bin`, and an application-menu launcher.
 
+**Upgrading:** run the installer again. If NetDeck from that installation is running, the installer stops it before replacing any files and starts the new version afterwards (a `--service` install is restarted through systemd). A NetDeck you run from a source checkout is left alone.
+
 ### With pipx
 
 ```bash

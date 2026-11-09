@@ -1,0 +1,31 @@
+{
+ "id": "RD-UPG-2",
+ "ok": true,
+ "log": "docs/delivery/installer-upgrade/reports/drills/RD-UPG-2.log",
+ "baseline_exit": 0,
+ "mutated_exit": 1,
+ "restored_exit": 0,
+ "observed": "installer started NetDeck although none was running",
+ "before": {
+  "path": "scripts/install.sh",
+  "sha256": "3cf8910ff271db4f798ca1d47b3434f6750a4c685697c90f9c6837cb4a3c5725"
+ },
+ "mutated": {
+  "path": "scripts/install.sh",
+  "sha256": "8bcdec03b37e2c5b93d8ef0ab9bc73996df1365118bf427ce715c4da0e94c099"
+ },
+ "after": {
+  "path": "scripts/install.sh",
+  "sha256": "3cf8910ff271db4f798ca1d47b3434f6750a4c685697c90f9c6837cb4a3c5725"
+ },
+ "mutation": "scripts/install.sh: 'elif [ \"$RESTART\" = instance ]; then\\n' -> 'elif [ \"$RESTART\" != service ]; then\\n'",
+ "command": [
+  "/usr/bin/python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests/test_install.py::test_upgrade_with_nothing_running_starts_nothing"
+ ]
+}
