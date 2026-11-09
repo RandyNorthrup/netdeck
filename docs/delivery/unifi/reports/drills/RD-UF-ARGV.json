@@ -1,0 +1,31 @@
+{
+ "id": "RD-UF-ARGV",
+ "ok": true,
+ "log": "docs/delivery/unifi/reports/drills/RD-UF-ARGV.log",
+ "baseline_exit": 0,
+ "mutated_exit": 1,
+ "restored_exit": 0,
+ "observed": "AssertionError: assert [['ssh', '-p'",
+ "before": {
+  "path": "src/netdeck/catalog.py",
+  "sha256": "a1a04b97845e2cd259a1b93de585d4abd23e9d3615ae5e9807ccfca7e62ec750"
+ },
+ "mutated": {
+  "path": "src/netdeck/catalog.py",
+  "sha256": "d30a5defa8212d5826b9c7b10b55026e25e2a8e94a573be3e4d72be671eda560"
+ },
+ "after": {
+  "path": "src/netdeck/catalog.py",
+  "sha256": "a1a04b97845e2cd259a1b93de585d4abd23e9d3615ae5e9807ccfca7e62ec750"
+ },
+ "mutation": "src/netdeck/catalog.py: 'return ([\"ssh\", \"-t\", \"-p\", str(p[\"port\"])]' -> 'return ([\"ssh\", \"-p\", str(p[\"port\"])]'",
+ "command": [
+  "/usr/bin/python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests/test_unifi.py::test_unifi_tool_commands"
+ ]
+}

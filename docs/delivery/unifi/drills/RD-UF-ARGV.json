@@ -1,0 +1,1 @@
+{"id": "RD-UF-ARGV", "path": "src/netdeck/catalog.py", "old": "return ([\"ssh\", \"-t\", \"-p\", str(p[\"port\"])]", "new": "return ([\"ssh\", \"-p\", str(p[\"port\"])]", "test": ["tests/test_unifi.py::test_unifi_tool_commands"], "expect": "AssertionError: assert \\[\\['ssh', '-p'"}

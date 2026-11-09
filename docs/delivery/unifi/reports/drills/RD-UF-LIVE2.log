@@ -1,0 +1,76 @@
+# drill RD-UF-LIVE2: src/netdeck/catalog.py
+mutation: 'UNIFI_DISCOVERY_PORT = "10001"' -> 'UNIFI_DISCOVERY_PORT = "10002"'
+result: PASS  observed: 'no UniFi device answered'
+note: MAC addresses and local hostnames in the captured nmap output were replaced (XX:XX:XX:XX:XX:XX, host.lan) before recording; the failure line is unchanged.
+
+## baseline (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 18.00s
+
+
+## mutated (disposable copy)
+exit 1
+F                                                                        [100%]
+=================================== FAILURES ===================================
+______ test_unifi_discovery_completes_and_finds_devices_on_unifi_networks ______
+
+deck = (50697, 'HFCaniJTVpHDIGB3gAhNeakZx_f5DP8ldhkJn2SxUzU')
+lan = {'gateway': '10.10.11.1', 'iface': 'wlan0', 'ip': '10.10.11.170', 'subnet': '10.10.11.0/24'}
+
+    def test_unifi_discovery_completes_and_finds_devices_on_unifi_networks(deck, lan):
+        status, code, seconds, out = run(deck, "unifi-discover", {"target": lan["subnet"]})
+        assert (status, code) == ("done", 0), out
+        assert seconds < 90, f"took {seconds:.0f} s"
+        if UNIFI_CONTROLLER:
+>           assert "ubiquiti-discovery:" in out and "config_status:" in out, f"no UniFi device answered:\n{out}"
+E           AssertionError: no UniFi device answered:
+E             sudo nmap -sU -p 10002 --script ubiquiti-discovery --open -T4 -- 10.10.11.0/24
+E             # NetDeck 1.0.0 — UniFi Device Discovery
+E             # sudo nmap -sU -p 10002 --script ubiquiti-discovery --open -T4 -- 10.10.11.0/24
+E             
+E             Starting Nmap 7.993 ( https://nmap.org ) at 2026-11-09 06:49 -0800
+E             Nmap scan report for host.lan (10.10.11.36)
+E             Host is up (0.0027s latency).
+E             
+E             PORT      STATE         SERVICE
+E             10002/udp open|filtered documentum
+E             MAC Address: XX:XX:XX:XX:XX:XX (HP)
+E             
+E             Nmap scan report for host.lan (10.10.11.127)
+E             Host is up (0.0029s latency).
+E             
+E             PORT      STATE         SERVICE
+E             10002/udp open|filtered documentum
+E             MAC Address: XX:XX:XX:XX:XX:XX (Shenzhen Meigao Electronic Equipment)
+E             
+E             Nmap scan report for host.lan (10.10.11.173)
+E             Host is up (0.27s latency).
+E             
+E             PORT      STATE         SERVICE
+E             10002/udp open|filtered documentum
+E             MAC Address: XX:XX:XX:XX:XX:XX (Unknown)
+E             
+E             Nmap scan report for 10.10.11.231
+E             Host is up (0.29s latency).
+E             
+E             PORT      STATE         SERVICE
+E             10002/udp open|filtered documentum
+E             MAC Address: XX:XX:XX:XX:XX:XX (Amazon Technologies)
+E             
+E             Nmap done: 256 IP addresses (21 hosts up) scanned in 10.29 seconds
+E             
+E           assert ('ubiquiti-discovery:' in 'sudo nmap -sU -p 10002 --script ubiquiti-discovery --open -T4 -- 10.10.11.0/24\n# NetDeck 1.0.0 — UniFi Device Discov...dress: XX:XX:XX:XX:XX:XX (Amazon Technologies)\n\nNmap done: 256 IP addresses (21 hosts up) scanned in 10.29 seconds\n')
+
+tests/test_field_live.py:162: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_field_live.py::test_unifi_discovery_completes_and_finds_devices_on_unifi_networks
+1 failed in 11.46s
+
+
+
+## restored (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 17.49s
+

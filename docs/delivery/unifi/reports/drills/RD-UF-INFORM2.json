@@ -1,0 +1,31 @@
+{
+ "id": "RD-UF-INFORM2",
+ "ok": true,
+ "log": "docs/delivery/unifi/reports/drills/RD-UF-INFORM2.log",
+ "baseline_exit": 0,
+ "mutated_exit": 1,
+ "restored_exit": 0,
+ "observed": "AssertionError: assert 'http://[::1]:45903/inform' in 'Checking http://::1:",
+ "before": {
+  "path": "src/netdeck/probes.py",
+  "sha256": "ee6bfbc83764965a54cda09e29a63cf7c28d4712bcbd594a00719e8ad08bb1f6"
+ },
+ "mutated": {
+  "path": "src/netdeck/probes.py",
+  "sha256": "ff6443e472992eff020b8c82f938b8f86b570a28f047923b2513400093351504"
+ },
+ "after": {
+  "path": "src/netdeck/probes.py",
+  "sha256": "ee6bfbc83764965a54cda09e29a63cf7c28d4712bcbd594a00719e8ad08bb1f6"
+ },
+ "mutation": "src/netdeck/probes.py: 'return f\"[{host}]:{port}\" if \":\" in host else f\"{host}:{port}\"' -> 'return f\"{host}:{port}\"'",
+ "command": [
+  "/usr/bin/python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests/test_unifi.py::test_inform_check_over_ipv6"
+ ]
+}

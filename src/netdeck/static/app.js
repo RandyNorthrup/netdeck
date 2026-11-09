@@ -59,6 +59,7 @@
     speedtest: "zap", "wifi-scan": "wifi", "wifi-link": "wifi", "tls-inspect": "lock", "public-ip": "globe",
     "http-headers": "globe", "http-timing": "clock", "iperf-server": "server", "route-get": "route",
     "listening": "server", "nmap-sweep": "radar", "arp-scan": "radar", "neighbors": "network", ethtool: "ethernet",
+    "unifi-discover": "radar", "unifi-inform": "plug",
   };
 
   // ───────────────────────────────── helpers ───────────────────────────────

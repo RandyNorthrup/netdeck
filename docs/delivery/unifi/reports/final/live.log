@@ -1,0 +1,11 @@
+============================= test session starts ==============================
+platform linux -- Python 3.14.9, pytest-9.2.0, pluggy-1.7.0 -- /usr/bin/python3
+rootdir: /home/randy/netdeck
+configfile: pyproject.toml
+plugins: platformdirs-4.14.3
+collecting ... collected 11 items / 9 deselected / 2 selected
+
+tests/test_field_live.py::test_unifi_discovery_completes_and_finds_devices_on_unifi_networks PASSED [ 50%]
+tests/test_field_live.py::test_unifi_inform_check PASSED                 [100%]
+
+======================= 2 passed, 9 deselected in 39.73s =======================

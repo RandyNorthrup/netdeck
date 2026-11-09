@@ -1,0 +1,47 @@
+# drill RD-UF-INFORM: src/netdeck/probes.py
+mutation: 'if resp.status == 400 and not body:' -> 'if resp.status == 400:'
+result: PASS  observed: 'assert 0 == 1'
+
+## baseline (original tree)
+exit 0
+...                                                                      [100%]
+3 passed in 1.06s
+
+
+## mutated (disposable copy)
+exit 1
+.F.                                                                      [100%]
+=================================== FAILURES ===================================
+__ test_inform_check_rejects_other_web_servers[400-<html>Bad Request</html>] ___
+
+status = 400, body = b'<html>Bad Request</html>'
+
+    @pytest.mark.parametrize(("status", "body"), [(200, b"<html>router login</html>"), (400, b"<html>Bad Request</html>"),
+                                                  (404, b"")])
+    def test_inform_check_rejects_other_web_servers(status, body):
+        server = _serve(status, body)
+        try:
+            code, out = inform("127.0.0.1", server.server_port)
+        finally:
+            server.shutdown()
+>       assert code == 1, out
+E       AssertionError: Checking http://127.0.0.1:40435/inform
+E         
+E         ✓ TCP port 40435 open on 127.0.0.1 (0.4 ms)
+E         ✓ UniFi inform endpoint answers (HTTP 400 to a plain request is normal: devices send informs).
+E         
+E         Devices that can reach this address can be adopted with: set-inform http://127.0.0.1:40435/inform
+E       assert 0 == 1
+
+tests/test_unifi.py:115: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_unifi.py::test_inform_check_rejects_other_web_servers[400-<html>Bad Request</html>]
+1 failed, 2 passed in 1.16s
+
+
+
+## restored (original tree)
+exit 0
+...                                                                      [100%]
+3 passed in 0.56s
+

@@ -1,0 +1,31 @@
+{
+ "id": "RD-UF-VAL",
+ "ok": true,
+ "log": "docs/delivery/unifi/reports/drills/RD-UF-VAL.log",
+ "baseline_exit": 0,
+ "mutated_exit": 1,
+ "restored_exit": 0,
+ "observed": "Failed: DID NOT RAISE",
+ "before": {
+  "path": "src/netdeck/catalog.py",
+  "sha256": "a1a04b97845e2cd259a1b93de585d4abd23e9d3615ae5e9807ccfca7e62ec750"
+ },
+ "mutated": {
+  "path": "src/netdeck/catalog.py",
+  "sha256": "b26d9188be8dba8bb4697152fa7ca017e300a51a8bd18f840753ae82cd8d9e4b"
+ },
+ "after": {
+  "path": "src/netdeck/catalog.py",
+  "sha256": "a1a04b97845e2cd259a1b93de585d4abd23e9d3615ae5e9807ccfca7e62ec750"
+ },
+ "mutation": "src/netdeck/catalog.py: 'Param(\"device\", \"Device\", \"host\", required=True, placeholder=\"192.168.1.20\"),\\n             Param(\"controller\"' -> 'Param(\"device\", \"Device\", \"expr\", required=True, placeholder=\"192.168.1.20\"),\\n             Param(\"controller\"'",
+ "command": [
+  "/usr/bin/python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests/test_unifi.py::test_unifi_adopt_rejects_unsafe_values"
+ ]
+}

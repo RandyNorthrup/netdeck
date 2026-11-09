@@ -1,0 +1,1 @@
+{"id": "RD-UF-INFORM", "path": "src/netdeck/probes.py", "old": "if resp.status == 400 and not body:", "new": "if resp.status == 400:", "test": ["tests/test_unifi.py::test_inform_check_rejects_other_web_servers"], "expect": "assert 0 == 1"}

@@ -10,7 +10,7 @@
 [![Platform](https://img.shields.io/badge/platform-Linux-fcc624?style=for-the-badge&logo=linux&logoColor=black)](#install)
 [![License](https://img.shields.io/github/license/randynorthrup/netdeck?style=for-the-badge&color=7c8cff)](LICENSE)
 
-[![Tools](https://img.shields.io/badge/tool%20workflows-81-5ee3c1?style=flat-square)](#tools)
+[![Tools](https://img.shields.io/badge/tool%20workflows-86-5ee3c1?style=flat-square)](#tools)
 [![Ruff](https://img.shields.io/badge/code%20style-ruff-d7ff64?style=flat-square&logo=ruff&logoColor=black)](https://github.com/astral-sh/ruff)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-ff69b4?style=flat-square)](CONTRIBUTING.md)
 [![Last commit](https://img.shields.io/github/last-commit/randynorthrup/netdeck?style=flat-square)](https://github.com/randynorthrup/netdeck/commits/main)
@@ -30,7 +30,7 @@
 
 ## Why NetDeck?
 
-Linux already has world-class network tools — `mtr`, `nmap`, `tcpdump`, `dig`, `iperf3`, `ss` and friends — but each has its own flags, output format and privilege quirks. NetDeck puts **81 tool workflows in 13 clear categories** behind a consistent, keyboard-friendly interface, while showing you the exact command it runs so you learn as you go.
+Linux already has world-class network tools — `mtr`, `nmap`, `tcpdump`, `dig`, `iperf3`, `ss` and friends — but each has its own flags, output format and privilege quirks. NetDeck puts **86 tool workflows in 14 clear categories** behind a consistent, keyboard-friendly interface, while showing you the exact command it runs so you learn as you go.
 
 - **One-click connection diagnosis** — checks link → gateway → DNS → internet → HTTPS and tells you which layer is broken.
 - **Live overview** — every interface with addresses, Wi-Fi signal, link speed and real-time throughput graphs.
@@ -120,6 +120,7 @@ NetDeck opens in a chromeless app window when Chrome/Chromium/Brave is available
 | **Connections & Ports** | Listening ports · Active connections · Who uses this port? · Socket summary · TCP states |
 | **Web & TLS** | HTTP headers · HTTP timing breakdown (DNS/connect/TLS/TTFB) · TLS certificate inspector (built-in) · TLS configuration audit (testssl.sh) · Public IP |
 | **Device Access** | Serial console (picocom, for console/rollover cables) · SSH (with legacy algorithms for old gear) · Telnet |
+| **UniFi** | Device discovery (model, firmware, adopted or factory-default) · Inform check (built-in) · Adopt via set-inform · Device info · Open controller |
 | **Firewall** | nftables ruleset · iptables · UFW · firewalld |
 
 Missing tools are shown greyed out with a one-click copyable install command for your distribution.
@@ -136,12 +137,20 @@ NetDeck is built to troubleshoot other people's networks from a laptop. What hel
   *Switch Neighbors* tool; it announces the laptop to the switch. *Switch Port* works without it, listening only.
 - **Monitor-mode Wi-Fi adapter** (e.g. Alfa) for the site survey; most built-in cards cannot do monitor mode.
 
+**UniFi adoption, step by step:** run *UniFi Device Discovery* on the subnet; `config_status: default/unmanaged`
+marks devices ready to adopt. *UniFi Inform Check* confirms the controller's inform endpoint answers (the usual
+cause of devices stuck in "Adopting"). *UniFi Adopt* then runs `set-inform` on the device over SSH (factory login
+`ubnt` / `ubnt`), and you click Adopt in the controller.
+
 **Field self-test:** before starting on site, check that the kit works on the network you are connected to
 (it sends real traffic, so it is opt-in):
 
 ```bash
 NETDECK_TEST_LIVE=1 python -m pytest tests/test_field_live.py
 ```
+
+On a UniFi network, add `NETDECK_TEST_UNIFI_CONTROLLER=<controller address>` to also require that UniFi devices
+are discovered and the controller's inform endpoint answers.
 
 ## Administrator access
 

@@ -1,0 +1,43 @@
+# drill RD-UF-INFORM2: src/netdeck/probes.py
+mutation: 'return f"[{host}]:{port}" if ":" in host else f"{host}:{port}"' -> 'return f"{host}:{port}"'
+result: PASS  observed: "AssertionError: assert 'http://[::1]:45903/inform' in 'Checking http://::1:"
+
+## baseline (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 0.05s
+
+
+## mutated (disposable copy)
+exit 1
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_________________________ test_inform_check_over_ipv6 __________________________
+
+    def test_inform_check_over_ipv6():
+        if not socket.has_ipv6:
+            pytest.skip("no IPv6")
+        try:
+            server = _serve(400, b"", socket.AF_INET6, "::1")
+        except OSError:
+            pytest.skip("IPv6 loopback unavailable")
+        try:
+            code, out = inform("::1", server.server_port)
+        finally:
+            server.shutdown()
+        assert code == 0, out
+>       assert f"http://[::1]:{server.server_port}/inform" in out
+E       AssertionError: assert 'http://[::1]:45903/inform' in 'Checking http://::1:45903/inform\n\n✓ TCP port 45903 open on ::1 (0.1 ms)\n✓ UniFi inform endpoint answers (HTTP 400 ... devices send informs).\n\nDevices that can reach this address can be adopted with: set-inform http://::1:45903/inform'
+
+tests/test_unifi.py:157: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_unifi.py::test_inform_check_over_ipv6 - AssertionError: ass...
+1 failed in 0.64s
+
+
+
+## restored (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 0.04s
+

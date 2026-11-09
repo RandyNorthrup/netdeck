@@ -1,0 +1,77 @@
+# drill RD-UF-ARGV: src/netdeck/catalog.py
+mutation: 'return (["ssh", "-t", "-p", str(p["port"])]' -> 'return (["ssh", "-p", str(p["port"])]'
+result: PASS  observed: "AssertionError: assert [['ssh', '-p'"
+
+## baseline (original tree)
+exit 0
+.......                                                                  [100%]
+7 passed in 0.05s
+
+
+## mutated (disposable copy)
+exit 1
+.FFF...                                                                  [100%]
+=================================== FAILURES ===================================
+___________________ test_unifi_tool_commands[unifi-adopt-1] ____________________
+
+tool_id = 'unifi-adopt'
+params = {'device': '10.0.0.20', 'controller': '10.0.0.1'}
+argvs = [['ssh', '-t', '-p', '22', '--', 'ubnt@10.0.0.20', ...]]
+
+    @pytest.mark.parametrize(("tool_id", "params", "argvs"), EXPECTED, ids=[f"{e[0]}-{i}" for i, e in enumerate(EXPECTED)])
+    def test_unifi_tool_commands(tool_id, params, argvs):
+        tool, _, built = build(tool_id, **params)
+        assert tool.category == "unifi"
+>       assert built == argvs
+E       AssertionError: assert [['ssh', '-p'...cli-op', ...]] == [['ssh', '-t'...0.0.20', ...]]
+E         
+E         At index 0 diff: ['ssh', '-p', '22', '--', 'ubnt@10.0.0.20', 'mca-cli-op', 'set-inform', 'http://10.0.0.1:8080/inform'] != ['ssh', '-t', '-p', '22', '--', 'ubnt@10.0.0.20', 'mca-cli-op', 'set-inform', 'http://10.0.0.1:8080/inform']
+E         Use -v to get more diff
+
+tests/test_unifi.py:39: AssertionError
+___________________ test_unifi_tool_commands[unifi-adopt-2] ____________________
+
+tool_id = 'unifi-adopt'
+params = {'device': 'fd00::20', 'controller': 'fd00::1', 'user': 'admin', 'fresh_key': True, ...}
+argvs = [['ssh', '-t', '-p', '2222', '-o', 'StrictHostKeyChecking=no', ...]]
+
+    @pytest.mark.parametrize(("tool_id", "params", "argvs"), EXPECTED, ids=[f"{e[0]}-{i}" for i, e in enumerate(EXPECTED)])
+    def test_unifi_tool_commands(tool_id, params, argvs):
+        tool, _, built = build(tool_id, **params)
+        assert tool.category == "unifi"
+>       assert built == argvs
+E       AssertionError: assert [['ssh', '-p'...', '-o', ...]] == [['ssh', '-t'...ing=no', ...]]
+E         
+E         At index 0 diff: ['ssh', '-p', '2222', '-o', 'StrictHostKeyChecking=no', '-o', 'UserKnownHostsFile=/dev/null', '--', 'admin@fd00::20', 'mca-cli-op', 'set-inform', 'http://[fd00::1]:8081/inform'] != ['ssh', '-t', '-p', '2222', '-o', 'StrictHostKeyChecking=no', '-o', 'UserKnownHostsFile=/dev/null', '--', 'admin@fd00::20', 'mca-cli-op', 'set-inform', 'http://[fd00::1]:8081/inform']
+E         Use -v to get more diff
+
+tests/test_unifi.py:39: AssertionError
+____________________ test_unifi_tool_commands[unifi-info-3] ____________________
+
+tool_id = 'unifi-info', params = {'device': '10.0.0.20'}
+argvs = [['ssh', '-t', '-p', '22', '--', 'ubnt@10.0.0.20', ...]]
+
+    @pytest.mark.parametrize(("tool_id", "params", "argvs"), EXPECTED, ids=[f"{e[0]}-{i}" for i, e in enumerate(EXPECTED)])
+    def test_unifi_tool_commands(tool_id, params, argvs):
+        tool, _, built = build(tool_id, **params)
+        assert tool.category == "unifi"
+>       assert built == argvs
+E       AssertionError: assert [['ssh', '-p'...cli-op', ...]] == [['ssh', '-t'...0.0.20', ...]]
+E         
+E         At index 0 diff: ['ssh', '-p', '22', '--', 'ubnt@10.0.0.20', 'mca-cli-op', 'info'] != ['ssh', '-t', '-p', '22', '--', 'ubnt@10.0.0.20', 'mca-cli-op', 'info']
+E         Use -v to get more diff
+
+tests/test_unifi.py:39: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_unifi.py::test_unifi_tool_commands[unifi-adopt-1] - Asserti...
+FAILED tests/test_unifi.py::test_unifi_tool_commands[unifi-adopt-2] - Asserti...
+FAILED tests/test_unifi.py::test_unifi_tool_commands[unifi-info-3] - Assertio...
+3 failed, 4 passed in 0.12s
+
+
+
+## restored (original tree)
+exit 0
+.......                                                                  [100%]
+7 passed in 0.05s
+

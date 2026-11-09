@@ -1,0 +1,1 @@
+{"id": "RD-UF-INFORM2", "path": "src/netdeck/probes.py", "old": "return f\"[{host}]:{port}\" if \":\" in host else f\"{host}:{port}\"", "new": "return f\"{host}:{port}\"", "test": ["tests/test_unifi.py::test_inform_check_over_ipv6"], "expect": "AssertionError: assert 'http://\\[::1\\]:\\d+/inform' in 'Checking http://::1:"}

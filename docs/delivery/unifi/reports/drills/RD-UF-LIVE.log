@@ -1,0 +1,51 @@
+# drill RD-UF-LIVE: src/netdeck/probes.py
+mutation: 'conn.request("GET", "/inform",' -> 'conn.request("GET", "/",'
+result: PASS  observed: 'not like a UniFi inform endpoint (HTTP 400, 435 bytes)'
+
+## baseline (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 1.36s
+
+
+## mutated (disposable copy)
+exit 1
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___________________________ test_unifi_inform_check ____________________________
+
+deck = (49733, '6TMFkIg3JSdRMmBiPxOoV-fKT_ZRAGlIgtImj5BcE10')
+lan = {'gateway': '10.10.11.1', 'iface': 'wlan0', 'ip': '10.10.11.170', 'subnet': '10.10.11.0/24'}
+
+    def test_unifi_inform_check(deck, lan):
+        status, code, _, out = run(deck, "unifi-inform", {"controller": UNIFI_CONTROLLER or lan["gateway"]}, timeout=30)
+        assert status in ("done", "failed") and "Checking http://" in out, out
+        if UNIFI_CONTROLLER:
+>           assert (status, code) == ("done", 0), out
+E           AssertionError: (built-in) UniFi inform check
+E             # NetDeck 1.0.0 — UniFi Inform Check
+E             # (built-in) UniFi inform check
+E             
+E             Checking http://10.10.11.1:8080/inform
+E             
+E             ✓ TCP port 8080 open on 10.10.11.1 (1.9 ms)
+E             ⚠ A web server answers on port 8080, but not like a UniFi inform endpoint (HTTP 400, 435 bytes).
+E               Another service may be using this port, or the controller uses a different inform port.
+E             
+E           assert ('failed', 1) == ('done', 0)
+E             
+E             At index 0 diff: 'failed' != 'done'
+E             Use -v to get more diff
+
+tests/test_field_live.py:169: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_field_live.py::test_unifi_inform_check - AssertionError: (b...
+1 failed in 1.35s
+
+
+
+## restored (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 1.36s
+

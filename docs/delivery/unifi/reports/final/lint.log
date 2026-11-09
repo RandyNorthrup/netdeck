@@ -1,0 +1,5 @@
+ruff check src tests
+All checks passed!
+shellcheck scripts/*.sh
+node --check src/netdeck/static/app.js
+node --check src/netdeck/static/theme.js

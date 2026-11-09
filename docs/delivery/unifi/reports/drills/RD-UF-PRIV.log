@@ -1,0 +1,45 @@
+# drill RD-UF-PRIV: src/netdeck/catalog.py
+mutation: '"-T4", "--", p["target"]], privileged=True, popular=True,' -> '"-T4", "--", p["target"]], privileged=False, popular=True,'
+result: PASS  observed: 'AssertionError: unifi-discover'
+
+## baseline (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 0.04s
+
+
+## mutated (disposable copy)
+exit 1
+F                                                                        [100%]
+=================================== FAILURES ===================================
+________________________ test_unifi_modes_and_elevation ________________________
+
+    def test_unifi_modes_and_elevation():
+        modes = {t: TOOLS_BY_ID[t].mode for t in ("unifi-discover", "unifi-inform", "unifi-adopt", "unifi-info",
+                                                      "unifi-controller")}
+        assert modes == {"unifi-discover": "stream", "unifi-inform": "stream", "unifi-adopt": "terminal",
+                         "unifi-info": "terminal", "unifi-controller": "gui"}
+        if os.geteuid() == 0:
+            pytest.skip("everything runs unelevated as root")
+        for tool_id, params, elevated in (("unifi-discover", {"target": "10.0.0.0/24"}, True),
+                                          ("unifi-adopt", {"device": "10.0.0.2", "controller": "10.0.0.1"}, False),
+                                          ("unifi-info", {"device": "10.0.0.2"}, False)):
+            tool, clean, _ = build(tool_id, **params)
+>           assert tool.needs_root(clean) is elevated, tool_id
+E           AssertionError: unifi-discover
+E           assert False is True
+E            +  where False = needs_root({'target': '10.0.0.0/24'})
+E            +    where needs_root = Tool(id='unifi-discover', name='UniFi Device Discovery', category='unifi', summary='Find Ubiquiti devices on a subnet:...as 'open|filtered' with a Ubiquiti MAC.", keywords=('ubiquiti', 'unifi', 'adopt', 'unadopted', 'ubnt', 'access point')).needs_root
+
+tests/test_unifi.py:53: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_unifi.py::test_unifi_modes_and_elevation - AssertionError: ...
+1 failed in 0.10s
+
+
+
+## restored (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 0.04s
+

@@ -1,0 +1,1 @@
+{"id": "RD-UF-LIVE2", "path": "src/netdeck/catalog.py", "old": "UNIFI_DISCOVERY_PORT = \"10001\"", "new": "UNIFI_DISCOVERY_PORT = \"10002\"", "test": ["tests/test_field_live.py::test_unifi_discovery_completes_and_finds_devices_on_unifi_networks"], "expect": "no UniFi device answered"}

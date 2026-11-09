@@ -1,0 +1,21 @@
+........................................................................ [ 29%]
+.........................sssssssssss.................................... [ 58%]
+....................ssss................................................ [ 87%]
+...............................                                          [100%]
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_field_live.py:75: sends traffic on the local network; set NETDECK_TEST_LIVE=1
+SKIPPED [1] tests/test_field_live.py:81: sends traffic on the local network; set NETDECK_TEST_LIVE=1
+SKIPPED [1] tests/test_field_live.py:102: sends traffic on the local network; set NETDECK_TEST_LIVE=1
+SKIPPED [1] tests/test_field_live.py:108: sends traffic on the local network; set NETDECK_TEST_LIVE=1
+SKIPPED [1] tests/test_field_live.py:116: sends traffic on the local network; set NETDECK_TEST_LIVE=1
+SKIPPED [1] tests/test_field_live.py:122: sends traffic on the local network; set NETDECK_TEST_LIVE=1
+SKIPPED [1] tests/test_field_live.py:129: sends traffic on the local network; set NETDECK_TEST_LIVE=1
+SKIPPED [1] tests/test_field_live.py:135: sends traffic on the local network; set NETDECK_TEST_LIVE=1
+SKIPPED [1] tests/test_field_live.py:141: sends traffic on the local network; set NETDECK_TEST_LIVE=1
+SKIPPED [1] tests/test_field_live.py:157: sends traffic on the local network; set NETDECK_TEST_LIVE=1
+SKIPPED [1] tests/test_field_live.py:165: sends traffic on the local network; set NETDECK_TEST_LIVE=1
+SKIPPED [1] tests/test_install.py:135: builds virtualenvs; set NETDECK_TEST_INSTALL=1
+SKIPPED [1] tests/test_install.py:149: builds virtualenvs; set NETDECK_TEST_INSTALL=1
+SKIPPED [1] tests/test_install.py:157: builds virtualenvs; set NETDECK_TEST_INSTALL=1
+SKIPPED [1] tests/test_install.py:167: builds virtualenvs; set NETDECK_TEST_INSTALL=1
+232 passed, 15 skipped in 17.48s

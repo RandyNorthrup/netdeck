@@ -6,11 +6,14 @@ All notable changes to this project are documented here. The format follows
 ## [Unreleased]
 
 ### Added
+- **UniFi** category: device discovery over the Ubiquiti discovery protocol (model, firmware, name and adoption
+  state), a built-in inform-endpoint check, adoption via `set-inform` over SSH, device info, and a shortcut to
+  the controller's web interface. 86 tool workflows in 14 categories.
 - **Field kit:** new *LAN Services* (DHCP server check, switch port via passive LLDP/CDP, SNMP query, device
   discovery, NetBIOS scan, IPv6 router advertisements), *Wi-Fi* (signal meter, channel chart, monitor mode,
   site survey; Wi-Fi scan and link moved here) and *Device Access* (serial console, SSH with legacy algorithms,
   Telnet) categories, plus MTU test, duplicate-IP check, bandwhich, TLS configuration audit and an Ethernet
-  cable test, and Switch Neighbors from the lldpd service. 81 tool workflows in 13 categories.
+  cable test, and Switch Neighbors from the lldpd service.
 - `tests/test_field_live.py`: an opt-in field self-test of the hardware-free tools on the current network.
 - **Exit** button (top-right power icon) with a confirmation dialog that lists the tools it will stop, and a
   "NetDeck has stopped" screen. Open pages also switch to that screen when NetDeck is stopped elsewhere.

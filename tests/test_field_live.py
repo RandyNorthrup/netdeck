@@ -3,6 +3,8 @@
 Opt-in (it sends real traffic on the local network): NETDECK_TEST_LIVE=1 pytest tests/test_field_live.py
 Use it on site to confirm the kit works before you start. It uses the default gateway and interface of the
 machine; SNMP is checked against a temporary local agent because most gateways do not run one.
+On a UniFi network, set NETDECK_TEST_UNIFI_CONTROLLER=<controller address> to also require that UniFi devices are
+found and the controller's inform endpoint answers.
 """
 
 import json
@@ -147,3 +149,22 @@ def test_ipv6_ra_tls_audit_public_ip_and_usage_history_complete(deck, lan):
     assert json.loads(out[out.index("{"):])["ip"], out
     status, code, _, out = run(deck, "vnstat", {})
     assert (status, code) == ("done", 0), out
+
+
+UNIFI_CONTROLLER = os.environ.get("NETDECK_TEST_UNIFI_CONTROLLER")
+
+
+def test_unifi_discovery_completes_and_finds_devices_on_unifi_networks(deck, lan):
+    status, code, seconds, out = run(deck, "unifi-discover", {"target": lan["subnet"]})
+    assert (status, code) == ("done", 0), out
+    assert seconds < 90, f"took {seconds:.0f} s"
+    if UNIFI_CONTROLLER:
+        assert "ubiquiti-discovery:" in out and "config_status:" in out, f"no UniFi device answered:\n{out}"
+
+
+def test_unifi_inform_check(deck, lan):
+    status, code, _, out = run(deck, "unifi-inform", {"controller": UNIFI_CONTROLLER or lan["gateway"]}, timeout=30)
+    assert status in ("done", "failed") and "Checking http://" in out, out
+    if UNIFI_CONTROLLER:
+        assert (status, code) == ("done", 0), out
+        assert "UniFi inform endpoint answers" in out, out

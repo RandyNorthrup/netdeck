@@ -1,0 +1,1 @@
+{"id": "RD-UF-PRIV", "path": "src/netdeck/catalog.py", "old": "\"-T4\", \"--\", p[\"target\"]], privileged=True, popular=True,", "new": "\"-T4\", \"--\", p[\"target\"]], privileged=False, popular=True,", "test": ["tests/test_unifi.py::test_unifi_modes_and_elevation"], "expect": "AssertionError: unifi-discover"}

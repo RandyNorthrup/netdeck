@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import concurrent.futures
+import http.client
 import socket
 import ssl
 import subprocess
@@ -141,6 +142,73 @@ def _fetch_unverified(host: str, port: int, sni: str) -> Optional[bytes]:
             return tls.getpeercert(binary_form=True)
     except (OSError, ssl.SSLError):
         return None
+
+
+# ---------------------------------------------------------------------------
+# UniFi
+# ---------------------------------------------------------------------------
+
+def _netloc(host: str, port: int) -> str:
+    return f"[{host}]:{port}" if ":" in host else f"{host}:{port}"
+
+
+def unifi_inform_url(host: str, port: int) -> str:
+    """The inform URL UniFi devices are given with set-inform."""
+    return f"http://{_netloc(host, port)}/inform"
+
+
+def unifi_inform(p: Dict, emit: Emit, stop) -> int:
+    """Check that a UniFi Network controller's inform endpoint answers.
+
+    Devices POST encrypted informs to /inform. A plain GET gets "400 Bad Request" with an empty body from the
+    controller; anything else on that port (a web page, an HTTPS-only server's error page) is not the endpoint.
+    """
+    host, port = p["controller"], p["port"]
+    url = unifi_inform_url(host, port)
+    emit(f"Checking {url}")
+    emit("")
+    try:
+        addrs = _resolve(host, port)
+    except socket.gaierror as exc:
+        emit(f"✗ Could not resolve {host}: {exc.strerror}")
+        return 2
+    fam, addr = addrs[0]
+    start = time.monotonic()
+    try:
+        with socket.socket(fam, socket.SOCK_STREAM) as sock:
+            sock.settimeout(5)
+            sock.connect(addr)
+    except TimeoutError:
+        emit(f"✗ No answer from {addr[0]} port {port} in 5 s: a firewall drops it, or the address is wrong.")
+        return 1
+    except ConnectionRefusedError:
+        emit(f"✗ {addr[0]} refuses port {port}: no UniFi controller is listening there.")
+        emit("  Check the controller's address, or that UniFi Network is running on it.")
+        return 1
+    except OSError as exc:
+        emit(f"✗ Cannot reach {addr[0]} port {port}: {exc.strerror or exc}")
+        return 1
+    emit(f"✓ TCP port {port} open on {addr[0]} ({(time.monotonic() - start) * 1000:.1f} ms)")
+
+    conn = http.client.HTTPConnection(_netloc(addr[0], port), timeout=5)
+    try:
+        conn.request("GET", "/inform", headers={"Host": _netloc(host, port), "User-Agent": "NetDeck"})
+        resp = conn.getresponse()
+        body = resp.read(4096)
+    except (OSError, http.client.HTTPException) as exc:
+        emit(f"✗ Port {port} is open but does not speak HTTP: {exc}")
+        return 1
+    finally:
+        conn.close()
+    if resp.status == 400 and not body:
+        emit("✓ UniFi inform endpoint answers (HTTP 400 to a plain request is normal: devices send informs).")
+        emit("")
+        emit(f"Devices that can reach this address can be adopted with: set-inform {url}")
+        return 0
+    emit(f"⚠ A web server answers on port {port}, but not like a UniFi inform endpoint "
+         f"(HTTP {resp.status}, {len(body)} bytes).")
+    emit("  Another service may be using this port, or the controller uses a different inform port.")
+    return 1
 
 
 # ---------------------------------------------------------------------------

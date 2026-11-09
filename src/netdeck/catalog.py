@@ -147,6 +147,7 @@ CATEGORIES: Tuple[Category, ...] = (
     Category("connections", "Connections & Ports", "plug", "Sockets, listeners and owning processes"),
     Category("web", "Web & TLS", "lock", "HTTP, certificates and public IP"),
     Category("access", "Device Access", "terminal", "Console, SSH and Telnet sessions to network gear"),
+    Category("unifi", "UniFi", "link", "Find, check and adopt Ubiquiti UniFi devices"),
     Category("firewall", "Firewall", "shield", "This machine's packet filter rules"),
 )
 
@@ -212,9 +213,25 @@ SNMP_OIDS = {
 }
 
 
+UNIFI_DISCOVERY_PORT = "10001"  # UDP port of the Ubiquiti discovery protocol
+UNIFI_INFORM_PORT = 8080  # port a UniFi Network controller receives device informs on
+UNIFI_UI_PORTS = {"unifi-os": "", "legacy": ":8443"}  # UniFi OS consoles serve the UI on 443
+SSH_FRESH_KEY = ["-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null"]
+
+
+def _unifi_ssh(p: Dict, *remote: str) -> List[str]:
+    """SSH to a UniFi device and run one mca-cli-op command (the non-interactive form of its CLI)."""
+    return (["ssh", "-t", "-p", str(p["port"])] + (SSH_FRESH_KEY if p["fresh_key"] else []) +
+            ["--", f"{p['user']}@{p['device']}", "mca-cli-op", *remote])
+
+
+def _url_host(host: str) -> str:
+    """A host as it appears in a URL or host:port pair (IPv6 literals in brackets)."""
+    return f"[{host}]" if ":" in host else host
+
+
 def _hostport(p: Dict) -> str:
-    host = p["host"]
-    return f"[{host}]:{p['port']}" if ":" in host else f"{host}:{p['port']}"
+    return f"{_url_host(p['host'])}:{p['port']}"
 
 
 def _snmp(p: Dict):
@@ -727,6 +744,55 @@ TOOLS: Tuple[Tool, ...] = (
          "telnet", lambda p: ["telnet", p["host"], str(p["port"])], mode=TERMINAL, keywords=("telnet", "legacy"),
          params=(HOST, Param("port", "Port", "port", 23))),
 
+    # ── UniFi ───────────────────────────────────────────────────────────────
+    Tool("unifi-discover", "UniFi Device Discovery", "unifi",
+         "Find Ubiquiti devices on a subnet: model, firmware, name and whether each is adopted.",
+         "nmap", lambda p: ["nmap", "-sU", "-p", UNIFI_DISCOVERY_PORT, "--script", "ubiquiti-discovery", "--open",
+                            "-T4", "--", p["target"]], privileged=True, popular=True,
+         keywords=("ubiquiti", "unifi", "adopt", "unadopted", "ubnt", "access point"),
+         notes="config_status default/unmanaged means factory default and ready to adopt; managed/adopted means a "
+               "controller owns it. Adopted devices often do not answer discovery, so they show only as "
+               "'open|filtered' with a Ubiquiti MAC.", params=(TARGET,)),
+    Tool("unifi-inform", "UniFi Inform Check", "unifi",
+         "Check that a UniFi controller's inform endpoint answers — why devices get stuck in 'Adopting'.",
+         None, lambda p: Internal(probes.unifi_inform, "UniFi inform check"),
+         keywords=("unifi", "inform", "adopting", "controller", "8080"),
+         notes="Tests from this laptop. A device on another VLAN or site must be able to reach the same address.",
+         params=(
+             Param("controller", "Controller", "host", required=True, prefill="gateway",
+                   help="UniFi console or server running UniFi Network"),
+             Param("port", "Inform port", "port", UNIFI_INFORM_PORT, advanced=True))),
+    Tool("unifi-adopt", "UniFi Adopt (set-inform)", "unifi",
+         "Point a UniFi device at a controller over SSH so it appears there, ready to adopt.",
+         "ssh", lambda p: _unifi_ssh(p, "set-inform", probes.unifi_inform_url(p["controller"], p["inform_port"])),
+         mode=TERMINAL, keywords=("unifi", "set-inform", "adopt", "ubnt", "layer 3 adoption"),
+         notes="Factory-default devices log in as ubnt / ubnt; adopted ones use the site's device SSH credentials. "
+               "Then click Adopt in the controller. If the device stays in 'Adopting', run this once more.",
+         params=(
+             Param("device", "Device", "host", required=True, placeholder="192.168.1.20"),
+             Param("controller", "Controller", "host", required=True, prefill="gateway"),
+             Param("user", "User", "username", "ubnt", help="Blank uses ubnt, the factory default"),
+             Param("fresh_key", "Device was factory-reset (do not check or save its SSH key)", "bool", False,
+                   help="A reset device has a new key, which SSH otherwise refuses as 'host identification changed'"),
+             Param("inform_port", "Inform port", "port", UNIFI_INFORM_PORT, advanced=True),
+             Param("port", "SSH port", "port", 22, advanced=True))),
+    Tool("unifi-info", "UniFi Device Info", "unifi",
+         "Model, firmware, inform URL and controller connection status, read from the device over SSH.",
+         "ssh", lambda p: _unifi_ssh(p, "info"), mode=TERMINAL, keywords=("unifi", "info", "inform", "status"),
+         notes="Factory-default devices log in as ubnt / ubnt.", params=(
+             Param("device", "Device", "host", required=True, placeholder="192.168.1.20"),
+             Param("user", "User", "username", "ubnt", help="Blank uses ubnt, the factory default"),
+             Param("fresh_key", "Device was factory-reset (do not check or save its SSH key)", "bool", False),
+             Param("port", "SSH port", "port", 22, advanced=True))),
+    Tool("unifi-controller", "Open UniFi Controller", "unifi", "Open the UniFi Network web interface.",
+         "xdg-open", lambda p: ["xdg-open", f"https://{_url_host(p['host'])}{UNIFI_UI_PORTS[p['kind']]}"], mode=GUI,
+         keywords=("unifi", "controller", "console", "web ui", "8443"),
+         notes="The console's certificate is usually self-signed, so the browser warns once.", params=(
+             Param("host", "Controller", "host", required=True, prefill="gateway"),
+             Param("kind", "Type", "choice", "unifi-os", choices=(
+                 ("unifi-os", "UniFi OS console (Dream Machine, Cloud Key, Cloud Gateway)"),
+                 ("legacy", "Self-hosted UniFi Network server (port 8443)"))))),
+
     # ── Traffic and web additions ────────────────────────────────────────────
     Tool("bandwhich", "Bandwidth by Process & Host", "traffic",
          "Live view of which programs and remote hosts use bandwidth, with DNS names.",
@@ -811,5 +877,6 @@ PACKAGES: Dict[str, Dict[str, str]] = {
     "airodump-ng": {"arch": "aircrack-ng", "debian": "aircrack-ng", "fedora": "aircrack-ng", "suse": "aircrack-ng"},
     "bandwhich": {"arch": "bandwhich", "fedora": "bandwhich"},
     "testssl": {"arch": "testssl.sh", "debian": "testssl.sh", "fedora": "testssl"},
+    "xdg-open": {"arch": "xdg-utils", "debian": "xdg-utils", "fedora": "xdg-utils", "suse": "xdg-utils"},
     "firewall-cmd": {"arch": "firewalld", "debian": "firewalld", "fedora": "firewalld", "suse": "firewalld"},
 }

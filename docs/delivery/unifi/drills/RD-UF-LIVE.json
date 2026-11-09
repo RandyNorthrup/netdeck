@@ -1,0 +1,1 @@
+{"id": "RD-UF-LIVE", "path": "src/netdeck/probes.py", "old": "conn.request(\"GET\", \"/inform\",", "new": "conn.request(\"GET\", \"/\",", "test": ["tests/test_field_live.py::test_unifi_inform_check"], "expect": "not like a UniFi inform endpoint \\(HTTP 400, \\d+ bytes\\)"}

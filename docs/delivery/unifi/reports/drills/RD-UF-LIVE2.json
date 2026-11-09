@@ -1,0 +1,31 @@
+{
+ "id": "RD-UF-LIVE2",
+ "ok": true,
+ "log": "docs/delivery/unifi/reports/drills/RD-UF-LIVE2.log",
+ "baseline_exit": 0,
+ "mutated_exit": 1,
+ "restored_exit": 0,
+ "observed": "no UniFi device answered",
+ "before": {
+  "path": "src/netdeck/catalog.py",
+  "sha256": "a1a04b97845e2cd259a1b93de585d4abd23e9d3615ae5e9807ccfca7e62ec750"
+ },
+ "mutated": {
+  "path": "src/netdeck/catalog.py",
+  "sha256": "383759b00958188936d7ccc2a0bd9c52634c7cd59f9d2ea6f5348d8b86d0573c"
+ },
+ "after": {
+  "path": "src/netdeck/catalog.py",
+  "sha256": "a1a04b97845e2cd259a1b93de585d4abd23e9d3615ae5e9807ccfca7e62ec750"
+ },
+ "mutation": "src/netdeck/catalog.py: 'UNIFI_DISCOVERY_PORT = \"10001\"' -> 'UNIFI_DISCOVERY_PORT = \"10002\"'",
+ "command": [
+  "/usr/bin/python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests/test_field_live.py::test_unifi_discovery_completes_and_finds_devices_on_unifi_networks"
+ ]
+}
