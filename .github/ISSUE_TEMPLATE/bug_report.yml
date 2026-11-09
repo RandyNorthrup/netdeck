@@ -1,0 +1,35 @@
+name: Bug report
+description: Something doesn't work as expected
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: NetDeck version
+      placeholder: output of `netdeck --version`
+    validations:
+      required: true
+  - type: input
+    id: distro
+    attributes:
+      label: Distribution and desktop
+      placeholder: e.g. Ubuntu 24.04, GNOME / Arch, Hyprland
+    validations:
+      required: true
+  - type: textarea
+    id: doctor
+    attributes:
+      label: Output of `netdeck doctor`
+      render: text
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / screenshots
+      description: Run `netdeck serve --log-level DEBUG` to get detailed logs. Remove any private addresses.

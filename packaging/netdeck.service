@@ -1,0 +1,16 @@
+[Unit]
+Description=NetDeck network toolkit dashboard
+Documentation=https://github.com/randynorthrup/netdeck
+After=graphical-session.target network-online.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=@BIN@ serve --no-browser
+Restart=on-failure
+RestartSec=3
+PrivateTmp=true
+ProtectSystem=full
+
+[Install]
+WantedBy=graphical-session.target

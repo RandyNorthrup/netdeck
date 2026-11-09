@@ -1,0 +1,69 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "netdeck"
+dynamic = ["version"]
+description = "A polished local web dashboard that brings open-source network troubleshooting tools together."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.9"
+authors = [{ name = "Randy Northrup" }]
+keywords = ["network", "troubleshooting", "dashboard", "nmap", "tcpdump", "mtr", "iperf3", "diagnostics"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Web Environment",
+  "Intended Audience :: System Administrators",
+  "Intended Audience :: Information Technology",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: System :: Networking",
+  "Topic :: System :: Networking :: Monitoring",
+]
+dependencies = []  # standard library only, by design
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "ruff>=0.5"]
+
+[project.urls]
+Homepage = "https://github.com/randynorthrup/netdeck"
+Issues = "https://github.com/randynorthrup/netdeck/issues"
+Changelog = "https://github.com/randynorthrup/netdeck/blob/main/CHANGELOG.md"
+
+[project.scripts]
+netdeck = "netdeck.cli:main"
+
+[tool.setuptools.dynamic]
+version = { attr = "netdeck.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+netdeck = ["static/*"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py39"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "BLE", "N", "SIM", "RUF"]
+ignore = [
+  "S603",   # subprocess without shell: that is exactly the safe pattern we use
+  "S607",   # partial executable paths are resolved through which() before exec
+  "S104",   # binding to all interfaces is gated behind --allow-remote
+  "UP006", "UP007", "UP035", "UP045",  # keep typing.List/Optional for Python 3.9 support
+  "RUF005",  # argv lists read best as explicit concatenation
+  "RUF001", "RUF003",  # intentional unicode glyphs (✓ ✗ …) in user-facing text
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101", "S105", "S106", "S108"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

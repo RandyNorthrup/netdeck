@@ -1,0 +1,15 @@
+name: Feature or tool request
+description: Suggest an improvement or a new tool integration
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: For a new tool, include the command line you would run and which options matter most.
