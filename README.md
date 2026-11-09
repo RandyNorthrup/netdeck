@@ -1,20 +1,28 @@
 <div align="center">
 
-<img src="src/netdeck/static/icon.svg" width="88" alt="NetDeck logo">
+<img src="docs/assets/banner.png" alt="NetDeck — every network troubleshooting tool, one beautiful dashboard" width="100%">
 
-# NetDeck
+<br>
 
-**One polished dashboard for all of your open-source network troubleshooting tools.**
+[![CI](https://img.shields.io/github/actions/workflow/status/randynorthrup/netdeck/ci.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white&label=CI)](https://github.com/randynorthrup/netdeck/actions/workflows/ci.yml)
+[![Python](https://img.shields.io/badge/python-3.10%2B-3776ab?style=for-the-badge&logo=python&logoColor=white)](pyproject.toml)
+[![Dependencies](https://img.shields.io/badge/dependencies-zero-2ea44f?style=for-the-badge)](pyproject.toml)
+[![Platform](https://img.shields.io/badge/platform-Linux-fcc624?style=for-the-badge&logo=linux&logoColor=black)](#install)
+[![License](https://img.shields.io/github/license/randynorthrup/netdeck?style=for-the-badge&color=7c8cff)](LICENSE)
 
-Ping, trace, scan, capture, measure and inspect — from a fast local web UI instead of a dozen terminal windows.
+[![Tools](https://img.shields.io/badge/tool%20workflows-62-5ee3c1?style=flat-square)](#tools)
+[![Ruff](https://img.shields.io/badge/code%20style-ruff-d7ff64?style=flat-square&logo=ruff&logoColor=black)](https://github.com/astral-sh/ruff)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-ff69b4?style=flat-square)](CONTRIBUTING.md)
+[![Last commit](https://img.shields.io/github/last-commit/randynorthrup/netdeck?style=flat-square)](https://github.com/randynorthrup/netdeck/commits/main)
+[![Stars](https://img.shields.io/github/stars/randynorthrup/netdeck?style=flat-square&logo=github)](https://github.com/randynorthrup/netdeck/stargazers)
 
-[![CI](https://github.com/randynorthrup/netdeck/actions/workflows/ci.yml/badge.svg)](https://github.com/randynorthrup/netdeck/actions/workflows/ci.yml)
-![Python](https://img.shields.io/badge/python-3.10%2B-3776ab)
-![Dependencies](https://img.shields.io/badge/dependencies-none-brightgreen)
-![Platform](https://img.shields.io/badge/platform-Linux-informational)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+### Ping, trace, scan, capture, measure and inspect — from one fast local web UI instead of a dozen terminal windows.
 
-<img src="docs/screenshots/overview.png" alt="NetDeck overview: connection health check, network details and live interface throughput" width="900">
+[**Install**](#install) · [**Features**](#why-netdeck) · [**Tools**](#tools) · [**Security**](#security) · [**Docs**](docs/ARCHITECTURE.md) · [**Contributing**](CONTRIBUTING.md)
+
+<br>
+
+<img src="docs/screenshots/overview.png" alt="NetDeck overview: connection health check, network details and live interface throughput" width="92%">
 
 </div>
 
