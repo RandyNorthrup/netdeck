@@ -4,6 +4,7 @@ Skipped when Chrome or websocket-client is unavailable, unless NETDECK_REQUIRE_E
 which case a missing prerequisite fails instead of silently skipping.
 """
 
+import contextlib
 import json
 import os
 import pathlib
@@ -36,11 +37,20 @@ class Browser:
     """Just enough of the Chrome DevTools Protocol to drive one page."""
 
     def __init__(self) -> None:
+        self.ws = None
         self.profile = tempfile.mkdtemp(prefix="netdeck-e2e-")
+        # Chrome gets its own process group so close() can end its helper processes too.
         self.proc = subprocess.Popen(
             [CHROME, "--headless=new", "--disable-gpu", "--no-first-run", "--no-default-browser-check",
              "--remote-debugging-port=0", f"--user-data-dir={self.profile}", "--window-size=1280,900",
-             "about:blank"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+             "about:blank"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+        try:
+            self._connect()
+        except BaseException:
+            self.close()  # a failed setup must not leave Chrome running
+            raise
+
+    def _connect(self) -> None:
         port_file = pathlib.Path(self.profile, "DevToolsActivePort")
         for _ in range(100):
             if port_file.exists() and port_file.read_text().strip():
@@ -84,12 +94,19 @@ class Browser:
             self.call("Input.dispatchKeyEvent", type=kind, key="Escape", code="Escape", windowsVirtualKeyCode=27)
 
     def close(self):
-        try:
-            self.ws.close()
-        finally:
-            self.proc.terminate()
+        if self.ws is not None:
+            with contextlib.suppress(Exception):
+                self.ws.close()
+        with contextlib.suppress(ProcessLookupError):
+            os.killpg(self.proc.pid, signal.SIGTERM)
+        with contextlib.suppress(subprocess.TimeoutExpired):  # SIGKILL below handles a hung Chrome
             self.proc.wait(10)
-            shutil.rmtree(self.profile, ignore_errors=True)
+        # Helpers (network service, GPU, renderers) outlive the main process briefly and would keep writing
+        # into the profile; end the whole group before deleting it.
+        with contextlib.suppress(ProcessLookupError):
+            os.killpg(self.proc.pid, signal.SIGKILL)
+        self.proc.wait(10)
+        shutil.rmtree(self.profile, ignore_errors=True)
 
 
 @pytest.fixture

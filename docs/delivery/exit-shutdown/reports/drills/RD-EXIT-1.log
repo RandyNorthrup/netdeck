@@ -5,7 +5,7 @@ result: PASS  observed: 'server still running 10 s after Exit'
 ## baseline (original tree)
 exit 0
 .                                                                        [100%]
-1 passed in 3.84s
+1 passed in 3.85s
 
 
 ## mutated (disposable copy)
@@ -22,7 +22,7 @@ seconds = 10, what = 'Exit'
 >           return proc.wait(timeout=seconds)
                    ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-tests/test_ui_e2e.py:118: 
+tests/test_ui_e2e.py:135: 
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 /usr/lib/python3.14/subprocess.py:1279: in wait
     return self._wait(timeout=timeout)
@@ -57,14 +57,14 @@ timeout = 10
                 remaining = self._remaining_time(endtime)
                 if remaining <= 0:
 >                   raise TimeoutExpired(self.args, timeout)
-E                   subprocess.TimeoutExpired: Command '['/usr/bin/python3', '-m', 'netdeck', 'serve', '--no-browser', '--port', '56585']' timed out after 10 seconds
+E                   subprocess.TimeoutExpired: Command '['/usr/bin/python3', '-m', 'netdeck', 'serve', '--no-browser', '--port', '34931']' timed out after 10 seconds
 
 /usr/lib/python3.14/subprocess.py:2076: TimeoutExpired
 
 During handling of the above exception, another exception occurred:
 
-browser = <test_ui_e2e.Browser object at 0x7f8187fb1400>
-server = (<Popen: returncode: None args: ['/usr/bin/python3', '-m', 'netdeck', 'serve'...>, 56585, 'XN65FdQVMKaFTcU6Z2SYgWVjfII...bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...})
+browser = <test_ui_e2e.Browser object at 0x7f4d24d81400>
+server = (<Popen: returncode: None args: ['/usr/bin/python3', '-m', 'netdeck', 'serve'...>, 34931, 'W_ZQxtg9dwfoMEJPLZVjxKtJ3Rp...bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...})
 
     def test_exit_dialog_cancel_keeps_running_then_confirm_stops(browser, server):
         proc, port, token, _ = server
@@ -96,7 +96,7 @@ server = (<Popen: returncode: None args: ['/usr/bin/python3', '-m', 'netdeck', '
 >       assert exit_code_within(proc, 10, "Exit") == 0
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-tests/test_ui_e2e.py:162: 
+tests/test_ui_e2e.py:179: 
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
 proc = <Popen: returncode: None args: ['/usr/bin/python3', '-m', 'netdeck', 'serve'...>
@@ -109,15 +109,15 @@ seconds = 10, what = 'Exit'
 >           pytest.fail(f"server still running {seconds} s after {what}")
 E           Failed: server still running 10 s after Exit
 
-tests/test_ui_e2e.py:120: Failed
+tests/test_ui_e2e.py:137: Failed
 =========================== short test summary info ============================
 FAILED tests/test_ui_e2e.py::test_exit_dialog_cancel_keeps_running_then_confirm_stops
-1 failed in 13.67s
+1 failed in 13.73s
 
 
 
 ## restored (original tree)
 exit 0
 .                                                                        [100%]
-1 passed in 3.85s
+1 passed in 3.87s
 

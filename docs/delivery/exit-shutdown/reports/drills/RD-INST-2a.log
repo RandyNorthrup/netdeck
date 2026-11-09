@@ -15,7 +15,7 @@ F                                                                        [100%]
 _______ test_every_shutdown_path_stops_jobs_and_cleans_up[netdeck-stop] ________
 
 env = {'SHELL': '/bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...}
-tmp_path = PosixPath('/tmp/pytest-of-randy/pytest-80/test_every_shutdown_path_stops0')
+tmp_path = PosixPath('/tmp/pytest-of-randy/pytest-105/test_every_shutdown_path_stops0')
 trigger = 'netdeck-stop'
 
     @pytest.mark.parametrize("trigger", ["exit-button-api", "netdeck-stop", "ctrl-c"])
@@ -49,12 +49,12 @@ E                +    where poll = <Popen: returncode: None args: ['/usr/bin/pyt
 tests/test_cli.py:109: AssertionError
 =========================== short test summary info ============================
 FAILED tests/test_cli.py::test_every_shutdown_path_stops_jobs_and_cleans_up[netdeck-stop]
-1 failed in 0.59s
+1 failed in 0.60s
 
 
 
 ## restored (original tree)
 exit 0
 .                                                                        [100%]
-1 passed in 1.20s
+1 passed in 1.08s
 

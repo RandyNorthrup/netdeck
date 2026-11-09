@@ -15,4 +15,4 @@ tests/test_runner.py::test_unsignalable_elevated_job_is_stopped_through_supervis
 tests/test_runner.py::test_unsignalable_elevated_job_is_stopped_through_supervisor[shutdown] PASSED [ 88%]
 tests/test_runner.py::test_shutdown_stops_jobs_concurrently PASSED       [100%]
 
-============================== 9 passed in 3.74s ===============================
+============================== 9 passed in 3.79s ===============================

@@ -5,7 +5,7 @@ result: PASS  observed: "assert 'running' == 'stopped'"
 ## baseline (original tree)
 exit 0
 ..                                                                       [100%]
-2 passed in 0.25s
+2 passed in 0.19s
 
 
 ## mutated (disposable copy)
@@ -14,7 +14,7 @@ FF                                                                       [100%]
 =================================== FAILURES ===================================
 ______ test_unsignalable_elevated_job_is_stopped_through_supervisor[stop] ______
 
-monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fa694ab8fc0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f53d9df0fc0>
 how = 'stop'
 
     @pytest.mark.parametrize("how", ["stop", "shutdown"])
@@ -43,10 +43,10 @@ E         + running
 
 tests/test_runner.py:151: AssertionError
 ------------------------------ Captured log call -------------------------------
-ERROR    netdeck.runner:runner.py:368 job 0bf8332ecba1: elevated process did not stop
+ERROR    netdeck.runner:runner.py:368 job 693dfa0530a3: elevated process did not stop
 ____ test_unsignalable_elevated_job_is_stopped_through_supervisor[shutdown] ____
 
-monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fa694ab8d60>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f53d9df0d60>
 how = 'shutdown'
 
     @pytest.mark.parametrize("how", ["stop", "shutdown"])
@@ -75,12 +75,12 @@ E         + running
 
 tests/test_runner.py:151: AssertionError
 ------------------------------ Captured log call -------------------------------
-ERROR    netdeck.runner:runner.py:368 job c73a96c029f1: elevated process did not stop
-ERROR    netdeck.runner:runner.py:253 jobs still running after shutdown deadline: c73a96c029f1
+ERROR    netdeck.runner:runner.py:368 job d8948d02c3fb: elevated process did not stop
+ERROR    netdeck.runner:runner.py:253 jobs still running after shutdown deadline: d8948d02c3fb
 =========================== short test summary info ============================
 FAILED tests/test_runner.py::test_unsignalable_elevated_job_is_stopped_through_supervisor[stop]
 FAILED tests/test_runner.py::test_unsignalable_elevated_job_is_stopped_through_supervisor[shutdown]
-2 failed in 23.29s
+2 failed in 23.27s
 
 
 

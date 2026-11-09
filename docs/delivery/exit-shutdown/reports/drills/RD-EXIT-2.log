@@ -5,7 +5,7 @@ result: PASS  observed: 'server exited after Cancel'
 ## baseline (original tree)
 exit 0
 .                                                                        [100%]
-1 passed in 3.87s
+1 passed in 3.84s
 
 
 ## mutated (disposable copy)
@@ -14,8 +14,8 @@ F                                                                        [100%]
 =================================== FAILURES ===================================
 ___________ test_exit_dialog_cancel_keeps_running_then_confirm_stops ___________
 
-browser = <test_ui_e2e.Browser object at 0x7f8d8d7e5400>
-server = (<Popen: returncode: 0 args: ['/usr/bin/python3', '-m', 'netdeck', 'serve', '...>, 60999, '30URNxN0Y5BjyFNtaqUeW_4wxS0...bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...})
+browser = <test_ui_e2e.Browser object at 0x7f34e9d91400>
+server = (<Popen: returncode: 0 args: ['/usr/bin/python3', '-m', 'netdeck', 'serve', '...>, 37553, 'oX1JTuB_sxSDgAB0zEWQyX_FOrD...bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...})
 
     def test_exit_dialog_cancel_keeps_running_then_confirm_stops(browser, server):
         proc, port, token, _ = server
@@ -32,11 +32,11 @@ server = (<Popen: returncode: 0 args: ['/usr/bin/python3', '-m', 'netdeck', 'ser
         assert browser.wait_for(f"!{DIALOG_OPEN}"), "cancel did not close the dialog"
 >       assert_still_running(proc, port, "Cancel")
 
-tests/test_ui_e2e.py:148: 
+tests/test_ui_e2e.py:165: 
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
 proc = <Popen: returncode: 0 args: ['/usr/bin/python3', '-m', 'netdeck', 'serve', '...>
-port = 60999, after = 'Cancel'
+port = 37553, after = 'Cancel'
 
     def assert_still_running(proc, port, after):
         time.sleep(1.0)
@@ -46,15 +46,15 @@ E       assert 0 is None
 E        +  where 0 = poll()
 E        +    where poll = <Popen: returncode: 0 args: ['/usr/bin/python3', '-m', 'netdeck', 'serve', '...>.poll
 
-tests/test_ui_e2e.py:125: AssertionError
+tests/test_ui_e2e.py:142: AssertionError
 =========================== short test summary info ============================
 FAILED tests/test_ui_e2e.py::test_exit_dialog_cancel_keeps_running_then_confirm_stops
-1 failed in 2.26s
+1 failed in 2.29s
 
 
 
 ## restored (original tree)
 exit 0
 .                                                                        [100%]
-1 passed in 3.84s
+1 passed in 3.88s
 

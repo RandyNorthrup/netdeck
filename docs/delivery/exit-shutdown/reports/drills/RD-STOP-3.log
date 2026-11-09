@@ -5,7 +5,7 @@ result: PASS  observed: 'shutdown took 6.0s'
 ## baseline (original tree)
 exit 0
 .                                                                        [100%]
-1 passed in 2.09s
+1 passed in 2.08s
 
 
 ## mutated (disposable copy)
@@ -26,12 +26,12 @@ ____________________ test_shutdown_stops_jobs_concurrently _____________________
         elapsed = time.monotonic() - start
 >       assert elapsed < 4.0, f"shutdown took {elapsed:.1f}s"
 E       AssertionError: shutdown took 6.0s
-E       assert 6.011449012999947 < 4.0
+E       assert 6.011703738999131 < 4.0
 
 tests/test_runner.py:167: AssertionError
 =========================== short test summary info ============================
 FAILED tests/test_runner.py::test_shutdown_stops_jobs_concurrently - Assertio...
-1 failed in 6.16s
+1 failed in 6.17s
 
 
 

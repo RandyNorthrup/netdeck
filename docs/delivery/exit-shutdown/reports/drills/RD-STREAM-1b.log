@@ -5,7 +5,7 @@ result: PASS  observed: "assert b'event: bye' in"
 ## baseline (original tree)
 exit 0
 .                                                                        [100%]
-1 passed in 1.17s
+1 passed in 1.19s
 
 
 ## mutated (disposable copy)
@@ -14,7 +14,7 @@ F                                                                        [100%]
 =================================== FAILURES ===================================
 __________________ test_streams_say_bye_and_close_on_shutdown __________________
 
-stoppable = (<netdeck.server.NetDeckHTTPServer object at 0x7f9c2c115160>, <Thread(Thread-1 (serve_forever), started daemon 140308728379072)>)
+stoppable = (<netdeck.server.NetDeckHTTPServer object at 0x7f441a77d160>, <Thread(Thread-1 (serve_forever), started daemon 139930477098688)>)
 
     def test_streams_say_bye_and_close_on_shutdown(stoppable):
         """A job that goes silent: only the shutdown wake-up can end the stream's 15 s wait early."""
@@ -38,12 +38,12 @@ E           assert b'event: bye' in b''
 tests/test_server.py:214: AssertionError
 =========================== short test summary info ============================
 FAILED tests/test_server.py::test_streams_say_bye_and_close_on_shutdown - Ass...
-1 failed in 1.24s
+1 failed in 1.23s
 
 
 
 ## restored (original tree)
 exit 0
 .                                                                        [100%]
-1 passed in 1.19s
+1 passed in 1.17s
 

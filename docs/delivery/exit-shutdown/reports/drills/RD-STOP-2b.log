@@ -5,7 +5,7 @@ result: PASS  observed: "assert 'interrupted' in"
 ## baseline (original tree)
 exit 0
 ..                                                                       [100%]
-2 passed in 0.19s
+2 passed in 0.20s
 
 
 ## mutated (disposable copy)
@@ -14,7 +14,7 @@ FF                                                                       [100%]
 =================================== FAILURES ===================================
 ______ test_unsignalable_elevated_job_is_stopped_through_supervisor[stop] ______
 
-monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fdf8dc78fc0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f827bd40fc0>
 how = 'stop'
 
     @pytest.mark.parametrize("how", ["stop", "shutdown"])
@@ -38,12 +38,12 @@ how = 'stop'
 >       assert "interrupted" in job.lines, job.lines
 E       AssertionError: ['up']
 E       assert 'interrupted' in ['up']
-E        +  where ['up'] = <netdeck.runner.Job object at 0x7fdf8dc717f0>.lines
+E        +  where ['up'] = <netdeck.runner.Job object at 0x7f827bd397f0>.lines
 
 tests/test_runner.py:152: AssertionError
 ____ test_unsignalable_elevated_job_is_stopped_through_supervisor[shutdown] ____
 
-monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fdf8dc78d60>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f827bd40d60>
 how = 'shutdown'
 
     @pytest.mark.parametrize("how", ["stop", "shutdown"])
@@ -67,18 +67,18 @@ how = 'shutdown'
 >       assert "interrupted" in job.lines, job.lines
 E       AssertionError: ['up']
 E       assert 'interrupted' in ['up']
-E        +  where ['up'] = <netdeck.runner.Job object at 0x7fdf8dca8a50>.lines
+E        +  where ['up'] = <netdeck.runner.Job object at 0x7f827bd70a50>.lines
 
 tests/test_runner.py:152: AssertionError
 =========================== short test summary info ============================
 FAILED tests/test_runner.py::test_unsignalable_elevated_job_is_stopped_through_supervisor[stop]
 FAILED tests/test_runner.py::test_unsignalable_elevated_job_is_stopped_through_supervisor[shutdown]
-2 failed in 4.21s
+2 failed in 4.19s
 
 
 
 ## restored (original tree)
 exit 0
 ..                                                                       [100%]
-2 passed in 0.20s
+2 passed in 0.19s
 

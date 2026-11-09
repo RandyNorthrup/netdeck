@@ -8,4 +8,4 @@ collecting ... collected 2 items
 tests/test_ui_e2e.py::test_exit_dialog_cancel_keeps_running_then_confirm_stops PASSED [ 50%]
 tests/test_ui_e2e.py::test_stopped_screen_when_server_is_stopped_from_terminal PASSED [100%]
 
-============================== 2 passed in 5.52s ===============================
+============================== 2 passed in 5.40s ===============================

@@ -5,20 +5,20 @@ result: PASS  observed: 'instance.json was left behind'
 ## baseline (original tree)
 exit 0
 ...                                                                      [100%]
-3 passed in 2.75s
+3 passed in 2.78s
 
 
 ## mutated (disposable copy)
 exit 1
-)>.exists
+ts
 E            +      where <module 'posixpath' (frozen)> = os.path
-E            +    and   '/tmp/pytest-of-randy/pytest-77/test_every_shutdown_path_stops0/run/netdeck/instance.json' = instance_path({'SHELL': '/bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...})
+E            +    and   '/tmp/pytest-of-randy/pytest-102/test_every_shutdown_path_stops0/run/netdeck/instance.json' = instance_path({'SHELL': '/bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...})
 
 tests/test_cli.py:115: AssertionError
 _______ test_every_shutdown_path_stops_jobs_and_cleans_up[netdeck-stop] ________
 
 env = {'SHELL': '/bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...}
-tmp_path = PosixPath('/tmp/pytest-of-randy/pytest-77/test_every_shutdown_path_stops1')
+tmp_path = PosixPath('/tmp/pytest-of-randy/pytest-102/test_every_shutdown_path_stops1')
 trigger = 'netdeck-stop'
 
     @pytest.mark.parametrize("trigger", ["exit-button-api", "netdeck-stop", "ctrl-c"])
@@ -52,16 +52,16 @@ trigger = 'netdeck-stop'
 >           assert not os.path.exists(instance_path(env)), "instance.json was left behind"
 E           AssertionError: instance.json was left behind
 E           assert not True
-E            +  where True = <function exists at 0x7f479838ddd0>('/tmp/pytest-of-randy/pytest-77/test_every_shutdown_path_stops1/run/netdeck/instance.json')
-E            +    where <function exists at 0x7f479838ddd0> = <module 'posixpath' (frozen)>.exists
+E            +  where True = <function exists at 0x7f33f1f8ddd0>('/tmp/pytest-of-randy/pytest-102/test_every_shutdown_path_stops1/run/netdeck/instance.json')
+E            +    where <function exists at 0x7f33f1f8ddd0> = <module 'posixpath' (frozen)>.exists
 E            +      where <module 'posixpath' (frozen)> = os.path
-E            +    and   '/tmp/pytest-of-randy/pytest-77/test_every_shutdown_path_stops1/run/netdeck/instance.json' = instance_path({'SHELL': '/bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...})
+E            +    and   '/tmp/pytest-of-randy/pytest-102/test_every_shutdown_path_stops1/run/netdeck/instance.json' = instance_path({'SHELL': '/bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...})
 
 tests/test_cli.py:115: AssertionError
 __________ test_every_shutdown_path_stops_jobs_and_cleans_up[ctrl-c] ___________
 
 env = {'SHELL': '/bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...}
-tmp_path = PosixPath('/tmp/pytest-of-randy/pytest-77/test_every_shutdown_path_stops2')
+tmp_path = PosixPath('/tmp/pytest-of-randy/pytest-102/test_every_shutdown_path_stops2')
 trigger = 'ctrl-c'
 
     @pytest.mark.parametrize("trigger", ["exit-button-api", "netdeck-stop", "ctrl-c"])
@@ -95,22 +95,22 @@ trigger = 'ctrl-c'
 >           assert not os.path.exists(instance_path(env)), "instance.json was left behind"
 E           AssertionError: instance.json was left behind
 E           assert not True
-E            +  where True = <function exists at 0x7f479838ddd0>('/tmp/pytest-of-randy/pytest-77/test_every_shutdown_path_stops2/run/netdeck/instance.json')
-E            +    where <function exists at 0x7f479838ddd0> = <module 'posixpath' (frozen)>.exists
+E            +  where True = <function exists at 0x7f33f1f8ddd0>('/tmp/pytest-of-randy/pytest-102/test_every_shutdown_path_stops2/run/netdeck/instance.json')
+E            +    where <function exists at 0x7f33f1f8ddd0> = <module 'posixpath' (frozen)>.exists
 E            +      where <module 'posixpath' (frozen)> = os.path
-E            +    and   '/tmp/pytest-of-randy/pytest-77/test_every_shutdown_path_stops2/run/netdeck/instance.json' = instance_path({'SHELL': '/bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...})
+E            +    and   '/tmp/pytest-of-randy/pytest-102/test_every_shutdown_path_stops2/run/netdeck/instance.json' = instance_path({'SHELL': '/bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...})
 
 tests/test_cli.py:115: AssertionError
 =========================== short test summary info ============================
 FAILED tests/test_cli.py::test_every_shutdown_path_stops_jobs_and_cleans_up[exit-button-api]
 FAILED tests/test_cli.py::test_every_shutdown_path_stops_jobs_and_cleans_up[netdeck-stop]
 FAILED tests/test_cli.py::test_every_shutdown_path_stops_jobs_and_cleans_up[ctrl-c]
-3 failed in 2.91s
+3 failed in 2.92s
 
 
 
 ## restored (original tree)
 exit 0
 ...                                                                      [100%]
-3 passed in 2.75s
+3 passed in 2.93s
 

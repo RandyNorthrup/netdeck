@@ -249,9 +249,9 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
       ],
       "status": "verified",
       "evidence": [
-        "EV-BEH-RUNNER-G",
-        "EV-RED-STOP-2a-G",
-        "EV-RED-STOP-2b-G"
+        "EV-BEH-RUNNER-H",
+        "EV-RED-STOP-2a-H",
+        "EV-RED-STOP-2b-H"
       ],
       "blocker": null,
       "superseded_by": null
@@ -278,10 +278,10 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
       ],
       "status": "verified",
       "evidence": [
-        "EV-BEH-RUNNER-G",
-        "EV-RED-STOP-2a-G",
-        "EV-RED-STOP-2b-G",
-        "EV-RED-STOP-3-G"
+        "EV-BEH-RUNNER-H",
+        "EV-RED-STOP-2a-H",
+        "EV-RED-STOP-2b-H",
+        "EV-RED-STOP-3-H"
       ],
       "blocker": null,
       "superseded_by": null
@@ -308,10 +308,10 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
       ],
       "status": "verified",
       "evidence": [
-        "EV-BEH-SERVER-G",
-        "EV-RED-EXIT-3-G",
-        "EV-RED-STREAM-1a-G",
-        "EV-RED-STREAM-1b-G"
+        "EV-BEH-SERVER-H",
+        "EV-RED-EXIT-3-H",
+        "EV-RED-STREAM-1a-H",
+        "EV-RED-STREAM-1b-H"
       ],
       "blocker": null,
       "superseded_by": null
@@ -339,11 +339,11 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
       ],
       "status": "verified",
       "evidence": [
-        "EV-BEH-CLI-G",
-        "EV-RED-STOP-1-G",
-        "EV-RED-INST-1-G",
-        "EV-RED-INST-2a-G",
-        "EV-RED-INST-2b-G"
+        "EV-BEH-CLI-H",
+        "EV-RED-STOP-1-H",
+        "EV-RED-INST-1-H",
+        "EV-RED-INST-2a-H",
+        "EV-RED-INST-2b-H"
       ],
       "blocker": null,
       "superseded_by": null
@@ -387,11 +387,11 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
       ],
       "status": "verified",
       "evidence": [
-        "EV-BEH-UI-G",
-        "EV-RED-EXIT-1-G",
-        "EV-RED-EXIT-1api-G",
-        "EV-RED-EXIT-2-G",
-        "EV-RED-STREAM-2-G"
+        "EV-BEH-UI-H",
+        "EV-RED-EXIT-1-H",
+        "EV-RED-EXIT-1api-H",
+        "EV-RED-EXIT-2-H",
+        "EV-RED-STREAM-2-H"
       ],
       "blocker": null,
       "superseded_by": null
@@ -426,11 +426,11 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
       ],
       "status": "verified",
       "evidence": [
-        "EV-BEH-UI-G",
-        "EV-BEH-RUNNER-G",
-        "EV-RED-EXIT-1-G",
-        "EV-RED-STOP-2a-G",
-        "EV-RED-STOP-2b-G"
+        "EV-BEH-UI-H",
+        "EV-BEH-RUNNER-H",
+        "EV-RED-EXIT-1-H",
+        "EV-RED-STOP-2a-H",
+        "EV-RED-STOP-2b-H"
       ],
       "blocker": null,
       "superseded_by": null
@@ -4510,7 +4510,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
         "AC-STOP-3"
       ],
       "kind": "behavior",
-      "status": "pass",
+      "status": "stale",
       "command": [
         "python3",
         "-m",
@@ -4614,7 +4614,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
       ],
       "scope_sha256": "f1b0f2e82815400d7c893357e369b3da22b033d6fb5b10799b3177184136e067",
       "red": null,
-      "reason": null
+      "reason": "tests/test_ui_e2e.py changed: the Browser helper leaked Chrome when setup failed and let helper processes rewrite deleted profiles; superseded by the -H receipts. Next action: none; kept as history."
     },
     {
       "id": "EV-BEH-SERVER-G",
@@ -4623,7 +4623,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
         "AC-STREAM-1"
       ],
       "kind": "behavior",
-      "status": "pass",
+      "status": "stale",
       "command": [
         "python3",
         "-m",
@@ -4687,7 +4687,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
       ],
       "scope_sha256": "dd2ad2c029a2e22528ea249572b8e6fbec3e4afa6a4fd286a22b2a98133bad42",
       "red": null,
-      "reason": null
+      "reason": "tests/test_ui_e2e.py changed: the Browser helper leaked Chrome when setup failed and let helper processes rewrite deleted profiles; superseded by the -H receipts. Next action: none; kept as history."
     },
     {
       "id": "EV-BEH-CLI-G",
@@ -4697,7 +4697,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
         "AC-INST-2"
       ],
       "kind": "behavior",
-      "status": "pass",
+      "status": "stale",
       "command": [
         "python3",
         "-m",
@@ -4769,7 +4769,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
       ],
       "scope_sha256": "1c5215964fd8b5ec6fea16cfb51864ba95578e38dc48e8b914a6910e0b8864ff",
       "red": null,
-      "reason": null
+      "reason": "tests/test_ui_e2e.py changed: the Browser helper leaked Chrome when setup failed and let helper processes rewrite deleted profiles; superseded by the -H receipts. Next action: none; kept as history."
     },
     {
       "id": "EV-BEH-UI-G",
@@ -4779,7 +4779,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
         "AC-STREAM-2"
       ],
       "kind": "behavior",
-      "status": "pass",
+      "status": "stale",
       "command": [
         "python3",
         "-m",
@@ -4883,7 +4883,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
       ],
       "scope_sha256": "f1b0f2e82815400d7c893357e369b3da22b033d6fb5b10799b3177184136e067",
       "red": null,
-      "reason": null
+      "reason": "tests/test_ui_e2e.py changed: the Browser helper leaked Chrome when setup failed and let helper processes rewrite deleted profiles; superseded by the -H receipts. Next action: none; kept as history."
     },
     {
       "id": "EV-RED-EXIT-1-G",
@@ -4891,7 +4891,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
         "AC-EXIT-1"
       ],
       "kind": "red",
-      "status": "pass",
+      "status": "stale",
       "command": [
         "/usr/bin/python3",
         "-m",
@@ -5020,7 +5020,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
           }
         ]
       },
-      "reason": null
+      "reason": "tests/test_ui_e2e.py changed: the Browser helper leaked Chrome when setup failed and let helper processes rewrite deleted profiles; superseded by the -H receipts. Next action: none; kept as history."
     },
     {
       "id": "EV-RED-EXIT-1api-G",
@@ -5028,7 +5028,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
         "AC-EXIT-1"
       ],
       "kind": "red",
-      "status": "pass",
+      "status": "stale",
       "command": [
         "/usr/bin/python3",
         "-m",
@@ -5157,7 +5157,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
           }
         ]
       },
-      "reason": null
+      "reason": "tests/test_ui_e2e.py changed: the Browser helper leaked Chrome when setup failed and let helper processes rewrite deleted profiles; superseded by the -H receipts. Next action: none; kept as history."
     },
     {
       "id": "EV-RED-EXIT-2-G",
@@ -5165,7 +5165,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
         "AC-EXIT-2"
       ],
       "kind": "red",
-      "status": "pass",
+      "status": "stale",
       "command": [
         "/usr/bin/python3",
         "-m",
@@ -5282,7 +5282,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
           }
         ]
       },
-      "reason": null
+      "reason": "tests/test_ui_e2e.py changed: the Browser helper leaked Chrome when setup failed and let helper processes rewrite deleted profiles; superseded by the -H receipts. Next action: none; kept as history."
     },
     {
       "id": "EV-RED-EXIT-3-G",
@@ -5290,7 +5290,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
         "AC-EXIT-3"
       ],
       "kind": "red",
-      "status": "pass",
+      "status": "stale",
       "command": [
         "/usr/bin/python3",
         "-m",
@@ -5379,7 +5379,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
           }
         ]
       },
-      "reason": null
+      "reason": "tests/test_ui_e2e.py changed: the Browser helper leaked Chrome when setup failed and let helper processes rewrite deleted profiles; superseded by the -H receipts. Next action: none; kept as history."
     },
     {
       "id": "EV-RED-INST-1-G",
@@ -5387,7 +5387,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
         "AC-INST-1"
       ],
       "kind": "red",
-      "status": "pass",
+      "status": "stale",
       "command": [
         "/usr/bin/python3",
         "-m",
@@ -5484,7 +5484,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
           }
         ]
       },
-      "reason": null
+      "reason": "tests/test_ui_e2e.py changed: the Browser helper leaked Chrome when setup failed and let helper processes rewrite deleted profiles; superseded by the -H receipts. Next action: none; kept as history."
     },
     {
       "id": "EV-RED-INST-2a-G",
@@ -5492,7 +5492,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
         "AC-INST-2"
       ],
       "kind": "red",
-      "status": "pass",
+      "status": "stale",
       "command": [
         "/usr/bin/python3",
         "-m",
@@ -5589,7 +5589,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
           }
         ]
       },
-      "reason": null
+      "reason": "tests/test_ui_e2e.py changed: the Browser helper leaked Chrome when setup failed and let helper processes rewrite deleted profiles; superseded by the -H receipts. Next action: none; kept as history."
     },
     {
       "id": "EV-RED-INST-2b-G",
@@ -5597,7 +5597,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
         "AC-INST-2"
       ],
       "kind": "red",
-      "status": "pass",
+      "status": "stale",
       "command": [
         "/usr/bin/python3",
         "-m",
@@ -5694,7 +5694,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
           }
         ]
       },
-      "reason": null
+      "reason": "tests/test_ui_e2e.py changed: the Browser helper leaked Chrome when setup failed and let helper processes rewrite deleted profiles; superseded by the -H receipts. Next action: none; kept as history."
     },
     {
       "id": "EV-RED-STOP-1-G",
@@ -5702,7 +5702,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
         "AC-STOP-1"
       ],
       "kind": "red",
-      "status": "pass",
+      "status": "stale",
       "command": [
         "/usr/bin/python3",
         "-m",
@@ -5799,7 +5799,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
           }
         ]
       },
-      "reason": null
+      "reason": "tests/test_ui_e2e.py changed: the Browser helper leaked Chrome when setup failed and let helper processes rewrite deleted profiles; superseded by the -H receipts. Next action: none; kept as history."
     },
     {
       "id": "EV-RED-STOP-2a-G",
@@ -5807,7 +5807,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
         "AC-STOP-2"
       ],
       "kind": "red",
-      "status": "pass",
+      "status": "stale",
       "command": [
         "/usr/bin/python3",
         "-m",
@@ -5936,7 +5936,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
           }
         ]
       },
-      "reason": null
+      "reason": "tests/test_ui_e2e.py changed: the Browser helper leaked Chrome when setup failed and let helper processes rewrite deleted profiles; superseded by the -H receipts. Next action: none; kept as history."
     },
     {
       "id": "EV-RED-STOP-2b-G",
@@ -5944,7 +5944,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
         "AC-STOP-2"
       ],
       "kind": "red",
-      "status": "pass",
+      "status": "stale",
       "command": [
         "/usr/bin/python3",
         "-m",
@@ -6073,7 +6073,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
           }
         ]
       },
-      "reason": null
+      "reason": "tests/test_ui_e2e.py changed: the Browser helper leaked Chrome when setup failed and let helper processes rewrite deleted profiles; superseded by the -H receipts. Next action: none; kept as history."
     },
     {
       "id": "EV-RED-STOP-3-G",
@@ -6081,7 +6081,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
         "AC-STOP-3"
       ],
       "kind": "red",
-      "status": "pass",
+      "status": "stale",
       "command": [
         "/usr/bin/python3",
         "-m",
@@ -6162,7 +6162,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
           }
         ]
       },
-      "reason": null
+      "reason": "tests/test_ui_e2e.py changed: the Browser helper leaked Chrome when setup failed and let helper processes rewrite deleted profiles; superseded by the -H receipts. Next action: none; kept as history."
     },
     {
       "id": "EV-RED-STREAM-1a-G",
@@ -6170,7 +6170,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
         "AC-STREAM-1"
       ],
       "kind": "red",
-      "status": "pass",
+      "status": "stale",
       "command": [
         "/usr/bin/python3",
         "-m",
@@ -6259,7 +6259,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
           }
         ]
       },
-      "reason": null
+      "reason": "tests/test_ui_e2e.py changed: the Browser helper leaked Chrome when setup failed and let helper processes rewrite deleted profiles; superseded by the -H receipts. Next action: none; kept as history."
     },
     {
       "id": "EV-RED-STREAM-1b-G",
@@ -6267,7 +6267,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
         "AC-STREAM-1"
       ],
       "kind": "red",
-      "status": "pass",
+      "status": "stale",
       "command": [
         "/usr/bin/python3",
         "-m",
@@ -6356,7 +6356,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
           }
         ]
       },
-      "reason": null
+      "reason": "tests/test_ui_e2e.py changed: the Browser helper leaked Chrome when setup failed and let helper processes rewrite deleted profiles; superseded by the -H receipts. Next action: none; kept as history."
     },
     {
       "id": "EV-RED-STREAM-2-G",
@@ -6364,7 +6364,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
         "AC-STREAM-2"
       ],
       "kind": "red",
-      "status": "pass",
+      "status": "stale",
       "command": [
         "/usr/bin/python3",
         "-m",
@@ -6481,6 +6481,1986 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
           }
         ]
       },
+      "reason": "tests/test_ui_e2e.py changed: the Browser helper leaked Chrome when setup failed and let helper processes rewrite deleted profiles; superseded by the -H receipts. Next action: none; kept as history."
+    },
+    {
+      "id": "EV-BEH-RUNNER-H",
+      "acceptance": [
+        "AC-STOP-2",
+        "AC-STOP-3"
+      ],
+      "kind": "behavior",
+      "status": "pass",
+      "command": [
+        "python3",
+        "-m",
+        "pytest",
+        "-v",
+        "-p",
+        "no:cacheprovider",
+        "tests/test_runner.py"
+      ],
+      "method": "Re-run after the browser-test cleanup fix against the final source with PYTHONPATH=src and NETDECK_REQUIRE_E2E=1: 9 tests: unsignalable polkit-mode job stopped via supervisor (stop and shutdown), three SIGINT-ignoring jobs stopped concurrently. All collected tests passed; full suite 131 passed and make lint passed.",
+      "environment": {
+        "platform": "linux",
+        "tools": {
+          "python": "3.14.9",
+          "pytest": "9.2.0",
+          "ruff": "0.17.4",
+          "node": "26.13.0",
+          "shellcheck": "0.11.0",
+          "google-chrome": "154.0.8037.97",
+          "websocket-client": "1.9.2"
+        }
+      },
+      "exit_code": 0,
+      "artifact": {
+        "path": "docs/delivery/exit-shutdown/reports/final/test_runner.log",
+        "sha256": "04f00802c35ad463411e47e3d89b9754cf5cc69d661e4515d28cd617e09cd7a2"
+      },
+      "inputs": [
+        {
+          "path": ".github/workflows/ci.yml",
+          "sha256": "99023084a0e40d11e070a7617ac17f5f56f2cd612fce851b853a315043cdd4e3"
+        },
+        {
+          "path": "CHANGELOG.md",
+          "sha256": "01dc37ee908aaa0845d8090a0cb8c74e30e3d6653a7045ecccb6067b12a51628"
+        },
+        {
+          "path": "CONTRIBUTING.md",
+          "sha256": "0460467256f328b75238576f5b76b5c16bdc1780393abf6ecb66df6195af8108"
+        },
+        {
+          "path": "README.md",
+          "sha256": "7e2fd58a304625b18c2ced61788158b9d19ee72ccca488b92bf703213635019d"
+        },
+        {
+          "path": "SECURITY.md",
+          "sha256": "be35a91c802b6d8ccea50d4c2c2c013fa7885af44b99f5e99c3f1fdb20e7dc14"
+        },
+        {
+          "path": "docs/PRIVILEGES.md",
+          "sha256": "9b7d0177eaf74b6030ea9bc4e4ae6571a0cab7abd734b3e8e187cc0835196a2e"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "24d2759b7889d789609aae1822a2e3bb67baec046e7c7f92460b693d2081f745"
+        },
+        {
+          "path": "src/netdeck/cli.py",
+          "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+        },
+        {
+          "path": "src/netdeck/hostenv.py",
+          "sha256": "afd1c5aa4f7c09afc74283c0fc32fcd78fe5070497c5b8d5f591442091018d00"
+        },
+        {
+          "path": "src/netdeck/runner.py",
+          "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+        },
+        {
+          "path": "src/netdeck/server.py",
+          "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+        },
+        {
+          "path": "src/netdeck/static/app.css",
+          "sha256": "ae2ec03b7f5ed7851e53f24ae5da4f6df54d485849bc5fc542ff9be751940926"
+        },
+        {
+          "path": "src/netdeck/static/app.js",
+          "sha256": "43a476598ab2b1d7e18d52f163e42bac41c4f1d0a22227b12c2d657253eecdbb"
+        },
+        {
+          "path": "src/netdeck/static/index.html",
+          "sha256": "98d7a649019787078b1bf5bb84340a6307d2cef2ed6ad7ee28bef3855c434952"
+        },
+        {
+          "path": "tests/test_cli.py",
+          "sha256": "5460dcd8371cea7997ee04268533643cb0c86dbae3d7e7b2bdbb3bd55a9f4f4d"
+        },
+        {
+          "path": "tests/test_runner.py",
+          "sha256": "1f5f262cceea35928b9cd923d8c51d5a1ea2b09e8e789e913163702ea3f6f5ad"
+        },
+        {
+          "path": "tests/test_server.py",
+          "sha256": "0fbb1d65e4ce2999f1b00c1d5d3f7b5a48b2728c12c207a1e48746a6af6d6dca"
+        },
+        {
+          "path": "tests/test_ui_e2e.py",
+          "sha256": "7e39f18cba26bca9e108ad7f0d9f686eb8735c968fc10503d336271a6767c239"
+        }
+      ],
+      "scope_sha256": "f1b0f2e82815400d7c893357e369b3da22b033d6fb5b10799b3177184136e067",
+      "red": null,
+      "reason": null
+    },
+    {
+      "id": "EV-BEH-SERVER-H",
+      "acceptance": [
+        "AC-EXIT-3",
+        "AC-STREAM-1"
+      ],
+      "kind": "behavior",
+      "status": "pass",
+      "command": [
+        "python3",
+        "-m",
+        "pytest",
+        "-v",
+        "-p",
+        "no:cacheprovider",
+        "tests/test_server.py"
+      ],
+      "method": "Re-run after the browser-test cleanup fix against the final source with PYTHONPATH=src and NETDECK_REQUIRE_E2E=1: 16 tests: shutdown refused without cookie/header/same origin while serving continued; silent job stream and stats stream got bye and closed within 2 s. All collected tests passed; full suite 131 passed and make lint passed.",
+      "environment": {
+        "platform": "linux",
+        "tools": {
+          "python": "3.14.9",
+          "pytest": "9.2.0",
+          "ruff": "0.17.4",
+          "node": "26.13.0",
+          "shellcheck": "0.11.0",
+          "google-chrome": "154.0.8037.97",
+          "websocket-client": "1.9.2"
+        }
+      },
+      "exit_code": 0,
+      "artifact": {
+        "path": "docs/delivery/exit-shutdown/reports/final/test_server.log",
+        "sha256": "1249db952cc5d5bd4d879793c3476bc2771c596a27bc029987f99f0975d005ff"
+      },
+      "inputs": [
+        {
+          "path": "CONTRIBUTING.md",
+          "sha256": "0460467256f328b75238576f5b76b5c16bdc1780393abf6ecb66df6195af8108"
+        },
+        {
+          "path": "README.md",
+          "sha256": "7e2fd58a304625b18c2ced61788158b9d19ee72ccca488b92bf703213635019d"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "24d2759b7889d789609aae1822a2e3bb67baec046e7c7f92460b693d2081f745"
+        },
+        {
+          "path": "src/netdeck/hostenv.py",
+          "sha256": "afd1c5aa4f7c09afc74283c0fc32fcd78fe5070497c5b8d5f591442091018d00"
+        },
+        {
+          "path": "src/netdeck/runner.py",
+          "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+        },
+        {
+          "path": "src/netdeck/server.py",
+          "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+        },
+        {
+          "path": "tests/test_runner.py",
+          "sha256": "1f5f262cceea35928b9cd923d8c51d5a1ea2b09e8e789e913163702ea3f6f5ad"
+        },
+        {
+          "path": "tests/test_server.py",
+          "sha256": "0fbb1d65e4ce2999f1b00c1d5d3f7b5a48b2728c12c207a1e48746a6af6d6dca"
+        }
+      ],
+      "scope_sha256": "dd2ad2c029a2e22528ea249572b8e6fbec3e4afa6a4fd286a22b2a98133bad42",
+      "red": null,
+      "reason": null
+    },
+    {
+      "id": "EV-BEH-CLI-H",
+      "acceptance": [
+        "AC-STOP-1",
+        "AC-INST-1",
+        "AC-INST-2"
+      ],
+      "kind": "behavior",
+      "status": "pass",
+      "command": [
+        "python3",
+        "-m",
+        "pytest",
+        "-v",
+        "-p",
+        "no:cacheprovider",
+        "tests/test_cli.py"
+      ],
+      "method": "Re-run after the browser-test cleanup fix against the final source with PYTHONPATH=src and NETDECK_REQUIRE_E2E=1: 5 tests: real servers stopped via API, netdeck stop and SIGINT with a running ping: exit 0, no ping left, instance.json removed, stop waited for exit; stale instance file removed. All collected tests passed; full suite 131 passed and make lint passed.",
+      "environment": {
+        "platform": "linux",
+        "tools": {
+          "python": "3.14.9",
+          "pytest": "9.2.0",
+          "ruff": "0.17.4",
+          "node": "26.13.0",
+          "shellcheck": "0.11.0",
+          "google-chrome": "154.0.8037.97",
+          "websocket-client": "1.9.2"
+        }
+      },
+      "exit_code": 0,
+      "artifact": {
+        "path": "docs/delivery/exit-shutdown/reports/final/test_cli.log",
+        "sha256": "794a5c4a5382c417c30418a171e229e166f446b083fe43a48d7158edd4f41d9b"
+      },
+      "inputs": [
+        {
+          "path": "CONTRIBUTING.md",
+          "sha256": "0460467256f328b75238576f5b76b5c16bdc1780393abf6ecb66df6195af8108"
+        },
+        {
+          "path": "README.md",
+          "sha256": "7e2fd58a304625b18c2ced61788158b9d19ee72ccca488b92bf703213635019d"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "24d2759b7889d789609aae1822a2e3bb67baec046e7c7f92460b693d2081f745"
+        },
+        {
+          "path": "src/netdeck/cli.py",
+          "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+        },
+        {
+          "path": "src/netdeck/hostenv.py",
+          "sha256": "afd1c5aa4f7c09afc74283c0fc32fcd78fe5070497c5b8d5f591442091018d00"
+        },
+        {
+          "path": "src/netdeck/runner.py",
+          "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+        },
+        {
+          "path": "src/netdeck/server.py",
+          "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+        },
+        {
+          "path": "tests/test_cli.py",
+          "sha256": "5460dcd8371cea7997ee04268533643cb0c86dbae3d7e7b2bdbb3bd55a9f4f4d"
+        },
+        {
+          "path": "tests/test_runner.py",
+          "sha256": "1f5f262cceea35928b9cd923d8c51d5a1ea2b09e8e789e913163702ea3f6f5ad"
+        },
+        {
+          "path": "tests/test_server.py",
+          "sha256": "0fbb1d65e4ce2999f1b00c1d5d3f7b5a48b2728c12c207a1e48746a6af6d6dca"
+        }
+      ],
+      "scope_sha256": "1c5215964fd8b5ec6fea16cfb51864ba95578e38dc48e8b914a6910e0b8864ff",
+      "red": null,
+      "reason": null
+    },
+    {
+      "id": "EV-BEH-UI-H",
+      "acceptance": [
+        "AC-EXIT-1",
+        "AC-EXIT-2",
+        "AC-STREAM-2"
+      ],
+      "kind": "behavior",
+      "status": "pass",
+      "command": [
+        "python3",
+        "-m",
+        "pytest",
+        "-v",
+        "-p",
+        "no:cacheprovider",
+        "tests/test_ui_e2e.py"
+      ],
+      "method": "Re-run after the browser-test cleanup fix against the final source with PYTHONPATH=src and NETDECK_REQUIRE_E2E=1: 2 tests in headless Chrome 154 with NETDECK_REQUIRE_E2E=1: Cancel/Escape kept the server running, Confirm showed the stopped screen and the server exited 0; SIGINT showed the stopped screen; no page exceptions. All collected tests passed; full suite 131 passed and make lint passed.",
+      "environment": {
+        "platform": "linux",
+        "tools": {
+          "python": "3.14.9",
+          "pytest": "9.2.0",
+          "ruff": "0.17.4",
+          "node": "26.13.0",
+          "shellcheck": "0.11.0",
+          "google-chrome": "154.0.8037.97",
+          "websocket-client": "1.9.2"
+        }
+      },
+      "exit_code": 0,
+      "artifact": {
+        "path": "docs/delivery/exit-shutdown/reports/final/test_ui_e2e.log",
+        "sha256": "10c6081f03dec0dd7780a9f3ced3886a593ef747f7015705b90fcef01821f8fe"
+      },
+      "inputs": [
+        {
+          "path": ".github/workflows/ci.yml",
+          "sha256": "99023084a0e40d11e070a7617ac17f5f56f2cd612fce851b853a315043cdd4e3"
+        },
+        {
+          "path": "CHANGELOG.md",
+          "sha256": "01dc37ee908aaa0845d8090a0cb8c74e30e3d6653a7045ecccb6067b12a51628"
+        },
+        {
+          "path": "CONTRIBUTING.md",
+          "sha256": "0460467256f328b75238576f5b76b5c16bdc1780393abf6ecb66df6195af8108"
+        },
+        {
+          "path": "README.md",
+          "sha256": "7e2fd58a304625b18c2ced61788158b9d19ee72ccca488b92bf703213635019d"
+        },
+        {
+          "path": "SECURITY.md",
+          "sha256": "be35a91c802b6d8ccea50d4c2c2c013fa7885af44b99f5e99c3f1fdb20e7dc14"
+        },
+        {
+          "path": "docs/PRIVILEGES.md",
+          "sha256": "9b7d0177eaf74b6030ea9bc4e4ae6571a0cab7abd734b3e8e187cc0835196a2e"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "24d2759b7889d789609aae1822a2e3bb67baec046e7c7f92460b693d2081f745"
+        },
+        {
+          "path": "src/netdeck/cli.py",
+          "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+        },
+        {
+          "path": "src/netdeck/hostenv.py",
+          "sha256": "afd1c5aa4f7c09afc74283c0fc32fcd78fe5070497c5b8d5f591442091018d00"
+        },
+        {
+          "path": "src/netdeck/runner.py",
+          "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+        },
+        {
+          "path": "src/netdeck/server.py",
+          "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+        },
+        {
+          "path": "src/netdeck/static/app.css",
+          "sha256": "ae2ec03b7f5ed7851e53f24ae5da4f6df54d485849bc5fc542ff9be751940926"
+        },
+        {
+          "path": "src/netdeck/static/app.js",
+          "sha256": "43a476598ab2b1d7e18d52f163e42bac41c4f1d0a22227b12c2d657253eecdbb"
+        },
+        {
+          "path": "src/netdeck/static/index.html",
+          "sha256": "98d7a649019787078b1bf5bb84340a6307d2cef2ed6ad7ee28bef3855c434952"
+        },
+        {
+          "path": "tests/test_cli.py",
+          "sha256": "5460dcd8371cea7997ee04268533643cb0c86dbae3d7e7b2bdbb3bd55a9f4f4d"
+        },
+        {
+          "path": "tests/test_runner.py",
+          "sha256": "1f5f262cceea35928b9cd923d8c51d5a1ea2b09e8e789e913163702ea3f6f5ad"
+        },
+        {
+          "path": "tests/test_server.py",
+          "sha256": "0fbb1d65e4ce2999f1b00c1d5d3f7b5a48b2728c12c207a1e48746a6af6d6dca"
+        },
+        {
+          "path": "tests/test_ui_e2e.py",
+          "sha256": "7e39f18cba26bca9e108ad7f0d9f686eb8735c968fc10503d336271a6767c239"
+        }
+      ],
+      "scope_sha256": "f1b0f2e82815400d7c893357e369b3da22b033d6fb5b10799b3177184136e067",
+      "red": null,
+      "reason": null
+    },
+    {
+      "id": "EV-RED-EXIT-1-H",
+      "acceptance": [
+        "AC-EXIT-1"
+      ],
+      "kind": "red",
+      "status": "pass",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/test_ui_e2e.py::test_exit_dialog_cancel_keeps_running_then_confirm_stops"
+      ],
+      "method": "Re-run after the browser-test cleanup fix: Removed the POST /api/shutdown call from exitNetDeck in a disposable copy; the named test failed with the expected diagnostic; the original was byte-identical before/after and the test passed again.",
+      "environment": {
+        "platform": "linux",
+        "tools": {
+          "python": "3.14.9",
+          "pytest": "9.2.0",
+          "ruff": "0.17.4",
+          "node": "26.13.0",
+          "shellcheck": "0.11.0",
+          "google-chrome": "154.0.8037.97",
+          "websocket-client": "1.9.2"
+        }
+      },
+      "exit_code": 0,
+      "artifact": {
+        "path": "docs/delivery/exit-shutdown/reports/drills/RD-EXIT-1.log",
+        "sha256": "00355aaac6a98c0acb461f81bdec3659b2fa97eba6b07d2735d3707d54e575f2"
+      },
+      "inputs": [
+        {
+          "path": ".github/workflows/ci.yml",
+          "sha256": "99023084a0e40d11e070a7617ac17f5f56f2cd612fce851b853a315043cdd4e3"
+        },
+        {
+          "path": "CHANGELOG.md",
+          "sha256": "01dc37ee908aaa0845d8090a0cb8c74e30e3d6653a7045ecccb6067b12a51628"
+        },
+        {
+          "path": "CONTRIBUTING.md",
+          "sha256": "0460467256f328b75238576f5b76b5c16bdc1780393abf6ecb66df6195af8108"
+        },
+        {
+          "path": "README.md",
+          "sha256": "7e2fd58a304625b18c2ced61788158b9d19ee72ccca488b92bf703213635019d"
+        },
+        {
+          "path": "SECURITY.md",
+          "sha256": "be35a91c802b6d8ccea50d4c2c2c013fa7885af44b99f5e99c3f1fdb20e7dc14"
+        },
+        {
+          "path": "docs/PRIVILEGES.md",
+          "sha256": "9b7d0177eaf74b6030ea9bc4e4ae6571a0cab7abd734b3e8e187cc0835196a2e"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "24d2759b7889d789609aae1822a2e3bb67baec046e7c7f92460b693d2081f745"
+        },
+        {
+          "path": "src/netdeck/cli.py",
+          "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+        },
+        {
+          "path": "src/netdeck/hostenv.py",
+          "sha256": "afd1c5aa4f7c09afc74283c0fc32fcd78fe5070497c5b8d5f591442091018d00"
+        },
+        {
+          "path": "src/netdeck/runner.py",
+          "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+        },
+        {
+          "path": "src/netdeck/server.py",
+          "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+        },
+        {
+          "path": "src/netdeck/static/app.css",
+          "sha256": "ae2ec03b7f5ed7851e53f24ae5da4f6df54d485849bc5fc542ff9be751940926"
+        },
+        {
+          "path": "src/netdeck/static/app.js",
+          "sha256": "43a476598ab2b1d7e18d52f163e42bac41c4f1d0a22227b12c2d657253eecdbb"
+        },
+        {
+          "path": "src/netdeck/static/index.html",
+          "sha256": "98d7a649019787078b1bf5bb84340a6307d2cef2ed6ad7ee28bef3855c434952"
+        },
+        {
+          "path": "tests/test_cli.py",
+          "sha256": "5460dcd8371cea7997ee04268533643cb0c86dbae3d7e7b2bdbb3bd55a9f4f4d"
+        },
+        {
+          "path": "tests/test_runner.py",
+          "sha256": "1f5f262cceea35928b9cd923d8c51d5a1ea2b09e8e789e913163702ea3f6f5ad"
+        },
+        {
+          "path": "tests/test_server.py",
+          "sha256": "0fbb1d65e4ce2999f1b00c1d5d3f7b5a48b2728c12c207a1e48746a6af6d6dca"
+        },
+        {
+          "path": "tests/test_ui_e2e.py",
+          "sha256": "7e39f18cba26bca9e108ad7f0d9f686eb8735c968fc10503d336271a6767c239"
+        }
+      ],
+      "scope_sha256": "f1b0f2e82815400d7c893357e369b3da22b033d6fb5b10799b3177184136e067",
+      "red": {
+        "mutation": "src/netdeck/static/app.js: '      await api(\"/api/shutdown\", { method: \"POST\" });\\n' -> ''",
+        "baseline_exit": 0,
+        "mutated_exit": 1,
+        "restored_exit": 0,
+        "expected_diagnostic": "server still running 10 s after Exit",
+        "observed_diagnostic": "server still running 10 s after Exit",
+        "before": [
+          {
+            "path": "src/netdeck/static/app.js",
+            "sha256": "43a476598ab2b1d7e18d52f163e42bac41c4f1d0a22227b12c2d657253eecdbb"
+          }
+        ],
+        "mutated": [
+          {
+            "path": "src/netdeck/static/app.js",
+            "sha256": "cd708cdb59d44a4daefe57cff743d2210c8e2c9075211bea1c3ef8896459cd9a"
+          }
+        ],
+        "after": [
+          {
+            "path": "src/netdeck/static/app.js",
+            "sha256": "43a476598ab2b1d7e18d52f163e42bac41c4f1d0a22227b12c2d657253eecdbb"
+          }
+        ]
+      },
+      "reason": null
+    },
+    {
+      "id": "EV-RED-EXIT-1api-H",
+      "acceptance": [
+        "AC-EXIT-1"
+      ],
+      "kind": "red",
+      "status": "pass",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/test_server.py::test_shutdown_endpoint_stops_the_server"
+      ],
+      "method": "Re-run after the browser-test cleanup fix: Made the shutdown endpoint answer 202 without requesting shutdown in a disposable copy; the named test failed with the expected diagnostic; the original was byte-identical before/after and the test passed again.",
+      "environment": {
+        "platform": "linux",
+        "tools": {
+          "python": "3.14.9",
+          "pytest": "9.2.0",
+          "ruff": "0.17.4",
+          "node": "26.13.0",
+          "shellcheck": "0.11.0",
+          "google-chrome": "154.0.8037.97",
+          "websocket-client": "1.9.2"
+        }
+      },
+      "exit_code": 0,
+      "artifact": {
+        "path": "docs/delivery/exit-shutdown/reports/drills/RD-EXIT-1api.log",
+        "sha256": "8b43cd7ec5d8ef14d6eaaae0451cf33ff1c538f2d9920edbc268701826e1d8a8"
+      },
+      "inputs": [
+        {
+          "path": ".github/workflows/ci.yml",
+          "sha256": "99023084a0e40d11e070a7617ac17f5f56f2cd612fce851b853a315043cdd4e3"
+        },
+        {
+          "path": "CHANGELOG.md",
+          "sha256": "01dc37ee908aaa0845d8090a0cb8c74e30e3d6653a7045ecccb6067b12a51628"
+        },
+        {
+          "path": "CONTRIBUTING.md",
+          "sha256": "0460467256f328b75238576f5b76b5c16bdc1780393abf6ecb66df6195af8108"
+        },
+        {
+          "path": "README.md",
+          "sha256": "7e2fd58a304625b18c2ced61788158b9d19ee72ccca488b92bf703213635019d"
+        },
+        {
+          "path": "SECURITY.md",
+          "sha256": "be35a91c802b6d8ccea50d4c2c2c013fa7885af44b99f5e99c3f1fdb20e7dc14"
+        },
+        {
+          "path": "docs/PRIVILEGES.md",
+          "sha256": "9b7d0177eaf74b6030ea9bc4e4ae6571a0cab7abd734b3e8e187cc0835196a2e"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "24d2759b7889d789609aae1822a2e3bb67baec046e7c7f92460b693d2081f745"
+        },
+        {
+          "path": "src/netdeck/cli.py",
+          "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+        },
+        {
+          "path": "src/netdeck/hostenv.py",
+          "sha256": "afd1c5aa4f7c09afc74283c0fc32fcd78fe5070497c5b8d5f591442091018d00"
+        },
+        {
+          "path": "src/netdeck/runner.py",
+          "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+        },
+        {
+          "path": "src/netdeck/server.py",
+          "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+        },
+        {
+          "path": "src/netdeck/static/app.css",
+          "sha256": "ae2ec03b7f5ed7851e53f24ae5da4f6df54d485849bc5fc542ff9be751940926"
+        },
+        {
+          "path": "src/netdeck/static/app.js",
+          "sha256": "43a476598ab2b1d7e18d52f163e42bac41c4f1d0a22227b12c2d657253eecdbb"
+        },
+        {
+          "path": "src/netdeck/static/index.html",
+          "sha256": "98d7a649019787078b1bf5bb84340a6307d2cef2ed6ad7ee28bef3855c434952"
+        },
+        {
+          "path": "tests/test_cli.py",
+          "sha256": "5460dcd8371cea7997ee04268533643cb0c86dbae3d7e7b2bdbb3bd55a9f4f4d"
+        },
+        {
+          "path": "tests/test_runner.py",
+          "sha256": "1f5f262cceea35928b9cd923d8c51d5a1ea2b09e8e789e913163702ea3f6f5ad"
+        },
+        {
+          "path": "tests/test_server.py",
+          "sha256": "0fbb1d65e4ce2999f1b00c1d5d3f7b5a48b2728c12c207a1e48746a6af6d6dca"
+        },
+        {
+          "path": "tests/test_ui_e2e.py",
+          "sha256": "7e39f18cba26bca9e108ad7f0d9f686eb8735c968fc10503d336271a6767c239"
+        }
+      ],
+      "scope_sha256": "f1b0f2e82815400d7c893357e369b3da22b033d6fb5b10799b3177184136e067",
+      "red": {
+        "mutation": "src/netdeck/server.py: '        self.app.request_shutdown(\"exit requested from the dashboard\")\\n' -> ''",
+        "baseline_exit": 0,
+        "mutated_exit": 1,
+        "restored_exit": 0,
+        "expected_diagnostic": "serve_forever is still running",
+        "observed_diagnostic": "serve_forever is still running",
+        "before": [
+          {
+            "path": "src/netdeck/server.py",
+            "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+          }
+        ],
+        "mutated": [
+          {
+            "path": "src/netdeck/server.py",
+            "sha256": "0489f9632ddde7e3d65f22c14133d536a33198430da508a13919244346fb72f7"
+          }
+        ],
+        "after": [
+          {
+            "path": "src/netdeck/server.py",
+            "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+          }
+        ]
+      },
+      "reason": null
+    },
+    {
+      "id": "EV-RED-EXIT-2-H",
+      "acceptance": [
+        "AC-EXIT-2"
+      ],
+      "kind": "red",
+      "status": "pass",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/test_ui_e2e.py::test_exit_dialog_cancel_keeps_running_then_confirm_stops"
+      ],
+      "method": "Re-run after the browser-test cleanup fix: Made the dialog close handler exit regardless of the chosen button in a disposable copy; the named test failed with the expected diagnostic; the original was byte-identical before/after and the test passed again.",
+      "environment": {
+        "platform": "linux",
+        "tools": {
+          "python": "3.14.9",
+          "pytest": "9.2.0",
+          "ruff": "0.17.4",
+          "node": "26.13.0",
+          "shellcheck": "0.11.0",
+          "google-chrome": "154.0.8037.97",
+          "websocket-client": "1.9.2"
+        }
+      },
+      "exit_code": 0,
+      "artifact": {
+        "path": "docs/delivery/exit-shutdown/reports/drills/RD-EXIT-2.log",
+        "sha256": "1dae5fdafc9583076052a77afd837ca1c342a668a124f24f79426a9ec155d8f2"
+      },
+      "inputs": [
+        {
+          "path": ".github/workflows/ci.yml",
+          "sha256": "99023084a0e40d11e070a7617ac17f5f56f2cd612fce851b853a315043cdd4e3"
+        },
+        {
+          "path": "CONTRIBUTING.md",
+          "sha256": "0460467256f328b75238576f5b76b5c16bdc1780393abf6ecb66df6195af8108"
+        },
+        {
+          "path": "README.md",
+          "sha256": "7e2fd58a304625b18c2ced61788158b9d19ee72ccca488b92bf703213635019d"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "24d2759b7889d789609aae1822a2e3bb67baec046e7c7f92460b693d2081f745"
+        },
+        {
+          "path": "src/netdeck/cli.py",
+          "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+        },
+        {
+          "path": "src/netdeck/hostenv.py",
+          "sha256": "afd1c5aa4f7c09afc74283c0fc32fcd78fe5070497c5b8d5f591442091018d00"
+        },
+        {
+          "path": "src/netdeck/runner.py",
+          "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+        },
+        {
+          "path": "src/netdeck/server.py",
+          "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+        },
+        {
+          "path": "src/netdeck/static/app.css",
+          "sha256": "ae2ec03b7f5ed7851e53f24ae5da4f6df54d485849bc5fc542ff9be751940926"
+        },
+        {
+          "path": "src/netdeck/static/app.js",
+          "sha256": "43a476598ab2b1d7e18d52f163e42bac41c4f1d0a22227b12c2d657253eecdbb"
+        },
+        {
+          "path": "src/netdeck/static/index.html",
+          "sha256": "98d7a649019787078b1bf5bb84340a6307d2cef2ed6ad7ee28bef3855c434952"
+        },
+        {
+          "path": "tests/test_cli.py",
+          "sha256": "5460dcd8371cea7997ee04268533643cb0c86dbae3d7e7b2bdbb3bd55a9f4f4d"
+        },
+        {
+          "path": "tests/test_runner.py",
+          "sha256": "1f5f262cceea35928b9cd923d8c51d5a1ea2b09e8e789e913163702ea3f6f5ad"
+        },
+        {
+          "path": "tests/test_server.py",
+          "sha256": "0fbb1d65e4ce2999f1b00c1d5d3f7b5a48b2728c12c207a1e48746a6af6d6dca"
+        },
+        {
+          "path": "tests/test_ui_e2e.py",
+          "sha256": "7e39f18cba26bca9e108ad7f0d9f686eb8735c968fc10503d336271a6767c239"
+        }
+      ],
+      "scope_sha256": "036677321ce32a61f6baf556c1aafaec79ead552991537da8ff2c465c081be46",
+      "red": {
+        "mutation": "src/netdeck/static/app.js: '      if ($(\"#exit-dialog\").returnValue === \"exit\") exitNetDeck();\\n' -> '      exitNetDeck();\\n'",
+        "baseline_exit": 0,
+        "mutated_exit": 1,
+        "restored_exit": 0,
+        "expected_diagnostic": "server exited after Cancel",
+        "observed_diagnostic": "server exited after Cancel",
+        "before": [
+          {
+            "path": "src/netdeck/static/app.js",
+            "sha256": "43a476598ab2b1d7e18d52f163e42bac41c4f1d0a22227b12c2d657253eecdbb"
+          }
+        ],
+        "mutated": [
+          {
+            "path": "src/netdeck/static/app.js",
+            "sha256": "86c769d101a186f18ef223718a9e10a11c66b28ad503a4a355d057af522a8c48"
+          }
+        ],
+        "after": [
+          {
+            "path": "src/netdeck/static/app.js",
+            "sha256": "43a476598ab2b1d7e18d52f163e42bac41c4f1d0a22227b12c2d657253eecdbb"
+          }
+        ]
+      },
+      "reason": null
+    },
+    {
+      "id": "EV-RED-EXIT-3-H",
+      "acceptance": [
+        "AC-EXIT-3"
+      ],
+      "kind": "red",
+      "status": "pass",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/test_server.py::test_shutdown_refuses_unauthenticated_or_cross_origin"
+      ],
+      "method": "Re-run after the browser-test cleanup fix: Removed the X-NetDeck header guard from _same_origin in a disposable copy; the named test failed with the expected diagnostic; the original was byte-identical before/after and the test passed again.",
+      "environment": {
+        "platform": "linux",
+        "tools": {
+          "python": "3.14.9",
+          "pytest": "9.2.0",
+          "ruff": "0.17.4",
+          "node": "26.13.0",
+          "shellcheck": "0.11.0",
+          "google-chrome": "154.0.8037.97",
+          "websocket-client": "1.9.2"
+        }
+      },
+      "exit_code": 0,
+      "artifact": {
+        "path": "docs/delivery/exit-shutdown/reports/drills/RD-EXIT-3.log",
+        "sha256": "eac8f9661409e514e76ff86110229d2db87673bc31d63701829928623ccda875"
+      },
+      "inputs": [
+        {
+          "path": "CONTRIBUTING.md",
+          "sha256": "0460467256f328b75238576f5b76b5c16bdc1780393abf6ecb66df6195af8108"
+        },
+        {
+          "path": "README.md",
+          "sha256": "7e2fd58a304625b18c2ced61788158b9d19ee72ccca488b92bf703213635019d"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "24d2759b7889d789609aae1822a2e3bb67baec046e7c7f92460b693d2081f745"
+        },
+        {
+          "path": "src/netdeck/hostenv.py",
+          "sha256": "afd1c5aa4f7c09afc74283c0fc32fcd78fe5070497c5b8d5f591442091018d00"
+        },
+        {
+          "path": "src/netdeck/runner.py",
+          "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+        },
+        {
+          "path": "src/netdeck/server.py",
+          "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+        },
+        {
+          "path": "tests/test_runner.py",
+          "sha256": "1f5f262cceea35928b9cd923d8c51d5a1ea2b09e8e789e913163702ea3f6f5ad"
+        },
+        {
+          "path": "tests/test_server.py",
+          "sha256": "0fbb1d65e4ce2999f1b00c1d5d3f7b5a48b2728c12c207a1e48746a6af6d6dca"
+        }
+      ],
+      "scope_sha256": "dd2ad2c029a2e22528ea249572b8e6fbec3e4afa6a4fd286a22b2a98133bad42",
+      "red": {
+        "mutation": "src/netdeck/server.py: '        if self.headers.get(\"X-NetDeck\") != \"1\":\\n            return False\\n' -> ''",
+        "baseline_exit": 0,
+        "mutated_exit": 1,
+        "restored_exit": 0,
+        "expected_diagnostic": "assert 202 in (401, 403)",
+        "observed_diagnostic": "assert 202 in (401, 403)",
+        "before": [
+          {
+            "path": "src/netdeck/server.py",
+            "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+          }
+        ],
+        "mutated": [
+          {
+            "path": "src/netdeck/server.py",
+            "sha256": "e3178b845edb51a7990c6577474b876509c0de7144f98ad2a1ae9fe04f1c2e19"
+          }
+        ],
+        "after": [
+          {
+            "path": "src/netdeck/server.py",
+            "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+          }
+        ]
+      },
+      "reason": null
+    },
+    {
+      "id": "EV-RED-INST-1-H",
+      "acceptance": [
+        "AC-INST-1"
+      ],
+      "kind": "red",
+      "status": "pass",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/test_cli.py::test_every_shutdown_path_stops_jobs_and_cleans_up"
+      ],
+      "method": "Re-run after the browser-test cleanup fix: Removed remove_instance() from the serve cleanup in a disposable copy; the named test failed with the expected diagnostic; the original was byte-identical before/after and the test passed again.",
+      "environment": {
+        "platform": "linux",
+        "tools": {
+          "python": "3.14.9",
+          "pytest": "9.2.0",
+          "ruff": "0.17.4",
+          "node": "26.13.0",
+          "shellcheck": "0.11.0",
+          "google-chrome": "154.0.8037.97",
+          "websocket-client": "1.9.2"
+        }
+      },
+      "exit_code": 0,
+      "artifact": {
+        "path": "docs/delivery/exit-shutdown/reports/drills/RD-INST-1.log",
+        "sha256": "565ff7a057b501bb8f6a42873231f809c4fa132b28080ae94930e700ee2f2fe6"
+      },
+      "inputs": [
+        {
+          "path": "CONTRIBUTING.md",
+          "sha256": "0460467256f328b75238576f5b76b5c16bdc1780393abf6ecb66df6195af8108"
+        },
+        {
+          "path": "README.md",
+          "sha256": "7e2fd58a304625b18c2ced61788158b9d19ee72ccca488b92bf703213635019d"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "24d2759b7889d789609aae1822a2e3bb67baec046e7c7f92460b693d2081f745"
+        },
+        {
+          "path": "src/netdeck/cli.py",
+          "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+        },
+        {
+          "path": "src/netdeck/hostenv.py",
+          "sha256": "afd1c5aa4f7c09afc74283c0fc32fcd78fe5070497c5b8d5f591442091018d00"
+        },
+        {
+          "path": "src/netdeck/runner.py",
+          "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+        },
+        {
+          "path": "src/netdeck/server.py",
+          "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+        },
+        {
+          "path": "tests/test_cli.py",
+          "sha256": "5460dcd8371cea7997ee04268533643cb0c86dbae3d7e7b2bdbb3bd55a9f4f4d"
+        },
+        {
+          "path": "tests/test_runner.py",
+          "sha256": "1f5f262cceea35928b9cd923d8c51d5a1ea2b09e8e789e913163702ea3f6f5ad"
+        },
+        {
+          "path": "tests/test_server.py",
+          "sha256": "0fbb1d65e4ce2999f1b00c1d5d3f7b5a48b2728c12c207a1e48746a6af6d6dca"
+        }
+      ],
+      "scope_sha256": "1c5215964fd8b5ec6fea16cfb51864ba95578e38dc48e8b914a6910e0b8864ff",
+      "red": {
+        "mutation": "src/netdeck/cli.py: '        server.server_close()\\n        remove_instance()\\n' -> '        server.server_close()\\n'",
+        "baseline_exit": 0,
+        "mutated_exit": 1,
+        "restored_exit": 0,
+        "expected_diagnostic": "instance.json was left behind",
+        "observed_diagnostic": "instance.json was left behind",
+        "before": [
+          {
+            "path": "src/netdeck/cli.py",
+            "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+          }
+        ],
+        "mutated": [
+          {
+            "path": "src/netdeck/cli.py",
+            "sha256": "67afa10ff3af2d6f5af447aecad38ad68041ce7da0b2f9e084b55787ec52f04b"
+          }
+        ],
+        "after": [
+          {
+            "path": "src/netdeck/cli.py",
+            "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+          }
+        ]
+      },
+      "reason": null
+    },
+    {
+      "id": "EV-RED-INST-2a-H",
+      "acceptance": [
+        "AC-INST-2"
+      ],
+      "kind": "red",
+      "status": "pass",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/test_cli.py::test_every_shutdown_path_stops_jobs_and_cleans_up[netdeck-stop]"
+      ],
+      "method": "Re-run after the browser-test cleanup fix: Made netdeck stop report success without waiting (the original defect) in a disposable copy; the named test failed with the expected diagnostic; the original was byte-identical before/after and the test passed again.",
+      "environment": {
+        "platform": "linux",
+        "tools": {
+          "python": "3.14.9",
+          "pytest": "9.2.0",
+          "ruff": "0.17.4",
+          "node": "26.13.0",
+          "shellcheck": "0.11.0",
+          "google-chrome": "154.0.8037.97",
+          "websocket-client": "1.9.2"
+        }
+      },
+      "exit_code": 0,
+      "artifact": {
+        "path": "docs/delivery/exit-shutdown/reports/drills/RD-INST-2a.log",
+        "sha256": "39dfba41292f7c9a5f3bfa7e7bb75112c60d15ff4f19a40f194203ee912d396f"
+      },
+      "inputs": [
+        {
+          "path": "CONTRIBUTING.md",
+          "sha256": "0460467256f328b75238576f5b76b5c16bdc1780393abf6ecb66df6195af8108"
+        },
+        {
+          "path": "README.md",
+          "sha256": "7e2fd58a304625b18c2ced61788158b9d19ee72ccca488b92bf703213635019d"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "24d2759b7889d789609aae1822a2e3bb67baec046e7c7f92460b693d2081f745"
+        },
+        {
+          "path": "src/netdeck/cli.py",
+          "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+        },
+        {
+          "path": "src/netdeck/hostenv.py",
+          "sha256": "afd1c5aa4f7c09afc74283c0fc32fcd78fe5070497c5b8d5f591442091018d00"
+        },
+        {
+          "path": "src/netdeck/runner.py",
+          "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+        },
+        {
+          "path": "src/netdeck/server.py",
+          "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+        },
+        {
+          "path": "tests/test_cli.py",
+          "sha256": "5460dcd8371cea7997ee04268533643cb0c86dbae3d7e7b2bdbb3bd55a9f4f4d"
+        },
+        {
+          "path": "tests/test_runner.py",
+          "sha256": "1f5f262cceea35928b9cd923d8c51d5a1ea2b09e8e789e913163702ea3f6f5ad"
+        },
+        {
+          "path": "tests/test_server.py",
+          "sha256": "0fbb1d65e4ce2999f1b00c1d5d3f7b5a48b2728c12c207a1e48746a6af6d6dca"
+        }
+      ],
+      "scope_sha256": "1c5215964fd8b5ec6fea16cfb51864ba95578e38dc48e8b914a6910e0b8864ff",
+      "red": {
+        "mutation": "src/netdeck/cli.py: '    while time.monotonic() < deadline:\\n        if not process_alive(pid):\\n' -> '    while time.monotonic() < deadline:\\n        if True:\\n'",
+        "baseline_exit": 0,
+        "mutated_exit": 1,
+        "restored_exit": 0,
+        "expected_diagnostic": "netdeck stop returned before the server exited",
+        "observed_diagnostic": "netdeck stop returned before the server exited",
+        "before": [
+          {
+            "path": "src/netdeck/cli.py",
+            "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+          }
+        ],
+        "mutated": [
+          {
+            "path": "src/netdeck/cli.py",
+            "sha256": "d9462d768fe7c995cb538febccdc24a4d11b29c1522280e4037a1fa9fc1c321b"
+          }
+        ],
+        "after": [
+          {
+            "path": "src/netdeck/cli.py",
+            "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+          }
+        ]
+      },
+      "reason": null
+    },
+    {
+      "id": "EV-RED-INST-2b-H",
+      "acceptance": [
+        "AC-INST-2"
+      ],
+      "kind": "red",
+      "status": "pass",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/test_cli.py::test_stop_removes_a_stale_instance_file"
+      ],
+      "method": "Re-run after the browser-test cleanup fix: Removed stale instance-file deletion from read_instance in a disposable copy; the named test failed with the expected diagnostic; the original was byte-identical before/after and the test passed again.",
+      "environment": {
+        "platform": "linux",
+        "tools": {
+          "python": "3.14.9",
+          "pytest": "9.2.0",
+          "ruff": "0.17.4",
+          "node": "26.13.0",
+          "shellcheck": "0.11.0",
+          "google-chrome": "154.0.8037.97",
+          "websocket-client": "1.9.2"
+        }
+      },
+      "exit_code": 0,
+      "artifact": {
+        "path": "docs/delivery/exit-shutdown/reports/drills/RD-INST-2b.log",
+        "sha256": "39f90ad2f816b4f8c3db5c0527f4577868f8d3dde696268572c35404adffb8bd"
+      },
+      "inputs": [
+        {
+          "path": "CONTRIBUTING.md",
+          "sha256": "0460467256f328b75238576f5b76b5c16bdc1780393abf6ecb66df6195af8108"
+        },
+        {
+          "path": "README.md",
+          "sha256": "7e2fd58a304625b18c2ced61788158b9d19ee72ccca488b92bf703213635019d"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "24d2759b7889d789609aae1822a2e3bb67baec046e7c7f92460b693d2081f745"
+        },
+        {
+          "path": "src/netdeck/cli.py",
+          "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+        },
+        {
+          "path": "src/netdeck/hostenv.py",
+          "sha256": "afd1c5aa4f7c09afc74283c0fc32fcd78fe5070497c5b8d5f591442091018d00"
+        },
+        {
+          "path": "src/netdeck/runner.py",
+          "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+        },
+        {
+          "path": "src/netdeck/server.py",
+          "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+        },
+        {
+          "path": "tests/test_cli.py",
+          "sha256": "5460dcd8371cea7997ee04268533643cb0c86dbae3d7e7b2bdbb3bd55a9f4f4d"
+        },
+        {
+          "path": "tests/test_runner.py",
+          "sha256": "1f5f262cceea35928b9cd923d8c51d5a1ea2b09e8e789e913163702ea3f6f5ad"
+        },
+        {
+          "path": "tests/test_server.py",
+          "sha256": "0fbb1d65e4ce2999f1b00c1d5d3f7b5a48b2728c12c207a1e48746a6af6d6dca"
+        }
+      ],
+      "scope_sha256": "1c5215964fd8b5ec6fea16cfb51864ba95578e38dc48e8b914a6910e0b8864ff",
+      "red": {
+        "mutation": "src/netdeck/cli.py: '        with contextlib.suppress(OSError):\\n            os.unlink(instance_file())\\n' -> ''",
+        "baseline_exit": 0,
+        "mutated_exit": 1,
+        "restored_exit": 0,
+        "expected_diagnostic": "stale instance.json was not removed",
+        "observed_diagnostic": "stale instance.json was not removed",
+        "before": [
+          {
+            "path": "src/netdeck/cli.py",
+            "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+          }
+        ],
+        "mutated": [
+          {
+            "path": "src/netdeck/cli.py",
+            "sha256": "26e7624f5e84f525c78e4a914924ddb1d9875dd79ab55e7c619aba8c02970099"
+          }
+        ],
+        "after": [
+          {
+            "path": "src/netdeck/cli.py",
+            "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+          }
+        ]
+      },
+      "reason": null
+    },
+    {
+      "id": "EV-RED-STOP-1-H",
+      "acceptance": [
+        "AC-STOP-1"
+      ],
+      "kind": "red",
+      "status": "pass",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/test_cli.py::test_every_shutdown_path_stops_jobs_and_cleans_up"
+      ],
+      "method": "Re-run after the browser-test cleanup fix: Removed jobs.shutdown() from App.close in a disposable copy; the named test failed with the expected diagnostic; the original was byte-identical before/after and the test passed again.",
+      "environment": {
+        "platform": "linux",
+        "tools": {
+          "python": "3.14.9",
+          "pytest": "9.2.0",
+          "ruff": "0.17.4",
+          "node": "26.13.0",
+          "shellcheck": "0.11.0",
+          "google-chrome": "154.0.8037.97",
+          "websocket-client": "1.9.2"
+        }
+      },
+      "exit_code": 0,
+      "artifact": {
+        "path": "docs/delivery/exit-shutdown/reports/drills/RD-STOP-1.log",
+        "sha256": "2d6a9381efdaa413d1ff0cce57397340e322fc991a040c90c2ab3d46b898e808"
+      },
+      "inputs": [
+        {
+          "path": "CONTRIBUTING.md",
+          "sha256": "0460467256f328b75238576f5b76b5c16bdc1780393abf6ecb66df6195af8108"
+        },
+        {
+          "path": "README.md",
+          "sha256": "7e2fd58a304625b18c2ced61788158b9d19ee72ccca488b92bf703213635019d"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "24d2759b7889d789609aae1822a2e3bb67baec046e7c7f92460b693d2081f745"
+        },
+        {
+          "path": "src/netdeck/cli.py",
+          "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+        },
+        {
+          "path": "src/netdeck/hostenv.py",
+          "sha256": "afd1c5aa4f7c09afc74283c0fc32fcd78fe5070497c5b8d5f591442091018d00"
+        },
+        {
+          "path": "src/netdeck/runner.py",
+          "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+        },
+        {
+          "path": "src/netdeck/server.py",
+          "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+        },
+        {
+          "path": "tests/test_cli.py",
+          "sha256": "5460dcd8371cea7997ee04268533643cb0c86dbae3d7e7b2bdbb3bd55a9f4f4d"
+        },
+        {
+          "path": "tests/test_runner.py",
+          "sha256": "1f5f262cceea35928b9cd923d8c51d5a1ea2b09e8e789e913163702ea3f6f5ad"
+        },
+        {
+          "path": "tests/test_server.py",
+          "sha256": "0fbb1d65e4ce2999f1b00c1d5d3f7b5a48b2728c12c207a1e48746a6af6d6dca"
+        }
+      ],
+      "scope_sha256": "1c5215964fd8b5ec6fea16cfb51864ba95578e38dc48e8b914a6910e0b8864ff",
+      "red": {
+        "mutation": "src/netdeck/server.py: '        self.request_shutdown(\"server closing\")\\n        self.jobs.shutdown()\\n' -> '        self.request_shutdown(\"server closing\")\\n'",
+        "baseline_exit": 0,
+        "mutated_exit": 1,
+        "restored_exit": 0,
+        "expected_diagnostic": "the ping job outlived NetDeck",
+        "observed_diagnostic": "the ping job outlived NetDeck",
+        "before": [
+          {
+            "path": "src/netdeck/server.py",
+            "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+          }
+        ],
+        "mutated": [
+          {
+            "path": "src/netdeck/server.py",
+            "sha256": "1146053da0afa354aea8ed0123ebb4262a01456abf9e51eb1e34440b09a42682"
+          }
+        ],
+        "after": [
+          {
+            "path": "src/netdeck/server.py",
+            "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+          }
+        ]
+      },
+      "reason": null
+    },
+    {
+      "id": "EV-RED-STOP-2a-H",
+      "acceptance": [
+        "AC-STOP-2"
+      ],
+      "kind": "red",
+      "status": "pass",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/test_runner.py::test_unsignalable_elevated_job_is_stopped_through_supervisor"
+      ],
+      "method": "Re-run after the browser-test cleanup fix: Removed the stdin close from the supervised branch of _terminate in a disposable copy; the named test failed with the expected diagnostic; the original was byte-identical before/after and the test passed again.",
+      "environment": {
+        "platform": "linux",
+        "tools": {
+          "python": "3.14.9",
+          "pytest": "9.2.0",
+          "ruff": "0.17.4",
+          "node": "26.13.0",
+          "shellcheck": "0.11.0",
+          "google-chrome": "154.0.8037.97",
+          "websocket-client": "1.9.2"
+        }
+      },
+      "exit_code": 0,
+      "artifact": {
+        "path": "docs/delivery/exit-shutdown/reports/drills/RD-STOP-2a.log",
+        "sha256": "c88b1b645106f0d8c9c6c67fbaaf0b1c726eb11ad89d70deb361788844d44d1b"
+      },
+      "inputs": [
+        {
+          "path": ".github/workflows/ci.yml",
+          "sha256": "99023084a0e40d11e070a7617ac17f5f56f2cd612fce851b853a315043cdd4e3"
+        },
+        {
+          "path": "CHANGELOG.md",
+          "sha256": "01dc37ee908aaa0845d8090a0cb8c74e30e3d6653a7045ecccb6067b12a51628"
+        },
+        {
+          "path": "CONTRIBUTING.md",
+          "sha256": "0460467256f328b75238576f5b76b5c16bdc1780393abf6ecb66df6195af8108"
+        },
+        {
+          "path": "README.md",
+          "sha256": "7e2fd58a304625b18c2ced61788158b9d19ee72ccca488b92bf703213635019d"
+        },
+        {
+          "path": "SECURITY.md",
+          "sha256": "be35a91c802b6d8ccea50d4c2c2c013fa7885af44b99f5e99c3f1fdb20e7dc14"
+        },
+        {
+          "path": "docs/PRIVILEGES.md",
+          "sha256": "9b7d0177eaf74b6030ea9bc4e4ae6571a0cab7abd734b3e8e187cc0835196a2e"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "24d2759b7889d789609aae1822a2e3bb67baec046e7c7f92460b693d2081f745"
+        },
+        {
+          "path": "src/netdeck/cli.py",
+          "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+        },
+        {
+          "path": "src/netdeck/hostenv.py",
+          "sha256": "afd1c5aa4f7c09afc74283c0fc32fcd78fe5070497c5b8d5f591442091018d00"
+        },
+        {
+          "path": "src/netdeck/runner.py",
+          "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+        },
+        {
+          "path": "src/netdeck/server.py",
+          "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+        },
+        {
+          "path": "src/netdeck/static/app.css",
+          "sha256": "ae2ec03b7f5ed7851e53f24ae5da4f6df54d485849bc5fc542ff9be751940926"
+        },
+        {
+          "path": "src/netdeck/static/app.js",
+          "sha256": "43a476598ab2b1d7e18d52f163e42bac41c4f1d0a22227b12c2d657253eecdbb"
+        },
+        {
+          "path": "src/netdeck/static/index.html",
+          "sha256": "98d7a649019787078b1bf5bb84340a6307d2cef2ed6ad7ee28bef3855c434952"
+        },
+        {
+          "path": "tests/test_cli.py",
+          "sha256": "5460dcd8371cea7997ee04268533643cb0c86dbae3d7e7b2bdbb3bd55a9f4f4d"
+        },
+        {
+          "path": "tests/test_runner.py",
+          "sha256": "1f5f262cceea35928b9cd923d8c51d5a1ea2b09e8e789e913163702ea3f6f5ad"
+        },
+        {
+          "path": "tests/test_server.py",
+          "sha256": "0fbb1d65e4ce2999f1b00c1d5d3f7b5a48b2728c12c207a1e48746a6af6d6dca"
+        },
+        {
+          "path": "tests/test_ui_e2e.py",
+          "sha256": "7e39f18cba26bca9e108ad7f0d9f686eb8735c968fc10503d336271a6767c239"
+        }
+      ],
+      "scope_sha256": "f1b0f2e82815400d7c893357e369b3da22b033d6fb5b10799b3177184136e067",
+      "red": {
+        "mutation": "src/netdeck/runner.py: '            # Supervised elevated child: the root-side supervisor runs the INT/TERM/KILL ladder.\\n            _close_quietly(proc.stdin)\\n' -> '            # Supervised elevated child: the root-side supervisor runs the INT/TERM/KILL ladder.\\n'",
+        "baseline_exit": 0,
+        "mutated_exit": 1,
+        "restored_exit": 0,
+        "expected_diagnostic": "assert 'running' == 'stopped'",
+        "observed_diagnostic": "assert 'running' == 'stopped'",
+        "before": [
+          {
+            "path": "src/netdeck/runner.py",
+            "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+          }
+        ],
+        "mutated": [
+          {
+            "path": "src/netdeck/runner.py",
+            "sha256": "23b7e2913cd7d52620492241536ad39ed56f88012fc4d6ea1391c0ba831e5899"
+          }
+        ],
+        "after": [
+          {
+            "path": "src/netdeck/runner.py",
+            "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+          }
+        ]
+      },
+      "reason": null
+    },
+    {
+      "id": "EV-RED-STOP-2b-H",
+      "acceptance": [
+        "AC-STOP-2"
+      ],
+      "kind": "red",
+      "status": "pass",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/test_runner.py::test_unsignalable_elevated_job_is_stopped_through_supervisor"
+      ],
+      "method": "Re-run after the browser-test cleanup fix: Made the supervisor watcher read the background /dev/null stdin instead of fd 3 in a disposable copy; the named test failed with the expected diagnostic; the original was byte-identical before/after and the test passed again.",
+      "environment": {
+        "platform": "linux",
+        "tools": {
+          "python": "3.14.9",
+          "pytest": "9.2.0",
+          "ruff": "0.17.4",
+          "node": "26.13.0",
+          "shellcheck": "0.11.0",
+          "google-chrome": "154.0.8037.97",
+          "websocket-client": "1.9.2"
+        }
+      },
+      "exit_code": 0,
+      "artifact": {
+        "path": "docs/delivery/exit-shutdown/reports/drills/RD-STOP-2b.log",
+        "sha256": "a68120095069a83930370b0842fe0119883980468fed30aefa7a515489a861ca"
+      },
+      "inputs": [
+        {
+          "path": ".github/workflows/ci.yml",
+          "sha256": "99023084a0e40d11e070a7617ac17f5f56f2cd612fce851b853a315043cdd4e3"
+        },
+        {
+          "path": "CHANGELOG.md",
+          "sha256": "01dc37ee908aaa0845d8090a0cb8c74e30e3d6653a7045ecccb6067b12a51628"
+        },
+        {
+          "path": "CONTRIBUTING.md",
+          "sha256": "0460467256f328b75238576f5b76b5c16bdc1780393abf6ecb66df6195af8108"
+        },
+        {
+          "path": "README.md",
+          "sha256": "7e2fd58a304625b18c2ced61788158b9d19ee72ccca488b92bf703213635019d"
+        },
+        {
+          "path": "SECURITY.md",
+          "sha256": "be35a91c802b6d8ccea50d4c2c2c013fa7885af44b99f5e99c3f1fdb20e7dc14"
+        },
+        {
+          "path": "docs/PRIVILEGES.md",
+          "sha256": "9b7d0177eaf74b6030ea9bc4e4ae6571a0cab7abd734b3e8e187cc0835196a2e"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "24d2759b7889d789609aae1822a2e3bb67baec046e7c7f92460b693d2081f745"
+        },
+        {
+          "path": "src/netdeck/cli.py",
+          "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+        },
+        {
+          "path": "src/netdeck/hostenv.py",
+          "sha256": "afd1c5aa4f7c09afc74283c0fc32fcd78fe5070497c5b8d5f591442091018d00"
+        },
+        {
+          "path": "src/netdeck/runner.py",
+          "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+        },
+        {
+          "path": "src/netdeck/server.py",
+          "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+        },
+        {
+          "path": "src/netdeck/static/app.css",
+          "sha256": "ae2ec03b7f5ed7851e53f24ae5da4f6df54d485849bc5fc542ff9be751940926"
+        },
+        {
+          "path": "src/netdeck/static/app.js",
+          "sha256": "43a476598ab2b1d7e18d52f163e42bac41c4f1d0a22227b12c2d657253eecdbb"
+        },
+        {
+          "path": "src/netdeck/static/index.html",
+          "sha256": "98d7a649019787078b1bf5bb84340a6307d2cef2ed6ad7ee28bef3855c434952"
+        },
+        {
+          "path": "tests/test_cli.py",
+          "sha256": "5460dcd8371cea7997ee04268533643cb0c86dbae3d7e7b2bdbb3bd55a9f4f4d"
+        },
+        {
+          "path": "tests/test_runner.py",
+          "sha256": "1f5f262cceea35928b9cd923d8c51d5a1ea2b09e8e789e913163702ea3f6f5ad"
+        },
+        {
+          "path": "tests/test_server.py",
+          "sha256": "0fbb1d65e4ce2999f1b00c1d5d3f7b5a48b2728c12c207a1e48746a6af6d6dca"
+        },
+        {
+          "path": "tests/test_ui_e2e.py",
+          "sha256": "7e39f18cba26bca9e108ad7f0d9f686eb8735c968fc10503d336271a6767c239"
+        }
+      ],
+      "scope_sha256": "f1b0f2e82815400d7c893357e369b3da22b033d6fb5b10799b3177184136e067",
+      "red": {
+        "mutation": "src/netdeck/hostenv.py: '( read -r _ <&3; kill -INT' -> '( read -r _; kill -INT'",
+        "baseline_exit": 0,
+        "mutated_exit": 1,
+        "restored_exit": 0,
+        "expected_diagnostic": "assert 'interrupted' in",
+        "observed_diagnostic": "assert 'interrupted' in",
+        "before": [
+          {
+            "path": "src/netdeck/hostenv.py",
+            "sha256": "afd1c5aa4f7c09afc74283c0fc32fcd78fe5070497c5b8d5f591442091018d00"
+          }
+        ],
+        "mutated": [
+          {
+            "path": "src/netdeck/hostenv.py",
+            "sha256": "0f4e850f15e4d911a3a68688828b37b21b32f98834b046abd2f6bedd0aa322b8"
+          }
+        ],
+        "after": [
+          {
+            "path": "src/netdeck/hostenv.py",
+            "sha256": "afd1c5aa4f7c09afc74283c0fc32fcd78fe5070497c5b8d5f591442091018d00"
+          }
+        ]
+      },
+      "reason": null
+    },
+    {
+      "id": "EV-RED-STOP-3-H",
+      "acceptance": [
+        "AC-STOP-3"
+      ],
+      "kind": "red",
+      "status": "pass",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/test_runner.py::test_shutdown_stops_jobs_concurrently"
+      ],
+      "method": "Re-run after the browser-test cleanup fix: Replaced concurrent stoppers with sequential _terminate calls in a disposable copy; the named test failed with the expected diagnostic; the original was byte-identical before/after and the test passed again.",
+      "environment": {
+        "platform": "linux",
+        "tools": {
+          "python": "3.14.9",
+          "pytest": "9.2.0",
+          "ruff": "0.17.4",
+          "node": "26.13.0",
+          "shellcheck": "0.11.0",
+          "google-chrome": "154.0.8037.97",
+          "websocket-client": "1.9.2"
+        }
+      },
+      "exit_code": 0,
+      "artifact": {
+        "path": "docs/delivery/exit-shutdown/reports/drills/RD-STOP-3.log",
+        "sha256": "3161058a999553d64e48a4f06327c268f0f289051abd24279b69efbb4e37c658"
+      },
+      "inputs": [
+        {
+          "path": "CONTRIBUTING.md",
+          "sha256": "0460467256f328b75238576f5b76b5c16bdc1780393abf6ecb66df6195af8108"
+        },
+        {
+          "path": "README.md",
+          "sha256": "7e2fd58a304625b18c2ced61788158b9d19ee72ccca488b92bf703213635019d"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "24d2759b7889d789609aae1822a2e3bb67baec046e7c7f92460b693d2081f745"
+        },
+        {
+          "path": "src/netdeck/hostenv.py",
+          "sha256": "afd1c5aa4f7c09afc74283c0fc32fcd78fe5070497c5b8d5f591442091018d00"
+        },
+        {
+          "path": "src/netdeck/runner.py",
+          "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+        },
+        {
+          "path": "tests/test_runner.py",
+          "sha256": "1f5f262cceea35928b9cd923d8c51d5a1ea2b09e8e789e913163702ea3f6f5ad"
+        }
+      ],
+      "scope_sha256": "8bbfb291c6b62adb8fda96bb9c4c9a7e196f5b61ac25b787f6424ffd310a286f",
+      "red": {
+        "mutation": "src/netdeck/runner.py: '        for thread in stoppers:\\n            thread.start()\\n' -> '        for job in running:\\n            self._terminate(job, grace)\\n        stoppers = []\\n'",
+        "baseline_exit": 0,
+        "mutated_exit": 1,
+        "restored_exit": 0,
+        "expected_diagnostic": "shutdown took",
+        "observed_diagnostic": "shutdown took 6.0s",
+        "before": [
+          {
+            "path": "src/netdeck/runner.py",
+            "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+          }
+        ],
+        "mutated": [
+          {
+            "path": "src/netdeck/runner.py",
+            "sha256": "5662c914e5c458348c4ad31655bf36abe91afdf45eb746fff63127482ad99473"
+          }
+        ],
+        "after": [
+          {
+            "path": "src/netdeck/runner.py",
+            "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+          }
+        ]
+      },
+      "reason": null
+    },
+    {
+      "id": "EV-RED-STREAM-1a-H",
+      "acceptance": [
+        "AC-STREAM-1"
+      ],
+      "kind": "red",
+      "status": "pass",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/test_server.py::test_streams_say_bye_and_close_on_shutdown"
+      ],
+      "method": "Re-run after the browser-test cleanup fix: Removed the shutdown condition from the job-stream wait predicate in a disposable copy; the named test failed with the expected diagnostic; the original was byte-identical before/after and the test passed again.",
+      "environment": {
+        "platform": "linux",
+        "tools": {
+          "python": "3.14.9",
+          "pytest": "9.2.0",
+          "ruff": "0.17.4",
+          "node": "26.13.0",
+          "shellcheck": "0.11.0",
+          "google-chrome": "154.0.8037.97",
+          "websocket-client": "1.9.2"
+        }
+      },
+      "exit_code": 0,
+      "artifact": {
+        "path": "docs/delivery/exit-shutdown/reports/drills/RD-STREAM-1a.log",
+        "sha256": "8c2be599624f61c50ac0e052fd962a3a02df87b38fa000ad24b5e01abe5524ca"
+      },
+      "inputs": [
+        {
+          "path": "CONTRIBUTING.md",
+          "sha256": "0460467256f328b75238576f5b76b5c16bdc1780393abf6ecb66df6195af8108"
+        },
+        {
+          "path": "README.md",
+          "sha256": "7e2fd58a304625b18c2ced61788158b9d19ee72ccca488b92bf703213635019d"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "24d2759b7889d789609aae1822a2e3bb67baec046e7c7f92460b693d2081f745"
+        },
+        {
+          "path": "src/netdeck/hostenv.py",
+          "sha256": "afd1c5aa4f7c09afc74283c0fc32fcd78fe5070497c5b8d5f591442091018d00"
+        },
+        {
+          "path": "src/netdeck/runner.py",
+          "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+        },
+        {
+          "path": "src/netdeck/server.py",
+          "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+        },
+        {
+          "path": "tests/test_runner.py",
+          "sha256": "1f5f262cceea35928b9cd923d8c51d5a1ea2b09e8e789e913163702ea3f6f5ad"
+        },
+        {
+          "path": "tests/test_server.py",
+          "sha256": "0fbb1d65e4ce2999f1b00c1d5d3f7b5a48b2728c12c207a1e48746a6af6d6dca"
+        }
+      ],
+      "scope_sha256": "dd2ad2c029a2e22528ea249572b8e6fbec3e4afa6a4fd286a22b2a98133bad42",
+      "red": {
+        "mutation": "src/netdeck/server.py: 'lambda seen=rev: job.rev != seen or self.app.shutdown.is_set(), timeout=15)' -> 'lambda seen=rev: job.rev != seen, timeout=15)'",
+        "baseline_exit": 0,
+        "mutated_exit": 1,
+        "restored_exit": 0,
+        "expected_diagnostic": "assert b'event: bye' in",
+        "observed_diagnostic": "assert b'event: bye' in",
+        "before": [
+          {
+            "path": "src/netdeck/server.py",
+            "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+          }
+        ],
+        "mutated": [
+          {
+            "path": "src/netdeck/server.py",
+            "sha256": "e4769b430aa77b2440e51155e8356d3a1029fac676f09b248ace73e7067c3624"
+          }
+        ],
+        "after": [
+          {
+            "path": "src/netdeck/server.py",
+            "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+          }
+        ]
+      },
+      "reason": null
+    },
+    {
+      "id": "EV-RED-STREAM-1b-H",
+      "acceptance": [
+        "AC-STREAM-1"
+      ],
+      "kind": "red",
+      "status": "pass",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/test_server.py::test_streams_say_bye_and_close_on_shutdown"
+      ],
+      "method": "Re-run after the browser-test cleanup fix: Removed the stats-stream bye event in a disposable copy; the named test failed with the expected diagnostic; the original was byte-identical before/after and the test passed again.",
+      "environment": {
+        "platform": "linux",
+        "tools": {
+          "python": "3.14.9",
+          "pytest": "9.2.0",
+          "ruff": "0.17.4",
+          "node": "26.13.0",
+          "shellcheck": "0.11.0",
+          "google-chrome": "154.0.8037.97",
+          "websocket-client": "1.9.2"
+        }
+      },
+      "exit_code": 0,
+      "artifact": {
+        "path": "docs/delivery/exit-shutdown/reports/drills/RD-STREAM-1b.log",
+        "sha256": "cd8443832e46509ff141b713180ba137148e23f1602325d3395320729d2f808f"
+      },
+      "inputs": [
+        {
+          "path": "CONTRIBUTING.md",
+          "sha256": "0460467256f328b75238576f5b76b5c16bdc1780393abf6ecb66df6195af8108"
+        },
+        {
+          "path": "README.md",
+          "sha256": "7e2fd58a304625b18c2ced61788158b9d19ee72ccca488b92bf703213635019d"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "24d2759b7889d789609aae1822a2e3bb67baec046e7c7f92460b693d2081f745"
+        },
+        {
+          "path": "src/netdeck/hostenv.py",
+          "sha256": "afd1c5aa4f7c09afc74283c0fc32fcd78fe5070497c5b8d5f591442091018d00"
+        },
+        {
+          "path": "src/netdeck/runner.py",
+          "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+        },
+        {
+          "path": "src/netdeck/server.py",
+          "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+        },
+        {
+          "path": "tests/test_runner.py",
+          "sha256": "1f5f262cceea35928b9cd923d8c51d5a1ea2b09e8e789e913163702ea3f6f5ad"
+        },
+        {
+          "path": "tests/test_server.py",
+          "sha256": "0fbb1d65e4ce2999f1b00c1d5d3f7b5a48b2728c12c207a1e48746a6af6d6dca"
+        }
+      ],
+      "scope_sha256": "dd2ad2c029a2e22528ea249572b8e6fbec3e4afa6a4fd286a22b2a98133bad42",
+      "red": {
+        "mutation": "src/netdeck/server.py: '            self._stats_loop()\\n            self._sse(\"bye\", {\"reason\": \"shutdown\"})\\n' -> '            self._stats_loop()\\n'",
+        "baseline_exit": 0,
+        "mutated_exit": 1,
+        "restored_exit": 0,
+        "expected_diagnostic": "assert b'event: bye' in",
+        "observed_diagnostic": "assert b'event: bye' in",
+        "before": [
+          {
+            "path": "src/netdeck/server.py",
+            "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+          }
+        ],
+        "mutated": [
+          {
+            "path": "src/netdeck/server.py",
+            "sha256": "5614528f6ce0f06c0a9929088a9c63c22b436cc23b177de7164f7780a375c153"
+          }
+        ],
+        "after": [
+          {
+            "path": "src/netdeck/server.py",
+            "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+          }
+        ]
+      },
+      "reason": null
+    },
+    {
+      "id": "EV-RED-STREAM-2-H",
+      "acceptance": [
+        "AC-STREAM-2"
+      ],
+      "kind": "red",
+      "status": "pass",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/test_ui_e2e.py::test_stopped_screen_when_server_is_stopped_from_terminal"
+      ],
+      "method": "Re-run after the browser-test cleanup fix: Made showStopped ignore server-initiated stops in a disposable copy; the named test failed with the expected diagnostic; the original was byte-identical before/after and the test passed again.",
+      "environment": {
+        "platform": "linux",
+        "tools": {
+          "python": "3.14.9",
+          "pytest": "9.2.0",
+          "ruff": "0.17.4",
+          "node": "26.13.0",
+          "shellcheck": "0.11.0",
+          "google-chrome": "154.0.8037.97",
+          "websocket-client": "1.9.2"
+        }
+      },
+      "exit_code": 0,
+      "artifact": {
+        "path": "docs/delivery/exit-shutdown/reports/drills/RD-STREAM-2.log",
+        "sha256": "68c72e9e74f6f4e39d3eb06b5453348dc1137faba9cfae2bbaebc50e45a10202"
+      },
+      "inputs": [
+        {
+          "path": ".github/workflows/ci.yml",
+          "sha256": "99023084a0e40d11e070a7617ac17f5f56f2cd612fce851b853a315043cdd4e3"
+        },
+        {
+          "path": "CONTRIBUTING.md",
+          "sha256": "0460467256f328b75238576f5b76b5c16bdc1780393abf6ecb66df6195af8108"
+        },
+        {
+          "path": "README.md",
+          "sha256": "7e2fd58a304625b18c2ced61788158b9d19ee72ccca488b92bf703213635019d"
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "24d2759b7889d789609aae1822a2e3bb67baec046e7c7f92460b693d2081f745"
+        },
+        {
+          "path": "src/netdeck/cli.py",
+          "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+        },
+        {
+          "path": "src/netdeck/hostenv.py",
+          "sha256": "afd1c5aa4f7c09afc74283c0fc32fcd78fe5070497c5b8d5f591442091018d00"
+        },
+        {
+          "path": "src/netdeck/runner.py",
+          "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+        },
+        {
+          "path": "src/netdeck/server.py",
+          "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+        },
+        {
+          "path": "src/netdeck/static/app.css",
+          "sha256": "ae2ec03b7f5ed7851e53f24ae5da4f6df54d485849bc5fc542ff9be751940926"
+        },
+        {
+          "path": "src/netdeck/static/app.js",
+          "sha256": "43a476598ab2b1d7e18d52f163e42bac41c4f1d0a22227b12c2d657253eecdbb"
+        },
+        {
+          "path": "src/netdeck/static/index.html",
+          "sha256": "98d7a649019787078b1bf5bb84340a6307d2cef2ed6ad7ee28bef3855c434952"
+        },
+        {
+          "path": "tests/test_cli.py",
+          "sha256": "5460dcd8371cea7997ee04268533643cb0c86dbae3d7e7b2bdbb3bd55a9f4f4d"
+        },
+        {
+          "path": "tests/test_runner.py",
+          "sha256": "1f5f262cceea35928b9cd923d8c51d5a1ea2b09e8e789e913163702ea3f6f5ad"
+        },
+        {
+          "path": "tests/test_server.py",
+          "sha256": "0fbb1d65e4ce2999f1b00c1d5d3f7b5a48b2728c12c207a1e48746a6af6d6dca"
+        },
+        {
+          "path": "tests/test_ui_e2e.py",
+          "sha256": "7e39f18cba26bca9e108ad7f0d9f686eb8735c968fc10503d336271a6767c239"
+        }
+      ],
+      "scope_sha256": "036677321ce32a61f6baf556c1aafaec79ead552991537da8ff2c465c081be46",
+      "red": {
+        "mutation": "src/netdeck/static/app.js: '    if (S.stopped) return;\\n    S.stopped = true;\\n' -> '    if (S.stopped || reason === \"server\") return;\\n    S.stopped = true;\\n'",
+        "baseline_exit": 0,
+        "mutated_exit": 1,
+        "restored_exit": 0,
+        "expected_diagnostic": "stopped screen not shown after Ctrl+C",
+        "observed_diagnostic": "stopped screen not shown after Ctrl+C",
+        "before": [
+          {
+            "path": "src/netdeck/static/app.js",
+            "sha256": "43a476598ab2b1d7e18d52f163e42bac41c4f1d0a22227b12c2d657253eecdbb"
+          }
+        ],
+        "mutated": [
+          {
+            "path": "src/netdeck/static/app.js",
+            "sha256": "a0431ae894c9f1c64faecf4461f6433342c59b67847f4102fecdedb2d95cef9a"
+          }
+        ],
+        "after": [
+          {
+            "path": "src/netdeck/static/app.js",
+            "sha256": "43a476598ab2b1d7e18d52f163e42bac41c4f1d0a22227b12c2d657253eecdbb"
+          }
+        ]
+      },
       "reason": null
     }
   ],
@@ -6557,7 +8537,7 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
       },
       {
         "path": "tests/test_ui_e2e.py",
-        "sha256": "26fd75808875f09fdb8a7213a755b66163620e2aa322e2b78148861db3123835"
+        "sha256": "7e39f18cba26bca9e108ad7f0d9f686eb8735c968fc10503d336271a6767c239"
       }
     ],
     "environment": {
@@ -6581,8 +8561,8 @@ Chrome over the DevTools protocol against a real server. Red drills mutate dispo
       "TASK-DOCS"
     ],
     "pending_operations": [],
-    "next_action": "None: delivery closed; CI outcome recorded in reports/final/ci-503fd9a.md.",
-    "source_revision": "503fd9a"
+    "next_action": "None: delivery closed. CI for the harness fix commit is observed after push.",
+    "source_revision": "16fdb86 + browser-test cleanup fix"
   }
 }
 ```

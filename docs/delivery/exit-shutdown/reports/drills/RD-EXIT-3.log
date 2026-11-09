@@ -14,7 +14,7 @@ exit 1
 =================================== FAILURES ===================================
 _______ test_shutdown_refuses_unauthenticated_or_cross_origin[no-header] _______
 
-stoppable = (<netdeck.server.NetDeckHTTPServer object at 0x7fe338f98e10>, <Thread(Thread-5 (serve_forever), started daemon 140613889328832)>)
+stoppable = (<netdeck.server.NetDeckHTTPServer object at 0x7ff74766ce10>, <Thread(Thread-5 (serve_forever), started daemon 140700030715584)>)
 variant = 'no-header'
 
     @pytest.mark.parametrize("variant", ["no-cookie", "no-header", "foreign-origin"])
@@ -28,17 +28,17 @@ variant = 'no-header'
         resp, _ = request(srv, "POST", "/api/shutdown", **kwargs)
 >       assert resp.status in (401, 403)
 E       assert 202 in (401, 403)
-E        +  where 202 = <http.client.HTTPResponse object at 0x7fe3396c4640>.status
+E        +  where 202 = <http.client.HTTPResponse object at 0x7ff7478c7100>.status
 
 tests/test_server.py:157: AssertionError
 =========================== short test summary info ============================
 FAILED tests/test_server.py::test_shutdown_refuses_unauthenticated_or_cross_origin[no-header]
-1 failed, 2 passed in 0.57s
+1 failed, 2 passed in 0.56s
 
 
 
 ## restored (original tree)
 exit 0
 ...                                                                      [100%]
-3 passed in 0.52s
+3 passed in 0.51s
 

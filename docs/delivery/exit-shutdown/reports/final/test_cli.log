@@ -11,4 +11,4 @@ tests/test_cli.py::test_every_shutdown_path_stops_jobs_and_cleans_up[ctrl-c] PAS
 tests/test_cli.py::test_stop_removes_a_stale_instance_file PASSED        [ 80%]
 tests/test_cli.py::test_stop_when_nothing_is_running PASSED              [100%]
 
-============================== 5 passed in 3.15s ===============================
+============================== 5 passed in 3.07s ===============================

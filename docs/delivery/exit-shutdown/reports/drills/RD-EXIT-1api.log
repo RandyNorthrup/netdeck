@@ -5,7 +5,7 @@ result: PASS  observed: 'serve_forever is still running'
 ## baseline (original tree)
 exit 0
 .                                                                        [100%]
-1 passed in 0.06s
+1 passed in 0.17s
 
 
 ## mutated (disposable copy)
@@ -14,7 +14,7 @@ F                                                                        [100%]
 =================================== FAILURES ===================================
 ___________________ test_shutdown_endpoint_stops_the_server ____________________
 
-stoppable = (<netdeck.server.NetDeckHTTPServer object at 0x7f1546509160>, <Thread(Thread-1 (serve_forever), started daemon 139729349195456)>)
+stoppable = (<netdeck.server.NetDeckHTTPServer object at 0x7fcc169f5160>, <Thread(Thread-1 (serve_forever), started daemon 140514526971584)>)
 
     def test_shutdown_endpoint_stops_the_server(stoppable):
         srv, thread = stoppable
@@ -26,17 +26,17 @@ stoppable = (<netdeck.server.NetDeckHTTPServer object at 0x7f1546509160>, <Threa
 E       AssertionError: serve_forever is still running
 E       assert not True
 E        +  where True = is_alive()
-E        +    where is_alive = <Thread(Thread-1 (serve_forever), started daemon 139729349195456)>.is_alive
+E        +    where is_alive = <Thread(Thread-1 (serve_forever), started daemon 140514526971584)>.is_alive
 
 tests/test_server.py:170: AssertionError
 =========================== short test summary info ============================
 FAILED tests/test_server.py::test_shutdown_endpoint_stops_the_server - Assert...
-1 failed in 3.22s
+1 failed in 3.23s
 
 
 
 ## restored (original tree)
 exit 0
 .                                                                        [100%]
-1 passed in 0.16s
+1 passed in 0.17s
 

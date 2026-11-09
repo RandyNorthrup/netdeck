@@ -5,7 +5,7 @@ result: PASS  observed: 'stopped screen not shown after Ctrl+C'
 ## baseline (original tree)
 exit 0
 .                                                                        [100%]
-1 passed in 1.49s
+1 passed in 1.50s
 
 
 ## mutated (disposable copy)
@@ -14,8 +14,8 @@ F                                                                        [100%]
 =================================== FAILURES ===================================
 ___________ test_stopped_screen_when_server_is_stopped_from_terminal ___________
 
-browser = <test_ui_e2e.Browser object at 0x7fed4ed1d400>
-server = (<Popen: returncode: 0 args: ['/usr/bin/python3', '-m', 'netdeck', 'serve', '...>, 55919, '8hsELXGyTVw7NigStfFFGXerD4R...bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...})
+browser = <test_ui_e2e.Browser object at 0x7f3a459c5400>
+server = (<Popen: returncode: 0 args: ['/usr/bin/python3', '-m', 'netdeck', 'serve', '...>, 52339, '9K3JUvikpVoyrFG5Mly258grzu-...bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...})
 
     def test_stopped_screen_when_server_is_stopped_from_terminal(browser, server):
         proc, port, token, _ = server
@@ -27,17 +27,17 @@ server = (<Popen: returncode: 0 args: ['/usr/bin/python3', '-m', 'netdeck', 'ser
 E       AssertionError: stopped screen not shown after Ctrl+C
 E       assert False
 E        +  where False = wait_for("!document.querySelector('#stopped').hidden", timeout=10)
-E        +    where wait_for = <test_ui_e2e.Browser object at 0x7fed4ed1d400>.wait_for
+E        +    where wait_for = <test_ui_e2e.Browser object at 0x7f3a459c5400>.wait_for
 
-tests/test_ui_e2e.py:172: AssertionError
+tests/test_ui_e2e.py:189: AssertionError
 =========================== short test summary info ============================
 FAILED tests/test_ui_e2e.py::test_stopped_screen_when_server_is_stopped_from_terminal
-1 failed in 11.62s
+1 failed in 11.74s
 
 
 
 ## restored (original tree)
 exit 0
 .                                                                        [100%]
-1 passed in 1.57s
+1 passed in 1.48s
 
