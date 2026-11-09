@@ -1838,15 +1838,9 @@ local `snmpd`; it doubles as a field self-test the user can run on site.
       "TASK-FK-DECK",
       "TASK-FK-DOCS"
     ],
-    "pending_operations": [
-      {
-        "id": "OP-FK-CI",
-        "description": "CI has not run the field-kit changes yet.",
-        "next_action": "Push and confirm CI passes; record the outcome."
-      }
-    ],
-    "next_action": "Push, observe OP-FK-CI, then upgrade the installed NetDeck with the installer.",
-    "source_revision": "ffb643a + uncommitted WORK-FIELD-KIT changes"
+    "pending_operations": [],
+    "next_action": "None: delivery closed; see reports/ci-85e7d5a.md.",
+    "source_revision": "85e7d5a"
   }
 }
 ```
