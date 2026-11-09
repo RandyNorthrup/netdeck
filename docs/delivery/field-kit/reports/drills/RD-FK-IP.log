@@ -1,0 +1,34 @@
+# drill RD-FK-IP: src/netdeck/catalog.py
+mutation: '            Param("v6", "Also check IPv6", "bool", False,' -> '            Param("v6", "Also check IPv6", "bool", True,'
+result: PASS  observed: 'assert (2 == 1)'
+
+## baseline (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 0.03s
+
+
+## mutated (disposable copy)
+exit 1
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__________________ test_public_ip_checks_ipv4_only_by_default __________________
+
+    def test_public_ip_checks_ipv4_only_by_default():
+        _, _, argvs = build("public-ip")
+>       assert len(argvs) == 1 and "-4" in argvs[0]
+E       AssertionError: assert (2 == 1)
+E        +  where 2 = len([['curl', '-sS', '-4', '--max-time', '10', 'https://ifconfig.co/json'], ['curl', '-sS', '-6', '--max-time', '10', 'https://ifconfig.co/json']])
+
+tests/test_fieldkit.py:37: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_fieldkit.py::test_public_ip_checks_ipv4_only_by_default - A...
+1 failed in 0.08s
+
+
+
+## restored (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 0.03s
+

@@ -1,0 +1,1 @@
+{"id": "RD-FK-VAL2", "path": "src/netdeck/validators.py", "old": "_COMMUNITY = re.compile(r\"^[A-Za-z0-9._@#%+=:~^*!-]{1,64}$\")", "new": "_COMMUNITY = re.compile(r\"^[^-].{0,63}$\")", "test": ["tests/test_fieldkit.py::test_community_rejects"], "expect": "DID NOT RAISE"}

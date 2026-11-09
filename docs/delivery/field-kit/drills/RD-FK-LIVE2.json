@@ -1,0 +1,1 @@
+{"id": "RD-FK-LIVE2", "path": "src/netdeck/catalog.py", "old": "[\"ping\", \"-M\", \"do\", \"-s\",", "new": "[\"ping\", \"-s\",", "test": ["tests/test_field_live.py::test_mtu_test_passes_at_1472_and_reports_fragmentation_at_1500"], "expect": "a 1528-byte packet passed with fragmentation forbidden"}

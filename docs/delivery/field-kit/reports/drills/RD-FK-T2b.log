@@ -1,0 +1,45 @@
+# drill RD-FK-T2b: src/netdeck/probes.py
+mutation: ' and i["kind"] != "internal"]' -> ']'
+result: PASS  observed: "assert 'ok' == 'fail'"
+
+## baseline (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 0.03s
+
+
+## mutated (disposable copy)
+exit 1
+F                                                                        [100%]
+=================================== FAILURES ===================================
+________ test_health_check_does_not_count_the_t2_link_as_a_network_link ________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fc921aa69e0>
+
+    def test_health_check_does_not_count_the_t2_link_as_a_network_link(monkeypatch):
+        internal_only = [{"name": "enp1s0f1u1", "kind": "internal", "state": "up", "loopback": False,
+                          "addresses": [{"family": "inet", "address": "169.254.1.2", "prefix": 16}]}]
+        monkeypatch.setattr(sysinfo, "interfaces", lambda: internal_only)
+        monkeypatch.setattr(sysinfo, "default_gateway", lambda: None)
+        monkeypatch.setattr(probes.socket, "getaddrinfo", lambda *a, **k: (_ for _ in ()).throw(OSError("offline")))
+        monkeypatch.setattr(probes.socket, "create_connection", lambda *a, **k: (_ for _ in ()).throw(OSError("off")))
+        link = next(s for s in probes.health_check() if s["id"] == "link")
+>       assert link["status"] == "fail", link
+E       AssertionError: {'id': 'link', 'label': 'Network link', 'status': 'ok', 'detail': 'Connected via enp1s0f1u1', ...}
+E       assert 'ok' == 'fail'
+E         
+E         - fail
+E         + ok
+
+tests/test_fieldkit.py:66: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_fieldkit.py::test_health_check_does_not_count_the_t2_link_as_a_network_link
+1 failed in 0.08s
+
+
+
+## restored (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 0.03s
+

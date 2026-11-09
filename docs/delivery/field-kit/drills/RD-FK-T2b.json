@@ -1,0 +1,1 @@
+{"id": "RD-FK-T2b", "path": "src/netdeck/probes.py", "old": " and i[\"kind\"] != \"internal\"]", "new": "]", "test": ["tests/test_fieldkit.py::test_health_check_does_not_count_the_t2_link_as_a_network_link"], "expect": "assert 'ok' == 'fail'"}

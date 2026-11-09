@@ -1,0 +1,1 @@
+{"id": "RD-FK-VAL", "path": "src/netdeck/validators.py", "old": "    if os.path.isdir(DEV_DIR) and not os.path.exists(os.path.join(DEV_DIR, name)):", "new": "    if False:", "test": ["tests/test_fieldkit.py::test_serial_device_validation"], "expect": "DID NOT RAISE"}

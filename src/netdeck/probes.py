@@ -162,7 +162,8 @@ def health_check() -> List[Dict]:
         steps.append({"id": step_id, "label": label, "status": status, "detail": detail,
                       "ms": round(ms, 1) if ms is not None else None})
 
-    ifaces = [i for i in sysinfo.interfaces() if i["state"] == "up" and not i["loopback"]]
+    ifaces = [i for i in sysinfo.interfaces()
+              if i["state"] == "up" and not i["loopback"] and i["kind"] != "internal"]
     with_ip = [i for i in ifaces if any(a["family"] == "inet" for a in i["addresses"])]
     if with_ip:
         names = ", ".join(i["name"] for i in with_ip)

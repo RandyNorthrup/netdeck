@@ -1,0 +1,41 @@
+# drill RD-FK-VAL: src/netdeck/validators.py
+mutation: '    if os.path.isdir(DEV_DIR) and not os.path.exists(os.path.join(DEV_DIR, name)):' -> '    if False:'
+result: PASS  observed: 'DID NOT RAISE'
+
+## baseline (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 0.04s
+
+
+## mutated (disposable copy)
+exit 1
+F                                                                        [100%]
+=================================== FAILURES ===================================
+________________________ test_serial_device_validation _________________________
+
+tmp_path = PosixPath('/tmp/pytest-of-randy/pytest-180/test_serial_device_validation0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ff3cc0ee9e0>
+
+    def test_serial_device_validation(tmp_path, monkeypatch):
+        monkeypatch.setattr(validators, "DEV_DIR", str(tmp_path))
+        (tmp_path / "ttyUSB0").write_text("")
+        assert validators.serial_device("/dev/ttyUSB0") == "/dev/ttyUSB0"
+        assert validators.serial_device("ttyUSB0") == "/dev/ttyUSB0"
+        for bad in ("/dev/ttyUSB1", "/dev/sda", "/etc/passwd", "/dev/../dev/ttyUSB0", "-b", "ttyUSB0;reboot", ""):
+>           with pytest.raises(validators.ValidationError):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE ValidationError
+
+tests/test_fieldkit.py:154: Failed
+=========================== short test summary info ============================
+FAILED tests/test_fieldkit.py::test_serial_device_validation - Failed: DID NO...
+1 failed in 0.08s
+
+
+
+## restored (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 0.03s
+

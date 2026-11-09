@@ -1,0 +1,1 @@
+{"id": "RD-FK-LIVE", "path": "src/netdeck/catalog.py", "old": "[Step([\"nmap\", \"--script\", \"broadcast-dhcp-discover\", \"-e\", p[\"iface\"]],", "new": "[Step([\"nmap\", \"--script\", \"broadcast-dns-service-discovery\", \"-e\", p[\"iface\"]],", "test": ["tests/test_field_live.py::test_dhcp_check_finds_the_dhcp_server"], "expect": "no DHCP server answered"}

@@ -1,0 +1,19 @@
+# vnStat on this laptop after 'sudo systemctl enable --now vnstat' (2026-11-08)
+$ systemctl is-active vnstat
+active
+$ vnstat
+
+                      rx      /      tx      /     total    /   estimated
+ docker0:
+       2026-11           0 B  /         0 B  /         0 B  /     --     
+         today           0 B  /         0 B  /         0 B  /     --     
+
+ enp1s0f1u1:
+       2026-11           0 B  /         0 B  /         0 B  /     --     
+         today           0 B  /         0 B  /         0 B  /     --     
+
+ wlan0:
+       2026-11      8.93 MiB  /    7.20 MiB  /   16.13 MiB  /   22.43 GiB
+         today      8.93 MiB  /    7.20 MiB  /   16.13 MiB  /   16.95 MiB
+
+exit status: 0

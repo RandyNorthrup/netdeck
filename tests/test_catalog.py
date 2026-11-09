@@ -8,7 +8,7 @@ from netdeck.catalog import CATEGORIES, GUI, PACKAGES, STREAM, TERMINAL, TOOLS, 
 SAMPLE = {
     "host": "example.com", "hosts": "1.1.1.1 8.8.8.8", "target": "192.168.1.0/24", "ip": "192.168.1.1",
     "cidr": "10.0.0.0/24", "url": "https://example.com", "iface": "lo", "ports": "22,80", "port": "443",
-    "rate": "10M", "expr": "port 53",
+    "rate": "10M", "expr": "port 53", "serial": "/dev/ttyUSB0", "community": "public", "username": "admin",
 }
 
 
@@ -40,6 +40,7 @@ def test_every_category_has_tools():
 def test_builds_argv_lists(tool, monkeypatch, tmp_path):
     monkeypatch.setenv("NETDECK_CAPTURES_DIR", str(tmp_path))
     monkeypatch.setattr(validators, "SYS_NET", "/nonexistent")  # accept any interface name
+    monkeypatch.setattr(validators, "DEV_DIR", "/nonexistent")  # accept any serial port name
     params = sample_params(tool)
     plan = tool.plan(params)
     assert plan.steps
@@ -49,7 +50,7 @@ def test_builds_argv_lists(tool, monkeypatch, tmp_path):
             continue
         assert isinstance(step, Step)
         assert all(isinstance(a, str) for a in step.argv), step.argv
-        assert step.argv[0] == tool.binary or step.argv[0] in ("ip", "ss", "nmcli", "dig", "curl"), step.argv
+        assert step.argv[0] == tool.binary or step.argv[0] in ("ip", "ss", "nmcli", "dig", "curl", "timeout"), step.argv
         assert not any(a == "" for a in step.argv), step.argv
 
 

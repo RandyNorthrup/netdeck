@@ -139,17 +139,17 @@ if [ "$WITH_TOOLS" = 1 ]; then
   family="${ID:-} ${ID_LIKE:-}"
   case "$family" in
     *arch*|*manjaro*|*endeavouros*|*cachyos*)
-      pkgs="iputils traceroute mtr bind whois nmap arp-scan iperf3 speedtest-cli nethogs iftop bmon vnstat tcpdump wireshark-cli termshark iproute2 networkmanager iw ethtool lsof curl nftables gping trippy"
+      pkgs="iputils traceroute mtr bind whois nmap arp-scan iperf3 speedtest-cli nethogs iftop bmon vnstat tcpdump wireshark-cli termshark iproute2 networkmanager iw ethtool lsof curl nftables gping trippy inetutils openssh picocom net-snmp nbtscan ndisc6 wavemon linssid aircrack-ng bandwhich testssl.sh"
       cmd=(sudo pacman -S --needed); [ "$ASSUME_YES" = 1 ] && cmd+=(--noconfirm) ;;
     *debian*|*ubuntu*)
-      pkgs="iputils-ping iputils-tracepath iputils-arping traceroute mtr-tiny dnsutils whois nmap arp-scan iperf3 speedtest-cli nethogs iftop bmon vnstat tcpdump tshark iproute2 iw ethtool lsof curl nftables"
+      pkgs="iputils-ping iputils-tracepath iputils-arping traceroute mtr-tiny dnsutils whois nmap arp-scan iperf3 speedtest-cli nethogs iftop bmon vnstat tcpdump tshark iproute2 iw ethtool lsof curl nftables telnet openssh-client picocom snmp nbtscan ndisc6 wavemon aircrack-ng testssl.sh"
       sudo apt-get update -qq
       cmd=(sudo apt-get install); [ "$ASSUME_YES" = 1 ] && cmd+=(-y) ;;
     *fedora*|*rhel*|*centos*|*rocky*|*almalinux*)
-      pkgs="iputils traceroute mtr bind-utils whois nmap arp-scan iperf3 nethogs iftop bmon vnstat tcpdump wireshark-cli iproute iw ethtool lsof curl nftables"
+      pkgs="iputils traceroute mtr bind-utils whois nmap arp-scan iperf3 nethogs iftop bmon vnstat tcpdump wireshark-cli iproute iw ethtool lsof curl nftables telnet openssh-clients picocom net-snmp-utils ndisc6 wavemon aircrack-ng testssl"
       cmd=(sudo dnf install); [ "$ASSUME_YES" = 1 ] && cmd+=(-y) ;;
     *suse*)
-      pkgs="iputils traceroute mtr bind-utils whois nmap arp-scan iperf nethogs iftop bmon vnstat tcpdump wireshark iproute2 iw ethtool lsof curl nftables"
+      pkgs="iputils traceroute mtr bind-utils whois nmap arp-scan iperf nethogs iftop bmon vnstat tcpdump wireshark iproute2 iw ethtool lsof curl nftables telnet openssh-clients picocom net-snmp wavemon aircrack-ng"
       cmd=(sudo zypper install); [ "$ASSUME_YES" = 1 ] && cmd+=(-y) ;;
     *) warn "Unknown distribution — skipping tool installation. Run 'netdeck doctor' to see what is missing."; pkgs="" ;;
   esac

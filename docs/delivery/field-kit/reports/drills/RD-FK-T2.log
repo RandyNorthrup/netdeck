@@ -1,0 +1,41 @@
+# drill RD-FK-T2: src/netdeck/sysinfo.py
+mutation: '    if any(marker in product for marker in INTERNAL_PRODUCTS):\n        return "internal"\n' -> ''
+result: PASS  observed: "assert 'ethernet' == 'internal'"
+
+## baseline (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 0.03s
+
+
+## mutated (disposable copy)
+exit 1
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_________________ test_apple_t2_link_is_internal_not_ethernet __________________
+
+tmp_path = PosixPath('/tmp/pytest-of-randy/pytest-177/test_apple_t2_link_is_internal0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ffa3461e9e0>
+
+    def test_apple_t2_link_is_internal_not_ethernet(tmp_path, monkeypatch):
+        monkeypatch.setattr(sysinfo, "SYS_NET", str(tmp_path))
+        make_iface(tmp_path, "enp1s0f1u1", "Apple T2 Controller")
+        make_iface(tmp_path, "enx001122334455", "USB 10/100/1000 LAN")
+>       assert sysinfo._iface_kind("enp1s0f1u1") == "internal"
+E       AssertionError: assert 'ethernet' == 'internal'
+E         
+E         - internal
+E         + ethernet
+
+tests/test_fieldkit.py:54: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_fieldkit.py::test_apple_t2_link_is_internal_not_ethernet - ...
+1 failed in 0.08s
+
+
+
+## restored (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 0.03s
+

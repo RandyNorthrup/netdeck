@@ -1,0 +1,43 @@
+# drill RD-FK-ARGV: src/netdeck/catalog.py
+mutation: '"-s", "1500",\n                               "-c", "1", "--", LLDP_CDP_FILTER]' -> '"-s", "1500",\n                               "--", LLDP_CDP_FILTER]'
+result: PASS  observed: "AssertionError: assert [['timeout'"
+
+## baseline (original tree)
+exit 0
+.......................                                                  [100%]
+23 passed in 0.05s
+
+
+## mutated (disposable copy)
+exit 1
+...F...................                                                  [100%]
+=================================== FAILURES ===================================
+___________________ test_field_tool_commands[switch-port-3] ____________________
+
+tool_id = 'switch-port', category = 'lan', params = {'iface': 'eth0'}
+argvs = [['timeout', '65', 'tcpdump', '-i', 'eth0', '-nn', ...]]
+
+    @pytest.mark.parametrize(("tool_id", "category", "params", "argvs"), EXPECTED,
+                             ids=[f"{e[0]}-{i}" for i, e in enumerate(EXPECTED)])
+    def test_field_tool_commands(tool_id, category, params, argvs):
+        tool, _, built = build(tool_id, **params)
+        assert tool.category == category
+        if argvs is not None:
+>           assert built == argvs
+E           AssertionError: assert [['timeout', ..., '-nn', ...]] == [['timeout', ..., '-nn', ...]]
+E             
+E             At index 0 diff: ['timeout', '65', 'tcpdump', '-i', 'eth0', '-nn', '-v', '-s', '1500', '--', '(ether proto 0x88cc) or (ether dst 01:00:0c:cc:cc:cc and ether[20:2] = 0x2000)'] != ['timeout', '65', 'tcpdump', '-i', 'eth0', '-nn', '-v', '-s', '1500', '-c', '1', '--', '(ether proto 0x88cc) or (ether dst 01:00:0c:cc:cc:cc and ether[20:2] = 0x2000)']
+E             Use -v to get more diff
+
+tests/test_fieldkit.py:113: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_fieldkit.py::test_field_tool_commands[switch-port-3] - Asse...
+1 failed, 22 passed in 0.11s
+
+
+
+## restored (original tree)
+exit 0
+.......................                                                  [100%]
+23 passed in 0.06s
+

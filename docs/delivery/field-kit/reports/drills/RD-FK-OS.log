@@ -1,0 +1,36 @@
+# drill RD-FK-OS: src/netdeck/catalog.py
+mutation: '"-T4", "--stats-every", "10s"]' -> '"-T4"]'
+result: PASS  observed: "assert [['nmap'"
+
+## baseline (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 0.03s
+
+
+## mutated (disposable copy)
+exit 1
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__ test_os_fingerprint_shows_progress_and_skips_service_detection_by_default ___
+
+    def test_os_fingerprint_shows_progress_and_skips_service_detection_by_default():
+        _, _, argvs = build("nmap-os", target="10.0.0.1")
+>       assert argvs == [["nmap", "-O", "--osscan-guess", "-T4", "--stats-every", "10s", "--", "10.0.0.1"]]
+E       AssertionError: assert [['nmap', '-O..., '10.0.0.1']] == [['nmap', '-O..., '10s', ...]]
+E         
+E         At index 0 diff: ['nmap', '-O', '--osscan-guess', '-T4', '--', '10.0.0.1'] != ['nmap', '-O', '--osscan-guess', '-T4', '--stats-every', '10s', '--', '10.0.0.1']
+E         Use -v to get more diff
+
+tests/test_fieldkit.py:30: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_fieldkit.py::test_os_fingerprint_shows_progress_and_skips_service_detection_by_default
+1 failed in 0.07s
+
+
+
+## restored (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 0.03s
+

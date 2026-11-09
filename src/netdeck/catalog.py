@@ -138,13 +138,16 @@ CATEGORIES: Tuple[Category, ...] = (
     Category("connectivity", "Connectivity", "activity", "Reachability, latency and path tracing"),
     Category("dns", "DNS & Lookup", "globe", "Name resolution, records and ownership"),
     Category("discovery", "Discovery & Scanning", "radar", "Find hosts, open ports and services"),
+    Category("lan", "LAN Services", "server", "DHCP, switch ports, SNMP and device discovery"),
     Category("performance", "Speed & Throughput", "gauge", "Bandwidth tests and speed tests"),
     Category("traffic", "Traffic Monitor", "chart", "Who is using the network right now"),
     Category("capture", "Packet Capture", "layers", "Capture and inspect packets"),
-    Category("interfaces", "Interfaces & Routing", "network", "Adapters, addresses, routes and Wi-Fi"),
+    Category("interfaces", "Interfaces & Routing", "network", "Adapters, addresses and routes"),
+    Category("wifi", "Wi-Fi", "wifi", "Signal, channels, site surveys and monitor mode"),
     Category("connections", "Connections & Ports", "plug", "Sockets, listeners and owning processes"),
     Category("web", "Web & TLS", "lock", "HTTP, certificates and public IP"),
-    Category("firewall", "Firewall", "shield", "Packet filter rules"),
+    Category("access", "Device Access", "terminal", "Console, SSH and Telnet sessions to network gear"),
+    Category("firewall", "Firewall", "shield", "This machine's packet filter rules"),
 )
 
 
@@ -190,6 +193,36 @@ def _nmap_scan(p: Dict) -> List[str]:
     return (["nmap", scan] + port_args + ["-T" + p["timing"], "--stats-every", "10s", "--reason"] +
             _if(p["service"], "-sV") + _if(p["scripts"], "-sC") + _if(p["skip_ping"], "-Pn") +
             _if(p["open_only"], "--open") + ["--", p["target"]])
+
+
+# LLDP (ethertype 0x88cc) or CDP (Cisco multicast MAC, SNAP protocol 0x2000).
+LLDP_CDP_FILTER = "(ether proto 0x88cc) or (ether dst 01:00:0c:cc:cc:cc and ether[20:2] = 0x2000)"
+
+SSH_LEGACY = ["-o", "KexAlgorithms=+diffie-hellman-group14-sha1,diffie-hellman-group1-sha1",
+              "-o", "HostKeyAlgorithms=+ssh-rsa", "-o", "PubkeyAcceptedAlgorithms=+ssh-rsa",
+              "-o", "Ciphers=+aes128-cbc,aes256-cbc,3des-cbc"]
+
+SNMP_OIDS = {
+    "system": ["1.3.6.1.2.1.1"],
+    "interfaces": ["1.3.6.1.2.1.2.2.1.2", "1.3.6.1.2.1.2.2.1.8"],  # ifDescr, ifOperStatus
+    "lldp": ["1.0.8802.1.1.2.1.4.1.1.9", "1.0.8802.1.1.2.1.4.1.1.7"],  # lldpRemSysName, lldpRemPortId
+    "all": ["1.3.6.1.2.1"],
+}
+
+
+def _hostport(p: Dict) -> str:
+    host = p["host"]
+    return f"[{host}]:{p['port']}" if ":" in host else f"{host}:{p['port']}"
+
+
+def _snmp(p: Dict):
+    host = p["host"]
+    agent = f"udp6:[{host}]:{p['port']}" if ":" in host else f"udp:{host}:{p['port']}"
+    base = ["snmpwalk", "-v", p["version"], "-c", p["community"], "-t", "2", "-r", "1", agent]
+    oids = SNMP_OIDS[p["view"]]
+    if len(oids) == 1:
+        return base + oids
+    return [Step(base + [oid], oid) for oid in oids]
 
 
 def _tcpdump(p: Dict) -> List[str]:
@@ -367,9 +400,12 @@ TOOLS: Tuple[Tool, ...] = (
                    ("4", "Aggressive"), ("5", "Insane")), advanced=True),
              Param("scripts", "Run default scripts (-sC)", "bool", False, advanced=True),
              Param("skip_ping", "Treat hosts as online (-Pn)", "bool", False, advanced=True))),
-    Tool("nmap-os", "OS Fingerprint", "discovery", "Guess the operating system and services of a host.",
-         "nmap", lambda p: ["nmap", "-O", "-sV", "--osscan-guess", "-T4", "--", p["target"]],
-         privileged=True, params=(Param("target", "Target", "target", required=True, placeholder="192.168.1.10"),)),
+    Tool("nmap-os", "OS Fingerprint", "discovery", "Guess the operating system of a host.",
+         "nmap", lambda p: ["nmap", "-O", "--osscan-guess", "-T4", "--stats-every", "10s"] +
+         _if(p["service"], "-sV") + ["--", p["target"]],
+         privileged=True, notes="Service detection can add minutes; Port Scan also offers it.", params=(
+             Param("target", "Target", "target", required=True, placeholder="192.168.1.10"),
+             Param("service", "Also detect service versions (slow)", "bool", False))),
     Tool("arp-scan", "ARP Scan", "discovery", "Fastest way to list every device on your LAN with vendor names.",
          "arp-scan", lambda p: ["arp-scan", "--interface", p["iface"], "--localnet"] + _if(p["plain"], "--plain"),
          privileged=lambda p: not capture_capable("arp-scan"), popular=True, keywords=("lan", "mac", "vendor"),
@@ -505,19 +541,21 @@ TOOLS: Tuple[Tool, ...] = (
          [Step(["nmcli", "general", "status"], "General"), Step(["nmcli", "device", "status"], "Devices"),
           Step(["nmcli", "connection", "show", "--active"], "Active connections")],
          params=(IFACE_OPT,)),
-    Tool("wifi-scan", "Wi-Fi Scan", "interfaces", "Nearby wireless networks with channel, signal and security.",
+    Tool("wifi-scan", "Wi-Fi Scan", "wifi", "Nearby wireless networks with channel, signal and security.",
          "nmcli", lambda p: ["nmcli", "-f", "IN-USE,SSID,BSSID,CHAN,FREQ,RATE,SIGNAL,BARS,SECURITY",
                              "device", "wifi", "list", "--rescan", "yes" if p["rescan"] else "no"],
          popular=True, keywords=("wireless", "ssid", "channel", "signal"), params=(
              Param("rescan", "Force fresh scan", "bool", True),)),
-    Tool("wifi-link", "Wi-Fi Link", "interfaces", "Current Wi-Fi association: signal, bitrate and frequency.",
+    Tool("wifi-link", "Wi-Fi Link", "wifi", "Current Wi-Fi association: signal, bitrate and frequency.",
          "iw", lambda p: ["iw", "dev", p["iface"], "link"], params=(IFACE,)),
     Tool("ethtool", "Ethernet Link", "interfaces", "Negotiated speed, duplex and NIC driver statistics.",
          "ethtool", lambda p: ["ethtool"] + _if(p["view"] == "stats", "-S") + _if(p["view"] == "driver", "-i") +
-         [p["iface"]], keywords=("duplex", "speed", "nic"), params=(
+         _if(p["view"] == "cable", "--cable-test") + [p["iface"]], privileged=lambda p: p["view"] == "cable",
+         keywords=("duplex", "speed", "nic", "cable", "tdr"),
+         notes="Cable test needs adapter support (many USB adapters lack it); it briefly drops the link.", params=(
              IFACE,
              Param("view", "Show", "choice", "link", choices=(("link", "Link settings"), ("driver", "Driver info"),
-                   ("stats", "NIC statistics"))))),
+                   ("stats", "NIC statistics"), ("cable", "Cable test (pairs, faults, length)"))))),
     Tool("nmtui", "nmtui", "interfaces", "Edit and activate connections with NetworkManager's text UI.",
          "nmtui", lambda p: ["nmtui"], mode=TERMINAL),
     Tool("nm-connection-editor", "Connection Editor", "interfaces", "NetworkManager's graphical connection editor.",
@@ -570,7 +608,127 @@ TOOLS: Tuple[Tool, ...] = (
          "curl", lambda p: [Step(["curl", "-sS", "-4", "--max-time", "10", "https://ifconfig.co/json"], "IPv4")] +
          ([Step(["curl", "-sS", "-6", "--max-time", "10", "https://ifconfig.co/json"], "IPv6")] if p["v6"] else []),
          keywords=("wan", "external ip", "nat"), notes="Contacts ifconfig.co.", params=(
-             Param("v6", "Also check IPv6", "bool", True),)),
+             Param("v6", "Also check IPv6", "bool", False,
+                   help="Fails on networks without IPv6, which is common"),)),
+
+    # ── Field additions: connectivity ─────────────────────────────────────────
+    Tool("mtu-test", "MTU Test", "connectivity",
+         "Check whether full-size packets pass without fragmentation (finds MTU and VPN/PPPoE problems).",
+         "ping", lambda p: ["ping", "-M", "do", "-s", str(p["size"]), "-c", str(p["count"]), "-W", "2", "--",
+                            p["host"]], keywords=("fragmentation", "pppoe", "vpn", "mss", "dont fragment"),
+         notes="Payload 1472 + 28 bytes of headers = 1500. 'Message too long' or 'Frag needed' means the path MTU "
+               "is smaller; lower the size until it passes.", params=(
+             HOST,
+             Param("size", "Payload size (bytes)", "int", 1472, min=500, max=8972),
+             Param("count", "Count", "int", 3, min=1, max=20))),
+    Tool("dup-ip", "Duplicate IP Check", "connectivity",
+         "Ask whether any other device already answers for an IP address (address conflicts).",
+         "arping", lambda p: ["arping", "-D", "-c", str(p["count"]), "-I", p["iface"], "--", p["ip"]],
+         privileged=lambda p: not capture_capable("arping"), keywords=("conflict", "duplicate", "arp"),
+         notes="Any reply means the address is already in use; the tool then exits with status 1.", params=(
+             Param("ip", "IP address", "ip", required=True, prefill="ip"),
+             IFACE,
+             Param("count", "Probes", "int", 3, min=1, max=20))),
+
+    # ── LAN services ────────────────────────────────────────────────────────
+    Tool("dhcp-check", "DHCP Server Check", "lan",
+         "Broadcast a DHCP request and list every server that answers — finds missing or rogue DHCP.",
+         "nmap", lambda p: [Step(["nmap", "--script", "broadcast-dhcp-discover", "-e", p["iface"]],
+                                 f"Attempt {n} of 2") for n in (1, 2)],
+         privileged=True, popular=True, keywords=("rogue dhcp", "no ip", "169.254", "lease", "dnsmasq"),
+         notes="Two independent requests: on Wi-Fi a single broadcast can be lost, and a rogue server may answer "
+               "only sometimes. Read-only: offers are never accepted, so no address is taken.", params=(IFACE,)),
+    Tool("switch-port", "Switch Port (LLDP/CDP)", "lan",
+         "Listen for the switch's own announcement: switch name, port, VLAN and model. Transmits nothing.",
+         "tcpdump", lambda p: ["timeout", str(p["wait"]), "tcpdump", "-i", p["iface"], "-nn", "-v", "-s", "1500",
+                               "-c", "1", "--", LLDP_CDP_FILTER],
+         privileged=lambda p: not capture_capable("tcpdump"), popular=True,
+         keywords=("lldp", "cdp", "which port", "vlan", "switch"),
+         notes="Use a wired connection. Switches announce every 30-60 s; if nothing arrives before the time limit "
+               "the port sends no LLDP/CDP (the tool then exits with status 124).", params=(
+             IFACE,
+             Param("wait", "Listen for (s)", "int", 65, min=10, max=300))),
+    Tool("snmp", "SNMP Query", "lan",
+         "Read a switch, printer or access point over SNMP: identity, interfaces or LLDP neighbors.",
+         "snmpwalk", lambda p: _snmp(p), keywords=("snmpwalk", "mib", "community", "switch", "printer"),
+         notes="SNMP v1/v2c sends the community string unencrypted.", params=(
+             HOST,
+             Param("community", "Community", "community", "public", required=True),
+             Param("view", "Read", "choice", "system", choices=(("system", "Identity"), ("interfaces", "Interfaces"),
+                   ("lldp", "LLDP neighbors"), ("all", "Everything (MIB-2)"))),
+             Param("version", "Version", "choice", "2c", choices=(("2c", "v2c"), ("1", "v1"))),
+             Param("port", "Port", "port", 161, advanced=True))),
+    Tool("lan-discovery", "Device Discovery", "lan",
+         "Find printers, Apple, Chromecast and IoT devices and Windows hosts that announce themselves.",
+         "nmap", lambda p: ["nmap", "--script",
+                            "broadcast-dns-service-discovery,broadcast-upnp-info,broadcast-netbios-master-browser",
+                            "-e", p["iface"]], privileged=True, keywords=("bonjour", "mdns", "upnp", "printer", "ssdp"),
+         params=(IFACE,)),
+    Tool("netbios-scan", "NetBIOS Name Scan", "lan", "Windows and Samba names, workgroups and MACs on a subnet.",
+         "nbtscan", lambda p: ["nbtscan", p["target"]], keywords=("windows", "smb", "workgroup", "hostname"),
+         params=(TARGET,)),
+    Tool("ipv6-ra", "IPv6 Router Advertisements", "lan",
+         "Ask for IPv6 routers: prefixes, DNS servers and lifetimes they announce (or reveal rogue ones).",
+         "rdisc6", lambda p: ["rdisc6", "-w", "2000", p["iface"]], keywords=("slaac", "ipv6", "prefix", "rogue ra"),
+         notes="'Timed out' means no IPv6 router answered on this network.", params=(IFACE,)),
+
+    # ── Wi-Fi ───────────────────────────────────────────────────────────────
+    Tool("wifi-meter", "Wi-Fi Signal Meter", "wifi",
+         "Live signal, noise and bitrate — walk the site to find dead spots.",
+         "wavemon", lambda p: ["wavemon", "-i", p["iface"]], mode=TERMINAL, keywords=("rssi", "dbm", "coverage"),
+         params=(IFACE,)),
+    Tool("wifi-chart", "Wi-Fi Channel Chart", "wifi",
+         "Graph nearby networks by channel and signal to spot interference.",
+         "linssid-pkexec", lambda p: ["linssid-pkexec"], mode=GUI, popular=True,
+         keywords=("channel", "interference", "congestion", "2.4 ghz", "5 ghz")),
+    Tool("monitor-on", "Monitor Mode On", "wifi",
+         "Put a monitor-capable USB adapter into monitor mode for a site survey.",
+         "airmon-ng", lambda p: ["airmon-ng", "start", p["iface"]], privileged=True,
+         notes="Use an adapter that supports monitor mode (e.g. your Alfa). The built-in Broadcom card cannot. "
+               "The new interface is usually named <iface>mon.", params=(IFACE,)),
+    Tool("monitor-off", "Monitor Mode Off", "wifi", "Return a monitor-mode adapter to normal (managed) mode.",
+         "airmon-ng", lambda p: ["airmon-ng", "stop", p["iface"]], privileged=True, params=(IFACE,)),
+    Tool("wifi-survey", "Wi-Fi Site Survey", "wifi",
+         "Every access point and client in range: channels, signal, encryption, traffic (monitor mode).",
+         "airodump-ng", lambda p: ["airodump-ng", "--band", p["band"], p["iface"]], mode=TERMINAL, privileged=True,
+         keywords=("airodump", "survey", "access points", "clients", "channels"), params=(
+             Param("iface", "Monitor interface", "iface", required=True, help="e.g. wlan1mon after Monitor Mode On"),
+             Param("band", "Bands", "choice", "abg", choices=(("abg", "2.4 + 5 GHz"), ("bg", "2.4 GHz"),
+                   ("a", "5 GHz"))))),
+
+    # ── Device access ───────────────────────────────────────────────────────
+    Tool("serial-console", "Serial Console", "access",
+         "Console session over a USB serial / RJ45 rollover cable to a switch, router or firewall.",
+         "picocom", lambda p: ["picocom", "-b", p["baud"], p["device"]], mode=TERMINAL, popular=True,
+         privileged=lambda p: not os.access(p["device"], os.R_OK | os.W_OK),
+         keywords=("console cable", "rollover", "cisco", "rs232", "ttyusb"),
+         notes="Most switches and routers use 9600 8N1. Exit picocom with Ctrl+A then Ctrl+X.", params=(
+             Param("device", "Serial port", "serial", required=True, placeholder="/dev/ttyUSB0"),
+             Param("baud", "Speed", "choice", "9600", choices=(("9600", "9600"), ("19200", "19200"),
+                   ("38400", "38400"), ("57600", "57600"), ("115200", "115200"))))),
+    Tool("ssh", "SSH Session", "access", "Open an SSH session to a device, with legacy algorithms for older gear.",
+         "ssh", lambda p: ["ssh", "-p", str(p["port"])] + (SSH_LEGACY if p["legacy"] else []) +
+         ["--", f"{p['user']}@{p['host']}" if p["user"] else p["host"]], mode=TERMINAL,
+         keywords=("ssh", "cli", "switch login"), params=(
+             HOST,
+             Param("user", "User", "username", placeholder="admin"),
+             Param("port", "Port", "port", 22, advanced=True),
+             Param("legacy", "Allow legacy algorithms (old switches/routers)", "bool", False))),
+    Tool("telnet", "Telnet Session", "access", "Telnet to older devices that have no SSH (unencrypted).",
+         "telnet", lambda p: ["telnet", p["host"], str(p["port"])], mode=TERMINAL, keywords=("telnet", "legacy"),
+         params=(HOST, Param("port", "Port", "port", 23))),
+
+    # ── Traffic and web additions ────────────────────────────────────────────
+    Tool("bandwhich", "Bandwidth by Process & Host", "traffic",
+         "Live view of which programs and remote hosts use bandwidth, with DNS names.",
+         "bandwhich", lambda p: ["bandwhich"] + _if(p["iface"], "-i", str(p["iface"])), mode=TERMINAL,
+         privileged=lambda p: not capture_capable("bandwhich"), params=(IFACE_OPT,)),
+    Tool("tls-audit", "TLS Configuration Audit", "web",
+         "Full TLS check of a server: protocols, ciphers, certificate chain and known vulnerabilities (testssl.sh).",
+         "testssl", lambda p: ["testssl", "--quiet", "--color", "0", "--warnings", "batch", _hostport(p)],
+         keywords=("testssl", "ssl labs", "cipher", "heartbleed", "tls 1.0"), notes="Takes 1-3 minutes.", params=(
+             Param("host", "Host", "host", required=True, placeholder="example.com"),
+             Param("port", "Port", "port", 443))),
 
     # ── Firewall ────────────────────────────────────────────────────────────
     Tool("nft", "nftables Ruleset", "firewall", "The complete active nftables ruleset.",
@@ -631,5 +789,17 @@ PACKAGES: Dict[str, Dict[str, str]] = {
     "nft": {"arch": "nftables", "debian": "nftables", "fedora": "nftables", "suse": "nftables"},
     "iptables": {"arch": "iptables", "debian": "iptables", "fedora": "iptables", "suse": "iptables"},
     "ufw": {"arch": "ufw", "debian": "ufw", "fedora": "ufw", "suse": "ufw"},
+    "telnet": {"arch": "inetutils", "debian": "telnet", "fedora": "telnet", "suse": "telnet"},
+    "ssh": {"arch": "openssh", "debian": "openssh-client", "fedora": "openssh-clients", "suse": "openssh-clients"},
+    "picocom": {"arch": "picocom", "debian": "picocom", "fedora": "picocom", "suse": "picocom"},
+    "snmpwalk": {"arch": "net-snmp", "debian": "snmp", "fedora": "net-snmp-utils", "suse": "net-snmp"},
+    "nbtscan": {"arch": "nbtscan", "debian": "nbtscan"},
+    "rdisc6": {"arch": "ndisc6", "debian": "ndisc6", "fedora": "ndisc6"},
+    "wavemon": {"arch": "wavemon", "debian": "wavemon", "fedora": "wavemon", "suse": "wavemon"},
+    "linssid-pkexec": {"arch": "linssid", "debian": "linssid"},
+    "airmon-ng": {"arch": "aircrack-ng", "debian": "aircrack-ng", "fedora": "aircrack-ng", "suse": "aircrack-ng"},
+    "airodump-ng": {"arch": "aircrack-ng", "debian": "aircrack-ng", "fedora": "aircrack-ng", "suse": "aircrack-ng"},
+    "bandwhich": {"arch": "bandwhich", "fedora": "bandwhich"},
+    "testssl": {"arch": "testssl.sh", "debian": "testssl.sh", "fedora": "testssl"},
     "firewall-cmd": {"arch": "firewalld", "debian": "firewalld", "fedora": "firewalld", "suse": "firewalld"},
 }

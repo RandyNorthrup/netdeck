@@ -336,7 +336,9 @@
             quickLink("Public IP", "globe", "public-ip", {}))),
       );
       // interfaces
-      const ifaces = sys.interfaces.filter((i) => !i.loopback).sort((a, b) => (a.state === "up" ? -1 : 1) - (b.state === "up" ? -1 : 1));
+      // Real ports first (up before down); internal links such as the Apple T2 bridge last.
+      const rank = (i) => (i.kind === "internal" ? 2 : i.state === "up" ? 0 : 1);
+      const ifaces = sys.interfaces.filter((i) => !i.loopback).sort((a, b) => rank(a) - rank(b));
       if (!ifaces.length) ifaceGrid.append(h("div", { class: "card empty" }, ic("network"), h("b", null, "No network interfaces")));
       const live = {};
       ifaces.forEach((i) => { const card = ifaceCard(i); live[i.name] = card; ifaceGrid.append(card.el); });
@@ -363,8 +365,8 @@
 
   function ifaceCard(i) {
     const up = i.state === "up";
-    const kindIcon = { wifi: "wifi", ethernet: "ethernet", vpn: "vpn", bridge: "network", virtual: "layers" }[i.kind] || "network";
-    const kindLabel = { wifi: "Wi-Fi", ethernet: "Ethernet", vpn: "VPN / tunnel", bridge: "Bridge", virtual: "Virtual" }[i.kind] || i.kind;
+    const kindIcon = { wifi: "wifi", ethernet: "ethernet", vpn: "vpn", bridge: "network", virtual: "layers", internal: "server" }[i.kind] || "network";
+    const kindLabel = { wifi: "Wi-Fi", ethernet: "Ethernet", vpn: "VPN / tunnel", bridge: "Bridge", virtual: "Virtual", internal: "Internal link (not a network port)" }[i.kind] || i.kind;
     const rx = h("span"), tx = h("span"), rxTot = h("small"), txTot = h("small");
     const canvas = h("canvas", { class: "spark", "aria-hidden": "true" });
     const v4 = i.addresses.filter((a) => a.family === "inet");
@@ -529,7 +531,8 @@
       control = h("input", {
         class: "input", id, type: numeric ? "number" : "text", placeholder: p.placeholder || "",
         min: p.min ?? (p.kind === "port" ? 1 : null), max: p.max ?? (p.kind === "port" ? 65535 : null),
-        autocomplete: "off", spellcheck: "false", list: ["host", "target", "hosts", "ip"].includes(p.kind) ? "dl-hosts" : null,
+        autocomplete: "off", spellcheck: "false",
+        list: ["host", "target", "hosts", "ip"].includes(p.kind) ? "dl-hosts" : p.kind === "serial" ? "dl-serial" : null,
       });
       control.value = cur ?? "";
       control.addEventListener("input", () => set(control.value));
@@ -549,6 +552,11 @@
     ["1.1.1.1", "8.8.8.8", "example.com"].forEach(add);
     return dl;
   }
+  function serialSuggestions() {
+    const ports = (S.system && S.system.serial_ports) || [];
+    return h("datalist", { id: "dl-serial" }, ports.map((port) => h("option", { value: port })));
+  }
+
   function rememberHosts(tool, values) {
     const hosts = tool.params.filter((p) => ["host", "target", "ip"].includes(p.kind)).map((p) => values[p.name]).filter(Boolean);
     if (!hosts.length) return;
@@ -579,7 +587,7 @@
       h("div", { class: "tool-head" },
         h("div", { class: "tool-icon" }, ic(toolIcon(t))),
         h("div", { class: "grow" }, h("h1", null, t.name), h("p", null, t.summary), h("div", { class: "badges" }, badges))),
-      hostSuggestions());
+      hostSuggestions(), serialSuggestions());
 
     // form
     const form = h("form", { class: "card form-card", novalidate: true });

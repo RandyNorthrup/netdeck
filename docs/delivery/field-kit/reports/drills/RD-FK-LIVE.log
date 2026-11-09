@@ -1,0 +1,54 @@
+# drill RD-FK-LIVE: src/netdeck/catalog.py
+mutation: '[Step(["nmap", "--script", "broadcast-dhcp-discover", "-e", p["iface"]],' -> '[Step(["nmap", "--script", "broadcast-dns-service-discovery", "-e", p["iface"]],'
+result: PASS  observed: 'no DHCP server answered'
+
+## baseline (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 21.48s
+
+
+## mutated (disposable copy)
+exit 1
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____________________ test_dhcp_check_finds_the_dhcp_server _____________________
+
+deck = (50369, 'Okc2nDndTv22pV3i1ni2EH5sNrvnjqsgGOKFG0A0Wf8')
+lan = {'gateway': '10.10.11.1', 'iface': 'wlan0', 'ip': '10.10.11.170', 'subnet': '10.10.11.0/24'}
+
+    def test_dhcp_check_finds_the_dhcp_server(deck, lan):
+        status, _, _, out = run(deck, "dhcp-check", {"iface": lan["iface"]})
+        assert status == "done", out
+>       assert "Server Identifier" in out, f"no DHCP server answered:\n{out}"
+E       AssertionError: no DHCP server answered:
+E         sudo nmap --script broadcast-dns-service-discovery -e wlan0
+E         sudo nmap --script broadcast-dns-service-discovery -e wlan0
+E         # NetDeck 1.0.0 — DHCP Server Check
+E         # sudo nmap --script broadcast-dns-service-discovery -e wlan0
+E         # sudo nmap --script broadcast-dns-service-discovery -e wlan0
+E         
+E         ━━ Attempt 1 of 2 ━━
+E         Starting Nmap 7.993 ( https://nmap.org ) at 2026-11-08 22:50 -0800
+E         WARNING: No targets were specified, so 0 hosts scanned.
+E         Nmap done: 0 IP addresses (0 hosts up) scanned in 7.71 seconds
+E         
+E         ━━ Attempt 2 of 2 ━━
+E         Starting Nmap 7.993 ( https://nmap.org ) at 2026-11-08 22:50 -0800
+E         WARNING: No targets were specified, so 0 hosts scanned.
+E         Nmap done: 0 IP addresses (0 hosts up) scanned in 7.61 seconds
+E         
+E       assert 'Server Identifier' in 'sudo nmap --script broadcast-dns-service-discovery -e wlan0\nsudo nmap --script broadcast-dns-service-discovery -e wl...NING: No targets were specified, so 0 hosts scanned.\nNmap done: 0 IP addresses (0 hosts up) scanned in 7.61 seconds\n'
+
+tests/test_field_live.py:76: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_field_live.py::test_dhcp_check_finds_the_dhcp_server - Asse...
+1 failed in 16.50s
+
+
+
+## restored (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 21.57s
+

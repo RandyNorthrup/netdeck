@@ -20,8 +20,12 @@ _PORTSPEC = re.compile(r"^[0-9]{1,5}(-[0-9]{1,5})?(,[0-9]{1,5}(-[0-9]{1,5})?)*$"
 _IPV4_RANGE = re.compile(r"^((?:\d{1,3}\.){3})(\d{1,3})-(\d{1,3})$")
 _RATE = re.compile(r"^\d{1,6}(\.\d{1,3})?[KMGkmg]?$")
 _CONTROL = re.compile(r"[\x00-\x1f\x7f]")
+_SERIAL = re.compile(r"^(?:/dev/)?(tty(?:USB|ACM|S)\d{1,3})$")
+_COMMUNITY = re.compile(r"^[A-Za-z0-9._@#%+=:~^*!-]{1,64}$")
+_USERNAME = re.compile(r"^[A-Za-z_][A-Za-z0-9_.@-]{0,63}$")
 
 SYS_NET = "/sys/class/net"
+DEV_DIR = "/dev"
 
 
 class ValidationError(ValueError):
@@ -192,6 +196,32 @@ def expression(value: str) -> str:
     return value
 
 
+def serial_device(value: str) -> str:
+    """A USB/ACM/onboard serial port, e.g. /dev/ttyUSB0. Returned as an absolute /dev path."""
+    m = _SERIAL.match(value.strip())
+    if not m:
+        raise ValidationError("must be a serial port such as /dev/ttyUSB0 or /dev/ttyACM0")
+    name = m.group(1)
+    if os.path.isdir(DEV_DIR) and not os.path.exists(os.path.join(DEV_DIR, name)):
+        raise ValidationError(f"/dev/{name} does not exist — is the console cable plugged in?")
+    return f"/dev/{name}"
+
+
+def community(value: str) -> str:
+    """An SNMP v1/v2c community string."""
+    value = _no_option(value.strip())
+    if not _COMMUNITY.match(value):
+        raise ValidationError("may only contain letters, digits and . _ @ # % + = : ~ ^ * ! -")
+    return value
+
+
+def username(value: str) -> str:
+    value = _no_option(value.strip())
+    if not _USERNAME.match(value):
+        raise ValidationError("must be a user name such as admin or cisco")
+    return value
+
+
 def validate(param, raw: Any) -> Any:
     """Validate ``raw`` against a :class:`netdeck.catalog.Param`. Returns the clean value."""
     kind = param.kind
@@ -227,4 +257,10 @@ def validate(param, raw: Any) -> Any:
         return rate(str(raw))
     if kind == "expr":
         return expression(str(raw))
+    if kind == "serial":
+        return serial_device(str(raw))
+    if kind == "community":
+        return community(str(raw))
+    if kind == "username":
+        return username(str(raw))
     raise ValidationError(f"unknown parameter kind {kind!r}")

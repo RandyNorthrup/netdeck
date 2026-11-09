@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import glob
 import ipaddress
 import json
 import os
@@ -14,6 +15,7 @@ from typing import Dict, List, Optional
 from netdeck.hostenv import os_release, which
 
 SYS_NET = "/sys/class/net"
+DEV_DIR = "/dev"
 
 
 def _run_json(argv: List[str]):
@@ -36,10 +38,17 @@ def _read(path: str) -> Optional[str]:
         return None
 
 
+# USB product names of links that are internal to the machine, not network ports.
+INTERNAL_PRODUCTS = ("T2 Controller", "iBridge")  # Apple T2 Macs expose a cdc_ncm link to the T2 chip
+
+
 def _iface_kind(name: str) -> str:
     base = os.path.join(SYS_NET, name)
     if name == "lo":
         return "loopback"
+    product = _read(os.path.join(base, "device", "..", "product")) or ""
+    if any(marker in product for marker in INTERNAL_PRODUCTS):
+        return "internal"
     if os.path.isdir(os.path.join(base, "wireless")) or os.path.isdir(os.path.join(base, "phy80211")):
         return "wifi"
     if os.path.isdir(os.path.join(base, "bridge")):
@@ -107,6 +116,11 @@ def wifi_link(name: str) -> Optional[Dict]:
         elif line.startswith("tx bitrate:"):
             info["tx_bitrate"] = line.split(":", 1)[1].strip().split(" MBit/s")[0] + " Mbit/s"
     return info or None
+
+
+def serial_ports() -> List[str]:
+    """USB and ACM serial adapters (console cables) currently plugged in."""
+    return sorted(glob.glob(os.path.join(DEV_DIR, "ttyUSB*")) + glob.glob(os.path.join(DEV_DIR, "ttyACM*")))
 
 
 def routes() -> List[Dict]:
@@ -196,5 +210,6 @@ def snapshot() -> Dict:
         "routes": routes(),
         "dns": dns_servers(),
         "primary": primary(),
+        "serial_ports": serial_ports(),
         "time": time.time(),
     }

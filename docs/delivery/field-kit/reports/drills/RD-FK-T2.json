@@ -1,0 +1,31 @@
+{
+ "id": "RD-FK-T2",
+ "ok": true,
+ "log": "docs/delivery/field-kit/reports/drills/RD-FK-T2.log",
+ "baseline_exit": 0,
+ "mutated_exit": 1,
+ "restored_exit": 0,
+ "observed": "assert 'ethernet' == 'internal'",
+ "before": {
+  "path": "src/netdeck/sysinfo.py",
+  "sha256": "2f7a08414c900ce249cfde81c4eeb8e08f83f6ccd9a816248f856d3d736cbc34"
+ },
+ "mutated": {
+  "path": "src/netdeck/sysinfo.py",
+  "sha256": "bae90bde8071f82c5dbabaa2c7295c9d51889837a7b38505e7f9cc505d4ed069"
+ },
+ "after": {
+  "path": "src/netdeck/sysinfo.py",
+  "sha256": "2f7a08414c900ce249cfde81c4eeb8e08f83f6ccd9a816248f856d3d736cbc34"
+ },
+ "mutation": "src/netdeck/sysinfo.py: '    if any(marker in product for marker in INTERNAL_PRODUCTS):\\n        return \"internal\"\\n' -> ''",
+ "command": [
+  "/usr/bin/python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests/test_fieldkit.py::test_apple_t2_link_is_internal_not_ethernet"
+ ]
+}

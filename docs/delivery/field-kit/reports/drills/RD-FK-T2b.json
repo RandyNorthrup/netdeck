@@ -1,0 +1,31 @@
+{
+ "id": "RD-FK-T2b",
+ "ok": true,
+ "log": "docs/delivery/field-kit/reports/drills/RD-FK-T2b.log",
+ "baseline_exit": 0,
+ "mutated_exit": 1,
+ "restored_exit": 0,
+ "observed": "assert 'ok' == 'fail'",
+ "before": {
+  "path": "src/netdeck/probes.py",
+  "sha256": "ff4de18002f73f8c75de3e327603f65cf4a3cc455df5fe7978a32114f06b3e49"
+ },
+ "mutated": {
+  "path": "src/netdeck/probes.py",
+  "sha256": "1830e8f20503c87ffda121290504ee08b9c82eede3b6706a2c3792d1eaa37545"
+ },
+ "after": {
+  "path": "src/netdeck/probes.py",
+  "sha256": "ff4de18002f73f8c75de3e327603f65cf4a3cc455df5fe7978a32114f06b3e49"
+ },
+ "mutation": "src/netdeck/probes.py: ' and i[\"kind\"] != \"internal\"]' -> ']'",
+ "command": [
+  "/usr/bin/python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests/test_fieldkit.py::test_health_check_does_not_count_the_t2_link_as_a_network_link"
+ ]
+}

@@ -1,0 +1,17 @@
+============================= test session starts ==============================
+platform linux -- Python 3.14.9, pytest-9.2.0, pluggy-1.7.0 -- /usr/bin/python3
+rootdir: /home/randy/netdeck
+configfile: pyproject.toml
+plugins: platformdirs-4.14.3
+collecting ... collected 8 items
+
+tests/test_field_live.py::test_dhcp_check_finds_the_dhcp_server PASSED   [ 12%]
+tests/test_field_live.py::test_device_discovery_and_netbios_scan_complete PASSED [ 25%]
+tests/test_field_live.py::test_snmp_query_reads_the_agent PASSED         [ 37%]
+tests/test_field_live.py::test_mtu_test_passes_at_1472_and_reports_fragmentation_at_1500 PASSED [ 50%]
+tests/test_field_live.py::test_duplicate_ip_check_flags_an_address_in_use PASSED [ 62%]
+tests/test_field_live.py::test_os_fingerprint_is_quick_by_default PASSED [ 75%]
+tests/test_field_live.py::test_switch_port_capture_ends_within_its_limit PASSED [ 87%]
+tests/test_field_live.py::test_ipv6_ra_tls_audit_public_ip_and_usage_history_complete PASSED [100%]
+
+======================== 8 passed in 324.48s (0:05:24) =========================

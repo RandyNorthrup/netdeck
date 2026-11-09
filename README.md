@@ -10,7 +10,7 @@
 [![Platform](https://img.shields.io/badge/platform-Linux-fcc624?style=for-the-badge&logo=linux&logoColor=black)](#install)
 [![License](https://img.shields.io/github/license/randynorthrup/netdeck?style=for-the-badge&color=7c8cff)](LICENSE)
 
-[![Tools](https://img.shields.io/badge/tool%20workflows-62-5ee3c1?style=flat-square)](#tools)
+[![Tools](https://img.shields.io/badge/tool%20workflows-80-5ee3c1?style=flat-square)](#tools)
 [![Ruff](https://img.shields.io/badge/code%20style-ruff-d7ff64?style=flat-square&logo=ruff&logoColor=black)](https://github.com/astral-sh/ruff)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-ff69b4?style=flat-square)](CONTRIBUTING.md)
 [![Last commit](https://img.shields.io/github/last-commit/randynorthrup/netdeck?style=flat-square)](https://github.com/randynorthrup/netdeck/commits/main)
@@ -30,7 +30,7 @@
 
 ## Why NetDeck?
 
-Linux already has world-class network tools — `mtr`, `nmap`, `tcpdump`, `dig`, `iperf3`, `ss` and friends — but each has its own flags, output format and privilege quirks. NetDeck puts **60+ tool workflows in 10 clear categories** behind a consistent, keyboard-friendly interface, while showing you the exact command it runs so you learn as you go.
+Linux already has world-class network tools — `mtr`, `nmap`, `tcpdump`, `dig`, `iperf3`, `ss` and friends — but each has its own flags, output format and privilege quirks. NetDeck puts **80 tool workflows in 13 clear categories** behind a consistent, keyboard-friendly interface, while showing you the exact command it runs so you learn as you go.
 
 - **One-click connection diagnosis** — checks link → gateway → DNS → internet → HTTPS and tells you which layer is broken.
 - **Live overview** — every interface with addresses, Wi-Fi signal, link speed and real-time throughput graphs.
@@ -108,18 +108,38 @@ NetDeck opens in a chromeless app window when Chrome/Chromium/Brave is available
 
 | Category | Tools |
 | --- | --- |
-| **Connectivity** | Ping · TCP port check (built-in) · Traceroute (UDP/ICMP/TCP) · Tracepath · MTR report · MTR live · Graph ping (gping) · Trippy · ARP ping |
+| **Connectivity** | Ping · TCP port check (built-in) · Traceroute (UDP/ICMP/TCP) · Tracepath · MTR report · MTR live · Graph ping (gping) · Trippy · ARP ping · MTU test · Duplicate IP check |
 | **DNS & Lookup** | dig (any record, any server, +trace, DNSSEC) · Resolver comparison (system vs. Cloudflare/Google/Quad9/OpenDNS) · Reverse lookup · host · WHOIS · resolvectl status / query |
 | **Discovery & Scanning** | Host discovery · Port scan (connect/SYN/UDP, service detection, scripts) · OS fingerprint · ARP scan · Neighbor table · Zenmap · Angry IP Scanner |
+| **LAN Services** | DHCP server check (missing/rogue DHCP) · Switch port via passive LLDP/CDP · SNMP query (identity, interfaces, LLDP neighbors) · Device discovery (mDNS/UPnP/NetBIOS) · NetBIOS name scan · IPv6 router advertisements |
 | **Speed & Throughput** | iperf3 client · iperf3 server · Internet speed test |
-| **Traffic Monitor** | Bandwidth per process (nethogs) · Bandwidth per connection (iftop) · bmon · vnStat history · Interface counters · Sniffnet |
+| **Traffic Monitor** | Bandwidth per process (nethogs) · Bandwidth per connection (iftop) · bandwhich · bmon · vnStat history · Interface counters · Sniffnet |
 | **Packet Capture** | Live capture (tcpdump) · Capture to .pcap → open in Wireshark · tshark with display filters · Termshark · Wireshark |
-| **Interfaces & Routing** | Addresses · Routing table · Route lookup · Link details · NetworkManager devices · Wi-Fi scan · Wi-Fi link · ethtool · nmtui · Connection editor |
+| **Interfaces & Routing** | Addresses · Routing table · Route lookup · Link details · NetworkManager devices · ethtool (incl. cable test) · nmtui · Connection editor |
+| **Wi-Fi** | Wi-Fi scan · Wi-Fi link · Signal meter (wavemon) · Channel chart (LinSSID) · Monitor mode on/off · Site survey (airodump-ng) |
 | **Connections & Ports** | Listening ports · Active connections · Who uses this port? · Socket summary · TCP states |
-| **Web & TLS** | HTTP headers · HTTP timing breakdown (DNS/connect/TLS/TTFB) · TLS certificate inspector (built-in) · Public IP |
+| **Web & TLS** | HTTP headers · HTTP timing breakdown (DNS/connect/TLS/TTFB) · TLS certificate inspector (built-in) · TLS configuration audit (testssl.sh) · Public IP |
+| **Device Access** | Serial console (picocom, for console/rollover cables) · SSH (with legacy algorithms for old gear) · Telnet |
 | **Firewall** | nftables ruleset · iptables · UFW · firewalld |
 
 Missing tools are shown greyed out with a one-click copyable install command for your distribution.
+
+## Field kit
+
+NetDeck is built to troubleshoot other people's networks from a laptop. What helps beyond the software:
+
+- **USB Ethernet adapter** for wired tests, the switch-port finder and cable tests. Some laptops (e.g. T2 MacBooks)
+  have no Ethernet port; NetDeck labels their internal T2 link as such instead of showing it as Ethernet.
+- **USB console cable + RJ45 rollover** for the serial console (add yourself to the `uucp` group on Arch or
+  `dialout` on Debian/Ubuntu to use it without sudo).
+- **Monitor-mode Wi-Fi adapter** (e.g. Alfa) for the site survey; most built-in cards cannot do monitor mode.
+
+**Field self-test:** before starting on site, check that the kit works on the network you are connected to
+(it sends real traffic, so it is opt-in):
+
+```bash
+NETDECK_TEST_LIVE=1 python -m pytest tests/test_field_live.py
+```
 
 ## Administrator access
 

@@ -1,0 +1,1 @@
+{"id": "RD-FK-PRIV", "path": "src/netdeck/catalog.py", "old": "         privileged=True, popular=True, keywords=(\"rogue dhcp\"", "new": "         privileged=False, popular=True, keywords=(\"rogue dhcp\"", "test": ["tests/test_fieldkit.py::test_field_tool_elevation"], "expect": "assert False is True"}

@@ -1,0 +1,1 @@
+{"id": "RD-FK-OS", "path": "src/netdeck/catalog.py", "old": "\"-T4\", \"--stats-every\", \"10s\"]", "new": "\"-T4\"]", "test": ["tests/test_fieldkit.py::test_os_fingerprint_shows_progress_and_skips_service_detection_by_default"], "expect": "assert \\[\\['nmap'"}

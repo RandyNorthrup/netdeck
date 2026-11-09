@@ -1,0 +1,55 @@
+# drill RD-FK-LIVE2: src/netdeck/catalog.py
+mutation: '["ping", "-M", "do", "-s",' -> '["ping", "-s",'
+result: PASS  observed: 'a 1528-byte packet passed with fragmentation forbidden'
+
+## baseline (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 6.40s
+
+
+## mutated (disposable copy)
+exit 1
+F                                                                        [100%]
+=================================== FAILURES ===================================
+________ test_mtu_test_passes_at_1472_and_reports_fragmentation_at_1500 ________
+
+deck = (48505, 'hKIL5xikawDouvj1a7nwMc3piwZX-oIJXj25hMiTfVQ')
+lan = {'gateway': '10.10.11.1', 'iface': 'wlan0', 'ip': '10.10.11.170', 'subnet': '10.10.11.0/24'}
+
+    def test_mtu_test_passes_at_1472_and_reports_fragmentation_at_1500(deck, lan):
+        status, code, _, out = run(deck, "mtu-test", {"host": lan["gateway"], "size": 1472})
+        assert (status, code) == ("done", 0), out
+        status, code, _, out = run(deck, "mtu-test", {"host": lan["gateway"], "size": 1500})
+>       assert status == "failed" and code != 0, f"a 1528-byte packet passed with fragmentation forbidden:\n{out}"
+E       AssertionError: a 1528-byte packet passed with fragmentation forbidden:
+E         ping -s 1500 -c 3 -W 2 -- 10.10.11.1
+E         # NetDeck 1.0.0 — MTU Test
+E         # ping -s 1500 -c 3 -W 2 -- 10.10.11.1
+E         
+E         PING 10.10.11.1 (10.10.11.1) 1500(1528) bytes of data.
+E         1508 bytes from 10.10.11.1: icmp_seq=1 ttl=64 time=1.56 ms
+E         1508 bytes from 10.10.11.1: icmp_seq=2 ttl=64 time=1.82 ms
+E         1508 bytes from 10.10.11.1: icmp_seq=3 ttl=64 time=1.66 ms
+E         
+E         --- 10.10.11.1 ping statistics ---
+E         3 packets transmitted, 3 received, 0% packet loss, time 2002ms
+E         rtt min/avg/max/mdev = 1.555/1.676/1.816/0.107 ms
+E         
+E       assert ('done' == 'failed'
+E         
+E         - failed
+E         + done)
+
+tests/test_field_live.py:110: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_field_live.py::test_mtu_test_passes_at_1472_and_reports_fragmentation_at_1500
+1 failed in 4.95s
+
+
+
+## restored (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 6.42s
+

@@ -6,11 +6,22 @@ All notable changes to this project are documented here. The format follows
 ## [Unreleased]
 
 ### Added
+- **Field kit:** new *LAN Services* (DHCP server check, switch port via passive LLDP/CDP, SNMP query, device
+  discovery, NetBIOS scan, IPv6 router advertisements), *Wi-Fi* (signal meter, channel chart, monitor mode,
+  site survey; Wi-Fi scan and link moved here) and *Device Access* (serial console, SSH with legacy algorithms,
+  Telnet) categories, plus MTU test, duplicate-IP check, bandwhich, TLS configuration audit and an Ethernet
+  cable test. 80 tool workflows in 13 categories.
+- `tests/test_field_live.py`: an opt-in field self-test of the hardware-free tools on the current network.
 - **Exit** button (top-right power icon) with a confirmation dialog that lists the tools it will stop, and a
   "NetDeck has stopped" screen. Open pages also switch to that screen when NetDeck is stopped elsewhere.
 - `POST /api/shutdown`, protected like every other state-changing request.
 
 ### Fixed
+- OS Fingerprint shows progress and no longer runs slow service detection unless asked (it looked frozen for
+  over two minutes).
+- Public IP no longer reports failure on IPv4-only networks; the IPv6 check is opt-in.
+- The Apple T2 internal link on T2 MacBooks is labelled as an internal link, not Ethernet, and no longer counts
+  as a network connection in the health check.
 - Tools elevated through polkit can now be stopped: they run under a root-side supervisor that interrupts them
   when NetDeck closes its stdin. Previously Stop and shutdown could leave them running as root.
 - Shutdown stops all running jobs in parallel under one deadline instead of one after another.

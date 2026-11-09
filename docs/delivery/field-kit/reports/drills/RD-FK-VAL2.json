@@ -1,0 +1,31 @@
+{
+ "id": "RD-FK-VAL2",
+ "ok": true,
+ "log": "docs/delivery/field-kit/reports/drills/RD-FK-VAL2.log",
+ "baseline_exit": 0,
+ "mutated_exit": 1,
+ "restored_exit": 0,
+ "observed": "DID NOT RAISE",
+ "before": {
+  "path": "src/netdeck/validators.py",
+  "sha256": "cceded1d744225a783cd94a6613868c3e15cec750377d8b82b09511881f42721"
+ },
+ "mutated": {
+  "path": "src/netdeck/validators.py",
+  "sha256": "da77e5f6856548f37c86a75608a66e8553c686e13698a7e3fe5bd3f574edd756"
+ },
+ "after": {
+  "path": "src/netdeck/validators.py",
+  "sha256": "cceded1d744225a783cd94a6613868c3e15cec750377d8b82b09511881f42721"
+ },
+ "mutation": "src/netdeck/validators.py: '_COMMUNITY = re.compile(r\"^[A-Za-z0-9._@#%+=:~^*!-]{1,64}$\")' -> '_COMMUNITY = re.compile(r\"^[^-].{0,63}$\")'",
+ "command": [
+  "/usr/bin/python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests/test_fieldkit.py::test_community_rejects"
+ ]
+}

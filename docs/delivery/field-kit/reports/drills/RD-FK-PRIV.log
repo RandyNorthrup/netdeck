@@ -1,0 +1,50 @@
+# drill RD-FK-PRIV: src/netdeck/catalog.py
+mutation: '         privileged=True, popular=True, keywords=("rogue dhcp"' -> '         privileged=False, popular=True, keywords=("rogue dhcp"'
+result: PASS  observed: 'assert False is True'
+
+## baseline (original tree)
+exit 0
+.........                                                                [100%]
+9 passed in 0.04s
+
+
+## mutated (disposable copy)
+exit 1
+F........                                                                [100%]
+=================================== FAILURES ===================================
+______________ test_field_tool_elevation[dhcp-check-params0-True] ______________
+
+tool_id = 'dhcp-check', params = {'iface': 'eth0'}, elevated = True
+
+    @pytest.mark.parametrize(("tool_id", "params", "elevated"), [
+        ("dhcp-check", {"iface": "eth0"}, True),
+        ("lan-discovery", {"iface": "eth0"}, True),
+        ("monitor-on", {"iface": "wlan1"}, True),
+        ("wifi-survey", {"iface": "wlan1mon"}, True),
+        ("ethtool", {"iface": "eth0", "view": "cable"}, True),
+        ("ethtool", {"iface": "eth0", "view": "link"}, False),
+        ("netbios-scan", {"target": "10.0.0.0/24"}, False),
+        ("ipv6-ra", {"iface": "eth0"}, False),
+        ("telnet", {"host": "10.0.0.2"}, False),
+    ])
+    def test_field_tool_elevation(tool_id, params, elevated):
+        if os.geteuid() == 0:
+            pytest.skip("everything runs unelevated as root")
+        tool, clean, _ = build(tool_id, **params)
+>       assert tool.needs_root(clean) is elevated
+E       AssertionError: assert False is True
+E        +  where False = needs_root({'iface': 'eth0'})
+E        +    where needs_root = Tool(id='dhcp-check', name='DHCP Server Check', category='lan', summary='Broadcast a DHCP request and list every serve...: offers are never accepted, so no address is taken.', keywords=('rogue dhcp', 'no ip', '169.254', 'lease', 'dnsmasq')).needs_root
+
+tests/test_fieldkit.py:131: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_fieldkit.py::test_field_tool_elevation[dhcp-check-params0-True]
+1 failed, 8 passed in 0.09s
+
+
+
+## restored (original tree)
+exit 0
+.........                                                                [100%]
+9 passed in 0.04s
+

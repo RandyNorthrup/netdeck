@@ -1,0 +1,1 @@
+{"id": "RD-FK-T2", "path": "src/netdeck/sysinfo.py", "old": "    if any(marker in product for marker in INTERNAL_PRODUCTS):\n        return \"internal\"\n", "new": "", "test": ["tests/test_fieldkit.py::test_apple_t2_link_is_internal_not_ethernet"], "expect": "assert 'ethernet' == 'internal'"}

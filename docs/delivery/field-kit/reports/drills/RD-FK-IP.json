@@ -1,0 +1,31 @@
+{
+ "id": "RD-FK-IP",
+ "ok": true,
+ "log": "docs/delivery/field-kit/reports/drills/RD-FK-IP.log",
+ "baseline_exit": 0,
+ "mutated_exit": 1,
+ "restored_exit": 0,
+ "observed": "assert (2 == 1)",
+ "before": {
+  "path": "src/netdeck/catalog.py",
+  "sha256": "ac64d87b2f64b53e9aa6fd87e5f79329558b30931d69f7d4eff7a90e08f7becf"
+ },
+ "mutated": {
+  "path": "src/netdeck/catalog.py",
+  "sha256": "238a0217e9d7f59ba211633fe62b7bcb1cb0c4fe158835ead38ea68670c562c5"
+ },
+ "after": {
+  "path": "src/netdeck/catalog.py",
+  "sha256": "ac64d87b2f64b53e9aa6fd87e5f79329558b30931d69f7d4eff7a90e08f7becf"
+ },
+ "mutation": "src/netdeck/catalog.py: '            Param(\"v6\", \"Also check IPv6\", \"bool\", False,' -> '            Param(\"v6\", \"Also check IPv6\", \"bool\", True,'",
+ "command": [
+  "/usr/bin/python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests/test_fieldkit.py::test_public_ip_checks_ipv4_only_by_default"
+ ]
+}

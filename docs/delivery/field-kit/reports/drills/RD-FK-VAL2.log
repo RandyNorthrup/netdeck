@@ -1,0 +1,72 @@
+# drill RD-FK-VAL2: src/netdeck/validators.py
+mutation: '_COMMUNITY = re.compile(r"^[A-Za-z0-9._@#%+=:~^*!-]{1,64}$")' -> '_COMMUNITY = re.compile(r"^[^-].{0,63}$")'
+result: PASS  observed: 'DID NOT RAISE'
+
+## baseline (original tree)
+exit 0
+......                                                                   [100%]
+6 passed in 0.03s
+
+
+## mutated (disposable copy)
+exit 1
+.FFF.F                                                                   [100%]
+=================================== FAILURES ===================================
+_______________________ test_community_rejects[pub lic] ________________________
+
+bad = 'pub lic'
+
+    @pytest.mark.parametrize("bad", ["-v1", "pub lic", "a;b", "$(id)", "x" * 65, "back`tick`"])
+    def test_community_rejects(bad):
+>       with pytest.raises(validators.ValidationError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValidationError
+
+tests/test_fieldkit.py:165: Failed
+_________________________ test_community_rejects[a;b] __________________________
+
+bad = 'a;b'
+
+    @pytest.mark.parametrize("bad", ["-v1", "pub lic", "a;b", "$(id)", "x" * 65, "back`tick`"])
+    def test_community_rejects(bad):
+>       with pytest.raises(validators.ValidationError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValidationError
+
+tests/test_fieldkit.py:165: Failed
+________________________ test_community_rejects[$(id)] _________________________
+
+bad = '$(id)'
+
+    @pytest.mark.parametrize("bad", ["-v1", "pub lic", "a;b", "$(id)", "x" * 65, "back`tick`"])
+    def test_community_rejects(bad):
+>       with pytest.raises(validators.ValidationError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValidationError
+
+tests/test_fieldkit.py:165: Failed
+______________________ test_community_rejects[back`tick`] ______________________
+
+bad = 'back`tick`'
+
+    @pytest.mark.parametrize("bad", ["-v1", "pub lic", "a;b", "$(id)", "x" * 65, "back`tick`"])
+    def test_community_rejects(bad):
+>       with pytest.raises(validators.ValidationError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValidationError
+
+tests/test_fieldkit.py:165: Failed
+=========================== short test summary info ============================
+FAILED tests/test_fieldkit.py::test_community_rejects[pub lic] - Failed: DID ...
+FAILED tests/test_fieldkit.py::test_community_rejects[a;b] - Failed: DID NOT ...
+FAILED tests/test_fieldkit.py::test_community_rejects[$(id)] - Failed: DID NO...
+FAILED tests/test_fieldkit.py::test_community_rejects[back`tick`] - Failed: D...
+4 failed, 2 passed in 0.10s
+
+
+
+## restored (original tree)
+exit 0
+......                                                                   [100%]
+6 passed in 0.03s
+

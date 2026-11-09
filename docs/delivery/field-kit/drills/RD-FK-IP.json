@@ -1,0 +1,1 @@
+{"id": "RD-FK-IP", "path": "src/netdeck/catalog.py", "old": "            Param(\"v6\", \"Also check IPv6\", \"bool\", False,", "new": "            Param(\"v6\", \"Also check IPv6\", \"bool\", True,", "test": ["tests/test_fieldkit.py::test_public_ip_checks_ipv4_only_by_default"], "expect": "assert \\(2 == 1\\)"}
