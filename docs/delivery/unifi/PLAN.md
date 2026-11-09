@@ -1428,15 +1428,9 @@ helpers (`_resolve`) used by TCP Check. IPv6 literals are bracketed in every URL
       "TASK-UF-DECK",
       "TASK-UF-DOCS"
     ],
-    "pending_operations": [
-      {
-        "id": "OP-UF-CI",
-        "description": "CI has not run the UniFi changes yet.",
-        "next_action": "Push and confirm CI passes; record the outcome."
-      }
-    ],
-    "next_action": "Commit, push, observe OP-UF-CI, then upgrade the installed NetDeck with the installer.",
-    "source_revision": "33d6e00 + uncommitted WORK-UNIFI changes"
+    "pending_operations": [],
+    "next_action": "None: delivery closed; see reports/ci-4e03749.md.",
+    "source_revision": "4e03749"
   }
 }
 ```
