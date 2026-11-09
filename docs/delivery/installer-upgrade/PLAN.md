@@ -838,15 +838,9 @@ systemd manager, and the user's own must not be touched by tests). It is opt-in 
       "TASK-UPG-INSTALLER",
       "TASK-UPG-DOCS"
     ],
-    "pending_operations": [
-      {
-        "id": "OP-UPG-CI",
-        "description": "CI install job now runs tests/test_install.py with NETDECK_TEST_INSTALL=1; not yet run on GitHub.",
-        "next_action": "Push, watch the install job, confirm the 4 upgrade tests ran, and record the outcome."
-      }
-    ],
-    "next_action": "Push and observe OP-UPG-CI; then upgrade this machine's real install with the new installer.",
-    "source_revision": "46866a0 + uncommitted WORK-INSTALLER-UPGRADE changes"
+    "pending_operations": [],
+    "next_action": "None: delivery closed; outcome in reports/ci-and-field-check.md.",
+    "source_revision": "b7caf17"
   }
 }
 ```
