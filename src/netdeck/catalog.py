@@ -198,6 +198,8 @@ def _nmap_scan(p: Dict) -> List[str]:
 # LLDP (ethertype 0x88cc) or CDP (Cisco multicast MAC, SNAP protocol 0x2000).
 LLDP_CDP_FILTER = "(ether proto 0x88cc) or (ether dst 01:00:0c:cc:cc:cc and ether[20:2] = 0x2000)"
 
+LLDPD_SOCKET = "/run/lldpd/socket"
+
 SSH_LEGACY = ["-o", "KexAlgorithms=+diffie-hellman-group14-sha1,diffie-hellman-group1-sha1",
               "-o", "HostKeyAlgorithms=+ssh-rsa", "-o", "PubkeyAcceptedAlgorithms=+ssh-rsa",
               "-o", "Ciphers=+aes128-cbc,aes256-cbc,3des-cbc"]
@@ -648,6 +650,13 @@ TOOLS: Tuple[Tool, ...] = (
                "the port sends no LLDP/CDP (the tool then exits with status 124).", params=(
              IFACE,
              Param("wait", "Listen for (s)", "int", 65, min=10, max=300))),
+    Tool("switch-neighbors", "Switch Neighbors (lldpd)", "lan",
+         "Neighbor table from the lldpd service: switch, port, VLAN, management IP and capabilities.",
+         "lldpcli", lambda p: ["lldpcli", "show", "neighbors", "details"],
+         privileged=lambda p: not os.access(LLDPD_SOCKET, os.R_OK | os.W_OK),
+         keywords=("lldp", "cdp", "neighbors", "which port", "vlan"),
+         notes="Needs the lldpd service (sudo systemctl enable --now lldpd), which also announces this laptop to "
+               "the switch. Neighbors appear 30-60 s after plugging in. Without the service, use Switch Port."),
     Tool("snmp", "SNMP Query", "lan",
          "Read a switch, printer or access point over SNMP: identity, interfaces or LLDP neighbors.",
          "snmpwalk", lambda p: _snmp(p), keywords=("snmpwalk", "mib", "community", "switch", "printer"),
@@ -792,6 +801,7 @@ PACKAGES: Dict[str, Dict[str, str]] = {
     "telnet": {"arch": "inetutils", "debian": "telnet", "fedora": "telnet", "suse": "telnet"},
     "ssh": {"arch": "openssh", "debian": "openssh-client", "fedora": "openssh-clients", "suse": "openssh-clients"},
     "picocom": {"arch": "picocom", "debian": "picocom", "fedora": "picocom", "suse": "picocom"},
+    "lldpcli": {"arch": "lldpd", "debian": "lldpd", "fedora": "lldpd", "suse": "lldpd"},
     "snmpwalk": {"arch": "net-snmp", "debian": "snmp", "fedora": "net-snmp-utils", "suse": "net-snmp"},
     "nbtscan": {"arch": "nbtscan", "debian": "nbtscan"},
     "rdisc6": {"arch": "ndisc6", "debian": "ndisc6", "fedora": "ndisc6"},

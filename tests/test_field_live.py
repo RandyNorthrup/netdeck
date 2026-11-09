@@ -130,6 +130,12 @@ def test_switch_port_capture_ends_within_its_limit(deck, lan):
     assert seconds < 25
 
 
+def test_switch_neighbors_reads_lldpd(deck):
+    status, code, _, out = run(deck, "switch-neighbors", {}, timeout=30)
+    assert (status, code) == ("done", 0), f"is the lldpd service running?\n{out}"
+    assert "LLDP neighbors" in out, out
+
+
 def test_ipv6_ra_tls_audit_public_ip_and_usage_history_complete(deck, lan):
     status, _, _, out = run(deck, "ipv6-ra", {"iface": lan["iface"]}, timeout=30)
     assert status in ("done", "failed") and "Soliciting" in out, out

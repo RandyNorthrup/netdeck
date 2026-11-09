@@ -10,7 +10,7 @@ All notable changes to this project are documented here. The format follows
   discovery, NetBIOS scan, IPv6 router advertisements), *Wi-Fi* (signal meter, channel chart, monitor mode,
   site survey; Wi-Fi scan and link moved here) and *Device Access* (serial console, SSH with legacy algorithms,
   Telnet) categories, plus MTU test, duplicate-IP check, bandwhich, TLS configuration audit and an Ethernet
-  cable test. 80 tool workflows in 13 categories.
+  cable test, and Switch Neighbors from the lldpd service. 81 tool workflows in 13 categories.
 - `tests/test_field_live.py`: an opt-in field self-test of the hardware-free tools on the current network.
 - **Exit** button (top-right power icon) with a confirmation dialog that lists the tools it will stop, and a
   "NetDeck has stopped" screen. Open pages also switch to that screen when NetDeck is stopped elsewhere.

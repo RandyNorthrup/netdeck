@@ -76,6 +76,7 @@ EXPECTED = [
     ("dhcp-check", "lan", {"iface": "eth0"}, [["nmap", "--script", "broadcast-dhcp-discover", "-e", "eth0"]] * 2),
     ("switch-port", "lan", {"iface": "eth0"},
      [["timeout", "65", "tcpdump", "-i", "eth0", "-nn", "-v", "-s", "1500", "-c", "1", "--", LLDP_CDP_FILTER]]),
+    ("switch-neighbors", "lan", {}, [["lldpcli", "show", "neighbors", "details"]]),
     ("snmp", "lan", {"host": "10.0.0.2", "community": "s3cret"},
      [["snmpwalk", "-v", "2c", "-c", "s3cret", "-t", "2", "-r", "1", "udp:10.0.0.2:161", "1.3.6.1.2.1.1"]]),
     ("snmp", "lan", {"host": "fd00::2", "community": "public", "view": "lldp", "version": "1"},
@@ -129,6 +130,21 @@ def test_field_tool_elevation(tool_id, params, elevated):
         pytest.skip("everything runs unelevated as root")
     tool, clean, _ = build(tool_id, **params)
     assert tool.needs_root(clean) is elevated
+
+
+def test_switch_neighbors_elevates_only_without_socket_access(tmp_path, monkeypatch):
+    if os.geteuid() == 0:
+        pytest.skip("root can open any socket")
+    from netdeck import catalog
+
+    sock = tmp_path / "socket"
+    sock.write_text("")
+    sock.chmod(0o600)
+    monkeypatch.setattr(catalog, "LLDPD_SOCKET", str(sock))
+    tool = TOOLS_BY_ID["switch-neighbors"]
+    assert tool.needs_root({}) is False
+    sock.chmod(0o000)
+    assert tool.needs_root({}) is True
 
 
 def test_serial_console_elevates_only_without_device_access(tmp_path, monkeypatch):
