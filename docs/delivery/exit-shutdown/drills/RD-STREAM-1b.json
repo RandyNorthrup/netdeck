@@ -1,0 +1,5 @@
+{"id": "RD-STREAM-1b", "path": "src/netdeck/server.py",
+ "old": "            self._stats_loop()\n            self._sse(\"bye\", {\"reason\": \"shutdown\"})\n",
+ "new": "            self._stats_loop()\n",
+ "test": ["tests/test_server.py::test_streams_say_bye_and_close_on_shutdown"],
+ "expect": "assert b'event: bye' in"}

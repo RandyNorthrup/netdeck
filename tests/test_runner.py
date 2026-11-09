@@ -1,10 +1,14 @@
 """Runner: output framing (\\r progress, partial lines), stop handling, resumable streaming."""
 
+import os
 import sys
 import time
 
+import pytest
+
+from netdeck import runner
 from netdeck.catalog import Step, Tool
-from netdeck.hostenv import Privilege
+from netdeck.hostenv import Privilege, supervised
 from netdeck.runner import Job, JobManager
 
 
@@ -90,3 +94,79 @@ def test_privileged_without_elevation_is_refused():
     else:
         import os
         assert os.geteuid() == 0
+
+
+# -- stopping elevated (polkit) jobs and shutdown -------------------------------------------------
+
+INTERRUPTIBLE = ("import signal,sys,time\n"
+                 "signal.signal(signal.SIGINT, lambda *a: (print('interrupted', flush=True), sys.exit(130)))\n"
+                 "print('up', flush=True)\n"
+                 "time.sleep(60)")
+IGNORES_SIGINT = ("import signal,time\n"
+                  "signal.signal(signal.SIGINT, signal.SIG_IGN)\n"
+                  "print('up', flush=True)\n"
+                  "time.sleep(60)")
+
+
+class PolkitLikePrivilege(Privilege):
+    """pkexec mode without pkexec: the same supervisor wrapper, run as the current user."""
+
+    def _detect(self) -> str:
+        return "pkexec"
+
+    def wrap(self, argv):
+        return supervised(argv)
+
+
+def wait_for_line(job, text, timeout=10):
+    end = time.time() + timeout
+    while text not in job.lines and time.time() < end:
+        time.sleep(0.05)
+    assert text in job.lines, f"never saw {text!r}: {job.lines}"
+
+
+def start_python(manager, code, privileged=False):
+    tool = Tool("t", "Test", "connectivity", "Test tool.", None,
+                lambda p: [Step([sys.executable, "-c", code])], privileged=privileged)
+    return manager.get(manager.start(tool, {})["job"]["id"])
+
+
+@pytest.mark.parametrize("how", ["stop", "shutdown"])
+def test_unsignalable_elevated_job_is_stopped_through_supervisor(monkeypatch, how):
+    """A root-owned child cannot be signalled; closing the supervisor's stdin must still stop it."""
+    def refuse(pgid, sig):
+        raise PermissionError(1, "Operation not permitted")  # what os.killpg does for a root-owned child
+
+    monkeypatch.setattr(runner.os, "killpg", refuse)
+    m = JobManager(PolkitLikePrivilege("pkexec"))
+    job = start_python(m, INTERRUPTIBLE, privileged=True)
+    assert job.elevated
+    wait_for_line(job, "up")
+    start = time.monotonic()
+    if how == "stop":
+        m.stop(job.id)
+    else:
+        m.shutdown()
+    wait(job, timeout=8)
+    assert job.status == "stopped", job.lines
+    assert "interrupted" in job.lines, job.lines
+    assert time.monotonic() - start < 6
+    assert job.proc.poll() is not None
+
+
+def test_shutdown_stops_jobs_concurrently():
+    """Three jobs that only exit on SIGTERM: one grace period in parallel, not three in sequence."""
+    m = manager()
+    jobs = [start_python(m, IGNORES_SIGINT) for _ in range(3)]
+    for job in jobs:
+        wait_for_line(job, "up")
+    pids = [job.proc.pid for job in jobs]
+    start = time.monotonic()
+    m.shutdown(grace=2.0)
+    elapsed = time.monotonic() - start
+    assert elapsed < 4.0, f"shutdown took {elapsed:.1f}s"
+    for job, pid in zip(jobs, pids, strict=True):
+        assert job.proc.poll() is not None
+        with pytest.raises(ProcessLookupError):
+            os.kill(pid, 0)
+        assert job.status == "stopped"

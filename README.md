@@ -93,10 +93,12 @@ pipx install git+https://github.com/randynorthrup/netdeck.git
 netdeck            # start (or re-open) the dashboard
 netdeck doctor     # which tools are installed, and how to install the rest
 netdeck url        # print the private URL of the running instance
-netdeck stop       # stop the running instance
+netdeck stop       # stop the running instance and wait until it has exited
 ```
 
 NetDeck opens in a chromeless app window when Chrome/Chromium/Brave is available, otherwise in your default browser. Running `netdeck` again simply re-opens the existing instance.
+
+**Exiting:** click the power button in the top-right corner (or press <kbd>Ctrl</kbd>+<kbd>C</kbd> in the terminal, or run `netdeck stop`). Every path stops all running tools — including ones running with administrator rights — before the server exits, and open NetDeck pages switch to a "NetDeck has stopped" screen. Terminal windows and desktop apps you launched from NetDeck are separate programs and stay open.
 
 **Keyboard shortcuts:** <kbd>Ctrl</kbd>+<kbd>K</kbd> or <kbd>/</kbd> search · <kbd>Ctrl</kbd>+<kbd>Enter</kbd> run the current tool · <kbd>Esc</kbd> close.
 

@@ -1,0 +1,14 @@
+============================= test session starts ==============================
+platform linux -- Python 3.14.9, pytest-9.2.0, pluggy-1.7.0 -- /usr/bin/python3
+rootdir: /home/randy/netdeck
+configfile: pyproject.toml
+plugins: platformdirs-4.14.3
+collecting ... collected 5 items
+
+tests/test_cli.py::test_every_shutdown_path_stops_jobs_and_cleans_up[exit-button-api] PASSED [ 20%]
+tests/test_cli.py::test_every_shutdown_path_stops_jobs_and_cleans_up[netdeck-stop] PASSED [ 40%]
+tests/test_cli.py::test_every_shutdown_path_stops_jobs_and_cleans_up[ctrl-c] PASSED [ 60%]
+tests/test_cli.py::test_stop_removes_a_stale_instance_file PASSED        [ 80%]
+tests/test_cli.py::test_stop_when_nothing_is_running PASSED              [100%]
+
+============================== 5 passed in 3.15s ===============================

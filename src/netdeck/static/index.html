@@ -30,6 +30,7 @@
         <div class="spacer"></div>
         <div id="top-status"></div>
         <button class="btn icon ghost" id="theme-btn" type="button" aria-label="Toggle theme" title="Toggle theme"></button>
+        <button class="btn icon ghost exit-btn" id="exit-btn" type="button" aria-label="Exit NetDeck" title="Exit NetDeck"></button>
       </header>
       <div class="content" id="content"><div class="empty"><div class="spinner"></div></div></div>
     </main>
@@ -42,5 +43,29 @@
     </div>
   </div>
   <div class="toasts" id="toasts" aria-live="polite"></div>
+  <dialog class="modal" id="exit-dialog" aria-labelledby="exit-title" aria-describedby="exit-desc">
+    <form method="dialog" class="modal-body">
+      <div class="modal-icon" id="exit-icon"></div>
+      <h2 id="exit-title">Exit NetDeck?</h2>
+      <p id="exit-desc">This shuts down the NetDeck server.</p>
+      <div id="exit-jobs" hidden>
+        <p class="modal-strong" id="exit-jobs-title"></p>
+        <ul class="modal-list" id="exit-jobs-list"></ul>
+      </div>
+      <p class="modal-note">Terminal windows and desktop apps you opened from NetDeck stay open.</p>
+      <div class="modal-actions">
+        <button class="btn" value="cancel" id="exit-cancel" autofocus>Cancel</button>
+        <button class="btn danger-solid" value="exit" id="exit-confirm">Exit NetDeck</button>
+      </div>
+    </form>
+  </dialog>
+  <div class="stopped" id="stopped" hidden>
+    <div class="card" role="status" aria-live="assertive">
+      <div class="stopped-icon" id="stopped-icon"></div>
+      <h1 id="stopped-title" tabindex="-1">NetDeck has stopped</h1>
+      <p id="stopped-text"></p>
+      <p class="stopped-hint">To start it again, run <code>netdeck</code> or open NetDeck from your app menu.</p>
+    </div>
+  </div>
 </body>
 </html>

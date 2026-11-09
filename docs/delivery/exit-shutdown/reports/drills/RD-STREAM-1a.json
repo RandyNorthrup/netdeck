@@ -1,0 +1,31 @@
+{
+ "id": "RD-STREAM-1a",
+ "ok": true,
+ "log": "docs/delivery/exit-shutdown/reports/drills/RD-STREAM-1a.log",
+ "baseline_exit": 0,
+ "mutated_exit": 1,
+ "restored_exit": 0,
+ "observed": "assert b'event: bye' in",
+ "before": {
+  "path": "src/netdeck/server.py",
+  "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+ },
+ "mutated": {
+  "path": "src/netdeck/server.py",
+  "sha256": "e4769b430aa77b2440e51155e8356d3a1029fac676f09b248ace73e7067c3624"
+ },
+ "after": {
+  "path": "src/netdeck/server.py",
+  "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+ },
+ "mutation": "src/netdeck/server.py: 'lambda seen=rev: job.rev != seen or self.app.shutdown.is_set(), timeout=15)' -> 'lambda seen=rev: job.rev != seen, timeout=15)'",
+ "command": [
+  "/usr/bin/python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests/test_server.py::test_streams_say_bye_and_close_on_shutdown"
+ ]
+}

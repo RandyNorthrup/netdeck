@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import contextlib
 import json
 import logging
 import os
@@ -23,6 +24,8 @@ from netdeck.hostenv import INSTALL_COMMANDS, Privilege, distro_family, which
 
 log = logging.getLogger("netdeck")
 
+STOP_TIMEOUT = 15.0  # seconds `netdeck stop` waits for the server to finish shutting down
+
 APP_BROWSERS = ("google-chrome-stable", "google-chrome", "chromium", "chromium-browser", "brave-browser",
                 "brave", "microsoft-edge-stable", "vivaldi-stable")
 
@@ -35,12 +38,32 @@ def instance_file() -> str:
     return os.path.join(runtime_dir(), "instance.json")
 
 
+def process_alive(pid: int) -> bool:
+    """True while ``pid`` exists and has not exited (a zombie awaiting its parent counts as exited)."""
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+    try:
+        with open(f"/proc/{pid}/stat", encoding="utf-8") as fh:
+            return fh.read().rsplit(")", 1)[1].split()[0] != "Z"
+    except (OSError, IndexError):
+        return True
+
+
 def read_instance() -> Optional[dict]:
     try:
         with open(instance_file(), encoding="utf-8") as fh:
             data = json.load(fh)
-        os.kill(int(data["pid"]), 0)
+        pid = int(data["pid"])
     except (OSError, ValueError, KeyError, TypeError):
+        return None
+    if not process_alive(pid):
+        # Left behind by a crash or SIGKILL: nothing will ever clean it up otherwise.
+        with contextlib.suppress(OSError):
+            os.unlink(instance_file())
         return None
     try:  # pid may have been recycled: confirm it is really NetDeck answering
         with urllib.request.urlopen(f"http://127.0.0.1:{data['port']}/api/ping", timeout=2) as resp:
@@ -113,13 +136,16 @@ def cmd_serve(args: argparse.Namespace) -> int:
     url = f"http://{display_host if ':' not in display_host else f'[{display_host}]'}:{port}/?token={token}"
     write_instance(port, url)
 
-    def stop(signum, _frame):
-        log.info("received signal %s, shutting down", signum)
-        app.shutdown.set()
-        threading.Thread(target=server.shutdown, daemon=True).start()
+    # One shutdown sequence for the Exit button, Ctrl+C and SIGTERM: stop the serve loop, then the
+    # cleanup below runs in this thread. server.shutdown() blocks until serve_forever returns, so it
+    # must not run on the thread that is serving.
+    app.on_shutdown = lambda: threading.Thread(target=server.shutdown, name="netdeck-stop", daemon=True).start()
 
-    signal.signal(signal.SIGTERM, stop)
-    signal.signal(signal.SIGINT, stop)
+    def on_signal(signum, _frame):
+        app.request_shutdown(f"received {signal.Signals(signum).name}")
+
+    signal.signal(signal.SIGTERM, on_signal)
+    signal.signal(signal.SIGINT, on_signal)
 
     print(f"NetDeck {__version__} is running at:\n\n    {url}\n", flush=True)
     print(f"Privileges: {app.privilege.describe()}")
@@ -129,10 +155,10 @@ def cmd_serve(args: argparse.Namespace) -> int:
     try:
         server.serve_forever(poll_interval=0.5)
     finally:
-        app.shutdown.set()
-        app.jobs.shutdown()
+        app.close()  # stops every job (bounded) and lets open pages receive their goodbye
         server.server_close()
         remove_instance()
+        print("NetDeck stopped.", flush=True)
     return 0
 
 
@@ -178,9 +204,17 @@ def cmd_stop(_args: argparse.Namespace) -> int:
     if not inst:
         print("NetDeck is not running.")
         return 0
-    os.kill(int(inst["pid"]), signal.SIGTERM)
-    print(f"Stopped NetDeck (pid {inst['pid']}).")
-    return 0
+    pid = int(inst["pid"])
+    os.kill(pid, signal.SIGTERM)
+    deadline = time.monotonic() + STOP_TIMEOUT
+    while time.monotonic() < deadline:
+        if not process_alive(pid):
+            print(f"Stopped NetDeck (pid {pid}).")
+            return 0
+        time.sleep(0.1)
+    print(f"NetDeck (pid {pid}) is still shutting down after {STOP_TIMEOUT:.0f} s; "
+          f"check it with `ps -p {pid}`.", file=sys.stderr)
+    return 1
 
 
 def build_parser() -> argparse.ArgumentParser:

@@ -1,0 +1,5 @@
+{"id": "RD-STREAM-1a", "path": "src/netdeck/server.py",
+ "old": "lambda seen=rev: job.rev != seen or self.app.shutdown.is_set(), timeout=15)",
+ "new": "lambda seen=rev: job.rev != seen, timeout=15)",
+ "test": ["tests/test_server.py::test_streams_say_bye_and_close_on_shutdown"],
+ "expect": "assert b'event: bye' in"}

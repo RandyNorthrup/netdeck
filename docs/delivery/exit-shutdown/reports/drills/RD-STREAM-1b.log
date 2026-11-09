@@ -1,0 +1,49 @@
+# drill RD-STREAM-1b: src/netdeck/server.py
+mutation: '            self._stats_loop()\n            self._sse("bye", {"reason": "shutdown"})\n' -> '            self._stats_loop()\n'
+result: PASS  observed: "assert b'event: bye' in"
+
+## baseline (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 1.17s
+
+
+## mutated (disposable copy)
+exit 1
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__________________ test_streams_say_bye_and_close_on_shutdown __________________
+
+stoppable = (<netdeck.server.NetDeckHTTPServer object at 0x7f9c2c115160>, <Thread(Thread-1 (serve_forever), started daemon 140308728379072)>)
+
+    def test_streams_say_bye_and_close_on_shutdown(stoppable):
+        """A job that goes silent: only the shutdown wake-up can end the stream's 15 s wait early."""
+        srv, _ = stoppable
+        quiet = Tool("quiet", "Quiet", "connectivity", "Prints once, then waits.", None,
+                     lambda p: [Step([sys.executable, "-c", "import time; print('up', flush=True); time.sleep(60)"])])
+        job_id = srv.app.jobs.start(quiet, {})["job"]["id"]
+        job_stream = open_stream(srv, f"/api/jobs/{job_id}/stream")
+        stats_stream = open_stream(srv, "/api/stats/stream")
+        assert b'"up"' in read_stream(job_stream, until=b'"up"')[0]
+        assert b"event: stats" in read_stream(stats_stream, until=b"event: stats")[0]
+    
+        start = time.monotonic()
+        request(srv, "POST", "/api/shutdown", body={})
+        for sock in (job_stream, stats_stream):
+            data, closed = read_stream(sock, timeout=2.0)
+>           assert b"event: bye" in data, data[-300:]
+E           AssertionError: b''
+E           assert b'event: bye' in b''
+
+tests/test_server.py:214: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_server.py::test_streams_say_bye_and_close_on_shutdown - Ass...
+1 failed in 1.24s
+
+
+
+## restored (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 1.19s
+

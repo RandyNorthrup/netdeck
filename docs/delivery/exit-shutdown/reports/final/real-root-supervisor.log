@@ -1,0 +1,5 @@
+tool says: up as uid 0
+root-owned processes carrying the marker: [(57212, 'sh'), (57213, 'python3'), (57214, 'sh')]
+user os.kill on the root tool: Operation not permitted
+after closing stdin: exit 130 in 0.01s, output 'TOOLMARK got SIGINT'
+root processes left after 0.5 s: []

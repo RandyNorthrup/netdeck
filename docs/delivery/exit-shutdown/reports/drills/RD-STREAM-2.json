@@ -1,0 +1,31 @@
+{
+ "id": "RD-STREAM-2",
+ "ok": true,
+ "log": "docs/delivery/exit-shutdown/reports/drills/RD-STREAM-2.log",
+ "baseline_exit": 0,
+ "mutated_exit": 1,
+ "restored_exit": 0,
+ "observed": "stopped screen not shown after Ctrl+C",
+ "before": {
+  "path": "src/netdeck/static/app.js",
+  "sha256": "43a476598ab2b1d7e18d52f163e42bac41c4f1d0a22227b12c2d657253eecdbb"
+ },
+ "mutated": {
+  "path": "src/netdeck/static/app.js",
+  "sha256": "a0431ae894c9f1c64faecf4461f6433342c59b67847f4102fecdedb2d95cef9a"
+ },
+ "after": {
+  "path": "src/netdeck/static/app.js",
+  "sha256": "43a476598ab2b1d7e18d52f163e42bac41c4f1d0a22227b12c2d657253eecdbb"
+ },
+ "mutation": "src/netdeck/static/app.js: '    if (S.stopped) return;\\n    S.stopped = true;\\n' -> '    if (S.stopped || reason === \"server\") return;\\n    S.stopped = true;\\n'",
+ "command": [
+  "/usr/bin/python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests/test_ui_e2e.py::test_stopped_screen_when_server_is_stopped_from_terminal"
+ ]
+}

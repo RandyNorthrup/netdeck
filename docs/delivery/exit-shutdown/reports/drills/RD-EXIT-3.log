@@ -1,0 +1,44 @@
+# drill RD-EXIT-3: src/netdeck/server.py
+mutation: '        if self.headers.get("X-NetDeck") != "1":\n            return False\n' -> ''
+result: PASS  observed: 'assert 202 in (401, 403)'
+
+## baseline (original tree)
+exit 0
+...                                                                      [100%]
+3 passed in 0.51s
+
+
+## mutated (disposable copy)
+exit 1
+.F.                                                                      [100%]
+=================================== FAILURES ===================================
+_______ test_shutdown_refuses_unauthenticated_or_cross_origin[no-header] _______
+
+stoppable = (<netdeck.server.NetDeckHTTPServer object at 0x7fe338f98e10>, <Thread(Thread-5 (serve_forever), started daemon 140613889328832)>)
+variant = 'no-header'
+
+    @pytest.mark.parametrize("variant", ["no-cookie", "no-header", "foreign-origin"])
+    def test_shutdown_refuses_unauthenticated_or_cross_origin(stoppable, variant):
+        srv, thread = stoppable
+        kwargs = {
+            "no-cookie": {"cookie": False, "body": {}},
+            "no-header": {"headers": {"Content-Type": "application/json"}},
+            "foreign-origin": {"body": {}, "headers": {"Origin": "http://evil.example"}},
+        }[variant]
+        resp, _ = request(srv, "POST", "/api/shutdown", **kwargs)
+>       assert resp.status in (401, 403)
+E       assert 202 in (401, 403)
+E        +  where 202 = <http.client.HTTPResponse object at 0x7fe3396c4640>.status
+
+tests/test_server.py:157: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_server.py::test_shutdown_refuses_unauthenticated_or_cross_origin[no-header]
+1 failed, 2 passed in 0.57s
+
+
+
+## restored (original tree)
+exit 0
+...                                                                      [100%]
+3 passed in 0.52s
+

@@ -1,0 +1,31 @@
+{
+ "id": "RD-INST-2a",
+ "ok": true,
+ "log": "docs/delivery/exit-shutdown/reports/drills/RD-INST-2a.log",
+ "baseline_exit": 0,
+ "mutated_exit": 1,
+ "restored_exit": 0,
+ "observed": "netdeck stop returned before the server exited",
+ "before": {
+  "path": "src/netdeck/cli.py",
+  "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+ },
+ "mutated": {
+  "path": "src/netdeck/cli.py",
+  "sha256": "d9462d768fe7c995cb538febccdc24a4d11b29c1522280e4037a1fa9fc1c321b"
+ },
+ "after": {
+  "path": "src/netdeck/cli.py",
+  "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+ },
+ "mutation": "src/netdeck/cli.py: '    while time.monotonic() < deadline:\\n        if not process_alive(pid):\\n' -> '    while time.monotonic() < deadline:\\n        if True:\\n'",
+ "command": [
+  "/usr/bin/python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests/test_cli.py::test_every_shutdown_path_stops_jobs_and_cleans_up[netdeck-stop]"
+ ]
+}

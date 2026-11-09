@@ -1,0 +1,60 @@
+# drill RD-INST-2a: src/netdeck/cli.py
+mutation: '    while time.monotonic() < deadline:\n        if not process_alive(pid):\n' -> '    while time.monotonic() < deadline:\n        if True:\n'
+result: PASS  observed: 'netdeck stop returned before the server exited'
+
+## baseline (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 1.19s
+
+
+## mutated (disposable copy)
+exit 1
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______ test_every_shutdown_path_stops_jobs_and_cleans_up[netdeck-stop] ________
+
+env = {'SHELL': '/bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...}
+tmp_path = PosixPath('/tmp/pytest-of-randy/pytest-80/test_every_shutdown_path_stops0')
+trigger = 'netdeck-stop'
+
+    @pytest.mark.parametrize("trigger", ["exit-button-api", "netdeck-stop", "ctrl-c"])
+    def test_every_shutdown_path_stops_jobs_and_cleans_up(env, tmp_path, trigger):
+        proc, port, token = start_server(env, tmp_path)
+        try:
+            marker = 1000 + os.getpid() % 1000  # unusual packet size identifies our ping
+            status, _ = api(port, token, "POST", "/api/run",
+                            {"tool": "ping", "params": {"host": "127.0.0.1", "count": 0, "interval": "2",
+                                                        "size": marker}})
+            assert status == 200
+            for _ in range(50):
+                if ping_pids(marker):
+                    break
+                time.sleep(0.1)
+            assert ping_pids(marker), "precondition: the ping job never started"
+    
+            if trigger == "exit-button-api":
+                status, data = api(port, token, "POST", "/api/shutdown", {})
+                assert status == 202 and data["ok"] is True
+            elif trigger == "netdeck-stop":
+                result = netdeck(env, "stop")
+                assert result.returncode == 0, result.stderr
+                assert "Stopped NetDeck" in result.stdout
+>               assert proc.poll() is not None, "netdeck stop returned before the server exited"
+E               AssertionError: netdeck stop returned before the server exited
+E               assert None is not None
+E                +  where None = poll()
+E                +    where poll = <Popen: returncode: None args: ['/usr/bin/python3', '-m', 'netdeck', 'serve'...>.poll
+
+tests/test_cli.py:109: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_cli.py::test_every_shutdown_path_stops_jobs_and_cleans_up[netdeck-stop]
+1 failed in 0.59s
+
+
+
+## restored (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 1.20s
+

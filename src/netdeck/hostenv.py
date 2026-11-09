@@ -90,6 +90,28 @@ def graphical_session() -> bool:
     return bool(os.environ.get("WAYLAND_DISPLAY") or os.environ.get("DISPLAY"))
 
 
+# Runs as root under pkexec. NetDeck cannot signal a root-owned process, but closing this script's
+# stdin needs no privileges: end-of-file interrupts the tool (INT, then TERM, then KILL, 2 s apart).
+# The pipe also closes if NetDeck dies, so the tool cannot outlive it. The tool's argv arrives as
+# positional parameters and is never interpolated into the script.
+ELEVATED_SUPERVISOR = (
+    "exec 3<&0\n"  # background lists get /dev/null as stdin, so keep NetDeck's pipe on fd 3
+    '"$@" </dev/null 3<&- &\n'
+    "tool=$!\n"
+    '( read -r _ <&3; kill -INT "$tool" 2>/dev/null && sleep 2 && kill -TERM "$tool" 2>/dev/null'
+    ' && sleep 2 && kill -KILL "$tool" 2>/dev/null ) >/dev/null 2>&1 &\n'  # off the output pipe
+    "watcher=$!\n"
+    'wait "$tool"; status=$?\n'
+    'kill "$watcher" 2>/dev/null\n'
+    'exit "$status"\n'
+)
+
+
+def supervised(argv: List[str]) -> List[str]:
+    """Wrap ``argv`` in :data:`ELEVATED_SUPERVISOR`; the caller keeps the write end of its stdin."""
+    return [which("sh") or "/bin/sh", "-c", ELEVATED_SUPERVISOR, "netdeck-elevated"] + argv
+
+
 class Privilege:
     """How NetDeck elevates tools that need root.
 
@@ -122,9 +144,13 @@ class Privilege:
         return self.mode in ("root", "sudo", "pkexec")
 
     @property
-    def killable(self) -> bool:
-        """Can we signal an elevated child? (pkexec children run with root's real uid.)"""
-        return self.mode in ("root", "sudo")
+    def stops_via_stdin(self) -> bool:
+        """pkexec children run with root's real uid, so NetDeck cannot signal them.
+
+        They run under :data:`ELEVATED_SUPERVISOR` instead, and are stopped by closing their stdin.
+        sudo relays signals to its child, and as root NetDeck signals directly.
+        """
+        return self.mode == "pkexec"
 
     def wrap(self, argv: List[str]) -> List[str]:
         if self.mode == "root":
@@ -132,7 +158,7 @@ class Privilege:
         if self.mode == "sudo":
             return ["sudo", "-n", "--"] + argv
         if self.mode == "pkexec":
-            return ["pkexec", "--disable-internal-agent"] + argv
+            return ["pkexec", "--disable-internal-agent"] + supervised(argv)
         raise PermissionError(
             "This tool needs administrator rights, but no elevation method is available. "
             "Start a polkit agent, configure sudo, or see docs/PRIVILEGES.md."

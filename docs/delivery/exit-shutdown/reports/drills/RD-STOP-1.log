@@ -1,0 +1,138 @@
+# drill RD-STOP-1: src/netdeck/server.py
+mutation: '        self.request_shutdown("server closing")\n        self.jobs.shutdown()\n' -> '        self.request_shutdown("server closing")\n'
+result: PASS  observed: 'the ping job outlived NetDeck'
+
+## baseline (original tree)
+exit 0
+...                                                                      [100%]
+3 passed in 2.75s
+
+
+## mutated (disposable copy)
+exit 1
+00 + os.getpid() % 1000  # unusual packet size identifies our ping
+            status, _ = api(port, token, "POST", "/api/run",
+                            {"tool": "ping", "params": {"host": "127.0.0.1", "count": 0, "interval": "2",
+                                                        "size": marker}})
+            assert status == 200
+            for _ in range(50):
+                if ping_pids(marker):
+                    break
+                time.sleep(0.1)
+            assert ping_pids(marker), "precondition: the ping job never started"
+    
+            if trigger == "exit-button-api":
+                status, data = api(port, token, "POST", "/api/shutdown", {})
+                assert status == 202 and data["ok"] is True
+            elif trigger == "netdeck-stop":
+                result = netdeck(env, "stop")
+                assert result.returncode == 0, result.stderr
+                assert "Stopped NetDeck" in result.stdout
+                assert proc.poll() is not None, "netdeck stop returned before the server exited"
+            else:
+                proc.send_signal(signal.SIGINT)
+    
+            assert proc.wait(timeout=15) == 0
+>           assert ping_pids(marker) == [], "the ping job outlived NetDeck"
+E           AssertionError: the ping job outlived NetDeck
+E           assert [60283] == []
+E             
+E             Left contains one more item: 60283
+E             Use -v to get more diff
+
+tests/test_cli.py:114: AssertionError
+_______ test_every_shutdown_path_stops_jobs_and_cleans_up[netdeck-stop] ________
+
+env = {'SHELL': '/bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...}
+tmp_path = PosixPath('/tmp/pytest-of-randy/pytest-86/test_every_shutdown_path_stops1')
+trigger = 'netdeck-stop'
+
+    @pytest.mark.parametrize("trigger", ["exit-button-api", "netdeck-stop", "ctrl-c"])
+    def test_every_shutdown_path_stops_jobs_and_cleans_up(env, tmp_path, trigger):
+        proc, port, token = start_server(env, tmp_path)
+        try:
+            marker = 1000 + os.getpid() % 1000  # unusual packet size identifies our ping
+            status, _ = api(port, token, "POST", "/api/run",
+                            {"tool": "ping", "params": {"host": "127.0.0.1", "count": 0, "interval": "2",
+                                                        "size": marker}})
+            assert status == 200
+            for _ in range(50):
+                if ping_pids(marker):
+                    break
+                time.sleep(0.1)
+            assert ping_pids(marker), "precondition: the ping job never started"
+    
+            if trigger == "exit-button-api":
+                status, data = api(port, token, "POST", "/api/shutdown", {})
+                assert status == 202 and data["ok"] is True
+            elif trigger == "netdeck-stop":
+                result = netdeck(env, "stop")
+                assert result.returncode == 0, result.stderr
+                assert "Stopped NetDeck" in result.stdout
+                assert proc.poll() is not None, "netdeck stop returned before the server exited"
+            else:
+                proc.send_signal(signal.SIGINT)
+    
+            assert proc.wait(timeout=15) == 0
+>           assert ping_pids(marker) == [], "the ping job outlived NetDeck"
+E           AssertionError: the ping job outlived NetDeck
+E           assert [60283, 60292] == []
+E             
+E             Left contains 2 more items, first extra item: 60283
+E             Use -v to get more diff
+
+tests/test_cli.py:114: AssertionError
+__________ test_every_shutdown_path_stops_jobs_and_cleans_up[ctrl-c] ___________
+
+env = {'SHELL': '/bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...}
+tmp_path = PosixPath('/tmp/pytest-of-randy/pytest-86/test_every_shutdown_path_stops2')
+trigger = 'ctrl-c'
+
+    @pytest.mark.parametrize("trigger", ["exit-button-api", "netdeck-stop", "ctrl-c"])
+    def test_every_shutdown_path_stops_jobs_and_cleans_up(env, tmp_path, trigger):
+        proc, port, token = start_server(env, tmp_path)
+        try:
+            marker = 1000 + os.getpid() % 1000  # unusual packet size identifies our ping
+            status, _ = api(port, token, "POST", "/api/run",
+                            {"tool": "ping", "params": {"host": "127.0.0.1", "count": 0, "interval": "2",
+                                                        "size": marker}})
+            assert status == 200
+            for _ in range(50):
+                if ping_pids(marker):
+                    break
+                time.sleep(0.1)
+            assert ping_pids(marker), "precondition: the ping job never started"
+    
+            if trigger == "exit-button-api":
+                status, data = api(port, token, "POST", "/api/shutdown", {})
+                assert status == 202 and data["ok"] is True
+            elif trigger == "netdeck-stop":
+                result = netdeck(env, "stop")
+                assert result.returncode == 0, result.stderr
+                assert "Stopped NetDeck" in result.stdout
+                assert proc.poll() is not None, "netdeck stop returned before the server exited"
+            else:
+                proc.send_signal(signal.SIGINT)
+    
+            assert proc.wait(timeout=15) == 0
+>           assert ping_pids(marker) == [], "the ping job outlived NetDeck"
+E           AssertionError: the ping job outlived NetDeck
+E           assert [60292, 60302] == []
+E             
+E             Left contains 2 more items, first extra item: 60292
+E             Use -v to get more diff
+
+tests/test_cli.py:114: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_cli.py::test_every_shutdown_path_stops_jobs_and_cleans_up[exit-button-api]
+FAILED tests/test_cli.py::test_every_shutdown_path_stops_jobs_and_cleans_up[netdeck-stop]
+FAILED tests/test_cli.py::test_every_shutdown_path_stops_jobs_and_cleans_up[ctrl-c]
+3 failed in 2.80s
+
+
+
+## restored (original tree)
+exit 0
+...                                                                      [100%]
+3 passed in 2.86s
+

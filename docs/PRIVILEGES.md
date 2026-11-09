@@ -21,9 +21,15 @@ Interactive terminal tools are started with `sudo` inside the terminal window, w
 
 ## Stopping elevated tools
 
-With `sudo`, *Stop* signals the process normally. Processes started through `pkexec` run with root's user id
-and cannot be signalled by your user; NetDeck closes their output pipe instead, so they exit at their next
-write. Every elevated streaming tool also ends on its own (packet count, sample period, or one-shot output).
+With `sudo`, *Stop* and *Exit* signal the process normally (sudo passes the signal on).
+
+Processes started through `pkexec` run with root's user id, so your user cannot signal them. NetDeck therefore
+starts them under a tiny root-side supervisor (a fixed POSIX `sh` script; the tool's arguments are passed as
+positional parameters and never interpolated) and keeps the supervisor's stdin open. To stop the tool, NetDeck
+closes that pipe, which needs no privileges; the supervisor then sends `SIGINT` (so tools print their summary),
+then `SIGTERM` and `SIGKILL` two seconds apart. The pipe also closes if NetDeck itself dies, so an elevated
+tool cannot outlive it. Because of this, the polkit dialog names `/bin/sh` as the program to run; its details
+show the full command line.
 
 ## Optional: avoid password prompts for capture tools
 

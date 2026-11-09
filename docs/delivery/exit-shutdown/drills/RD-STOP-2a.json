@@ -1,0 +1,5 @@
+{"id": "RD-STOP-2a", "path": "src/netdeck/runner.py",
+ "old": "            # Supervised elevated child: the root-side supervisor runs the INT/TERM/KILL ladder.\n            _close_quietly(proc.stdin)\n",
+ "new": "            # Supervised elevated child: the root-side supervisor runs the INT/TERM/KILL ladder.\n",
+ "test": ["tests/test_runner.py::test_unsignalable_elevated_job_is_stopped_through_supervisor"],
+ "expect": "assert '(running|failed|done)' == 'stopped'"}

@@ -30,6 +30,7 @@ NetDeck is a **single-user, local** application. It defends against:
 | DNS rebinding | `Host` header must be `127.0.0.1`, `localhost` or `[::1]` with the instance port |
 | Other machines on the network | Binds to `127.0.0.1`; `--allow-remote` must be passed explicitly and prints a warning |
 | Unauthenticated local clients | Per-instance 256-bit random token, compared in constant time |
+| Remote shutdown (`POST /api/shutdown`) | Same token, CSRF header and Origin checks as every other state-changing request |
 | Command / option injection | No shell; argv lists only; typed validators reject leading `-`, control characters and malformed values; free-form filters are passed as a single argument after `--` |
 | XSS via tool output | Output inserted as text nodes only; strict CSP (`script-src 'self'`), no inline scripts |
 | Path traversal | Static files are served from a fixed directory with `realpath` containment |

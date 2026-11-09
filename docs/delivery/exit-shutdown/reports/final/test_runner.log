@@ -1,0 +1,18 @@
+============================= test session starts ==============================
+platform linux -- Python 3.14.9, pytest-9.2.0, pluggy-1.7.0 -- /usr/bin/python3
+rootdir: /home/randy/netdeck
+configfile: pyproject.toml
+plugins: platformdirs-4.14.3
+collecting ... collected 9 items
+
+tests/test_runner.py::test_lines_and_exit_code PASSED                    [ 11%]
+tests/test_runner.py::test_carriage_return_overwrites_line PASSED        [ 22%]
+tests/test_runner.py::test_crlf_and_partial_flush PASSED                 [ 33%]
+tests/test_runner.py::test_stop_sends_sigint PASSED                      [ 44%]
+tests/test_runner.py::test_changes_since_resume PASSED                   [ 55%]
+tests/test_runner.py::test_privileged_without_elevation_is_refused PASSED [ 66%]
+tests/test_runner.py::test_unsignalable_elevated_job_is_stopped_through_supervisor[stop] PASSED [ 77%]
+tests/test_runner.py::test_unsignalable_elevated_job_is_stopped_through_supervisor[shutdown] PASSED [ 88%]
+tests/test_runner.py::test_shutdown_stops_jobs_concurrently PASSED       [100%]
+
+============================== 9 passed in 3.74s ===============================

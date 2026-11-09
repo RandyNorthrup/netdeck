@@ -1,0 +1,31 @@
+{
+ "id": "RD-EXIT-2",
+ "ok": true,
+ "log": "docs/delivery/exit-shutdown/reports/drills/RD-EXIT-2.log",
+ "baseline_exit": 0,
+ "mutated_exit": 1,
+ "restored_exit": 0,
+ "observed": "server exited after Cancel",
+ "before": {
+  "path": "src/netdeck/static/app.js",
+  "sha256": "43a476598ab2b1d7e18d52f163e42bac41c4f1d0a22227b12c2d657253eecdbb"
+ },
+ "mutated": {
+  "path": "src/netdeck/static/app.js",
+  "sha256": "86c769d101a186f18ef223718a9e10a11c66b28ad503a4a355d057af522a8c48"
+ },
+ "after": {
+  "path": "src/netdeck/static/app.js",
+  "sha256": "43a476598ab2b1d7e18d52f163e42bac41c4f1d0a22227b12c2d657253eecdbb"
+ },
+ "mutation": "src/netdeck/static/app.js: '      if ($(\"#exit-dialog\").returnValue === \"exit\") exitNetDeck();\\n' -> '      exitNetDeck();\\n'",
+ "command": [
+  "/usr/bin/python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests/test_ui_e2e.py::test_exit_dialog_cancel_keeps_running_then_confirm_stops"
+ ]
+}

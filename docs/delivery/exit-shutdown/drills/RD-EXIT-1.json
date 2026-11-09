@@ -1,0 +1,5 @@
+{"id": "RD-EXIT-1", "path": "src/netdeck/static/app.js",
+ "old": "      await api(\"/api/shutdown\", { method: \"POST\" });\n",
+ "new": "",
+ "test": ["tests/test_ui_e2e.py::test_exit_dialog_cancel_keeps_running_then_confirm_stops"],
+ "expect": "server still running 10 s after Exit"}

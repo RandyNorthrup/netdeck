@@ -1,0 +1,91 @@
+# drill RD-STOP-2a: src/netdeck/runner.py
+mutation: '            # Supervised elevated child: the root-side supervisor runs the INT/TERM/KILL ladder.\n            _close_quietly(proc.stdin)\n' -> '            # Supervised elevated child: the root-side supervisor runs the INT/TERM/KILL ladder.\n'
+result: PASS  observed: "assert 'running' == 'stopped'"
+
+## baseline (original tree)
+exit 0
+..                                                                       [100%]
+2 passed in 0.25s
+
+
+## mutated (disposable copy)
+exit 1
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+______ test_unsignalable_elevated_job_is_stopped_through_supervisor[stop] ______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fa694ab8fc0>
+how = 'stop'
+
+    @pytest.mark.parametrize("how", ["stop", "shutdown"])
+    def test_unsignalable_elevated_job_is_stopped_through_supervisor(monkeypatch, how):
+        """A root-owned child cannot be signalled; closing the supervisor's stdin must still stop it."""
+        def refuse(pgid, sig):
+            raise PermissionError(1, "Operation not permitted")  # what os.killpg does for a root-owned child
+    
+        monkeypatch.setattr(runner.os, "killpg", refuse)
+        m = JobManager(PolkitLikePrivilege("pkexec"))
+        job = start_python(m, INTERRUPTIBLE, privileged=True)
+        assert job.elevated
+        wait_for_line(job, "up")
+        start = time.monotonic()
+        if how == "stop":
+            m.stop(job.id)
+        else:
+            m.shutdown()
+        wait(job, timeout=8)
+>       assert job.status == "stopped", job.lines
+E       AssertionError: ['up', '✗ The elevated process did not stop. Check it with your system monitor.']
+E       assert 'running' == 'stopped'
+E         
+E         - stopped
+E         + running
+
+tests/test_runner.py:151: AssertionError
+------------------------------ Captured log call -------------------------------
+ERROR    netdeck.runner:runner.py:368 job 0bf8332ecba1: elevated process did not stop
+____ test_unsignalable_elevated_job_is_stopped_through_supervisor[shutdown] ____
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fa694ab8d60>
+how = 'shutdown'
+
+    @pytest.mark.parametrize("how", ["stop", "shutdown"])
+    def test_unsignalable_elevated_job_is_stopped_through_supervisor(monkeypatch, how):
+        """A root-owned child cannot be signalled; closing the supervisor's stdin must still stop it."""
+        def refuse(pgid, sig):
+            raise PermissionError(1, "Operation not permitted")  # what os.killpg does for a root-owned child
+    
+        monkeypatch.setattr(runner.os, "killpg", refuse)
+        m = JobManager(PolkitLikePrivilege("pkexec"))
+        job = start_python(m, INTERRUPTIBLE, privileged=True)
+        assert job.elevated
+        wait_for_line(job, "up")
+        start = time.monotonic()
+        if how == "stop":
+            m.stop(job.id)
+        else:
+            m.shutdown()
+        wait(job, timeout=8)
+>       assert job.status == "stopped", job.lines
+E       AssertionError: ['up', '✗ The elevated process did not stop. Check it with your system monitor.']
+E       assert 'running' == 'stopped'
+E         
+E         - stopped
+E         + running
+
+tests/test_runner.py:151: AssertionError
+------------------------------ Captured log call -------------------------------
+ERROR    netdeck.runner:runner.py:368 job c73a96c029f1: elevated process did not stop
+ERROR    netdeck.runner:runner.py:253 jobs still running after shutdown deadline: c73a96c029f1
+=========================== short test summary info ============================
+FAILED tests/test_runner.py::test_unsignalable_elevated_job_is_stopped_through_supervisor[stop]
+FAILED tests/test_runner.py::test_unsignalable_elevated_job_is_stopped_through_supervisor[shutdown]
+2 failed in 23.29s
+
+
+
+## restored (original tree)
+exit 0
+..                                                                       [100%]
+2 passed in 0.24s
+

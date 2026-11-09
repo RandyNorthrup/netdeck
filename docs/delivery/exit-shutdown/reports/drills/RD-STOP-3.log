@@ -1,0 +1,42 @@
+# drill RD-STOP-3: src/netdeck/runner.py
+mutation: '        for thread in stoppers:\n            thread.start()\n' -> '        for job in running:\n            self._terminate(job, grace)\n        stoppers = []\n'
+result: PASS  observed: 'shutdown took 6.0s'
+
+## baseline (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 2.09s
+
+
+## mutated (disposable copy)
+exit 1
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____________________ test_shutdown_stops_jobs_concurrently _____________________
+
+    def test_shutdown_stops_jobs_concurrently():
+        """Three jobs that only exit on SIGTERM: one grace period in parallel, not three in sequence."""
+        m = manager()
+        jobs = [start_python(m, IGNORES_SIGINT) for _ in range(3)]
+        for job in jobs:
+            wait_for_line(job, "up")
+        pids = [job.proc.pid for job in jobs]
+        start = time.monotonic()
+        m.shutdown(grace=2.0)
+        elapsed = time.monotonic() - start
+>       assert elapsed < 4.0, f"shutdown took {elapsed:.1f}s"
+E       AssertionError: shutdown took 6.0s
+E       assert 6.011449012999947 < 4.0
+
+tests/test_runner.py:167: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_runner.py::test_shutdown_stops_jobs_concurrently - Assertio...
+1 failed in 6.16s
+
+
+
+## restored (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 2.08s
+

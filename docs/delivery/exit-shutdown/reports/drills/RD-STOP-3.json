@@ -1,0 +1,31 @@
+{
+ "id": "RD-STOP-3",
+ "ok": true,
+ "log": "docs/delivery/exit-shutdown/reports/drills/RD-STOP-3.log",
+ "baseline_exit": 0,
+ "mutated_exit": 1,
+ "restored_exit": 0,
+ "observed": "shutdown took 6.0s",
+ "before": {
+  "path": "src/netdeck/runner.py",
+  "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+ },
+ "mutated": {
+  "path": "src/netdeck/runner.py",
+  "sha256": "5662c914e5c458348c4ad31655bf36abe91afdf45eb746fff63127482ad99473"
+ },
+ "after": {
+  "path": "src/netdeck/runner.py",
+  "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+ },
+ "mutation": "src/netdeck/runner.py: '        for thread in stoppers:\\n            thread.start()\\n' -> '        for job in running:\\n            self._terminate(job, grace)\\n        stoppers = []\\n'",
+ "command": [
+  "/usr/bin/python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests/test_runner.py::test_shutdown_stops_jobs_concurrently"
+ ]
+}

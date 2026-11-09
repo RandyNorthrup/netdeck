@@ -1,0 +1,43 @@
+# drill RD-STREAM-2: src/netdeck/static/app.js
+mutation: '    if (S.stopped) return;\n    S.stopped = true;\n' -> '    if (S.stopped || reason === "server") return;\n    S.stopped = true;\n'
+result: PASS  observed: 'stopped screen not shown after Ctrl+C'
+
+## baseline (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 1.49s
+
+
+## mutated (disposable copy)
+exit 1
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___________ test_stopped_screen_when_server_is_stopped_from_terminal ___________
+
+browser = <test_ui_e2e.Browser object at 0x7fed4ed1d400>
+server = (<Popen: returncode: 0 args: ['/usr/bin/python3', '-m', 'netdeck', 'serve', '...>, 55919, '8hsELXGyTVw7NigStfFFGXerD4R...bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...})
+
+    def test_stopped_screen_when_server_is_stopped_from_terminal(browser, server):
+        proc, port, token, _ = server
+        open_dashboard(browser, port, token)
+        assert browser.wait_for("!!document.querySelector('.iface')"), "overview with live stats did not render"
+        proc.send_signal(signal.SIGINT)
+        assert exit_code_within(proc, 10, "SIGINT") == 0
+>       assert browser.wait_for(STOPPED_SHOWN, timeout=10), "stopped screen not shown after Ctrl+C"
+E       AssertionError: stopped screen not shown after Ctrl+C
+E       assert False
+E        +  where False = wait_for("!document.querySelector('#stopped').hidden", timeout=10)
+E        +    where wait_for = <test_ui_e2e.Browser object at 0x7fed4ed1d400>.wait_for
+
+tests/test_ui_e2e.py:172: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_ui_e2e.py::test_stopped_screen_when_server_is_stopped_from_terminal
+1 failed in 11.62s
+
+
+
+## restored (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 1.57s
+

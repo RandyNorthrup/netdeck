@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import getpass
 import logging
 import os
@@ -25,6 +26,8 @@ TRIM_CHUNK = 5_000
 MAX_JOBS_KEPT = 100
 MAX_CONCURRENT = 12
 FLUSH_PARTIAL_AFTER = 0.3  # seconds before an unterminated line is shown
+STOP_GRACE = 2.0  # seconds between INT, TERM and KILL when stopping a job
+SUPERVISOR_LADDER = 4.0  # ELEVATED_SUPERVISOR's own INT -> TERM -> KILL spacing (2 s + 2 s)
 
 
 class JobError(Exception):
@@ -53,6 +56,7 @@ class Job:
         self.cond = threading.Condition()
         self.stop_event = threading.Event()
         self.proc: Optional[subprocess.Popen] = None
+        self.thread: Optional[threading.Thread] = None
 
     # -- output ---------------------------------------------------------------
     def _bump(self) -> int:
@@ -103,6 +107,11 @@ class Job:
             self._bump()
             self.cond.notify_all()
 
+    def wake(self) -> None:
+        """Wake every stream waiting on this job (used when the server shuts down)."""
+        with self.cond:
+            self.cond.notify_all()
+
     @property
     def running(self) -> bool:
         return self.status == "running"
@@ -125,6 +134,13 @@ def _clean_env() -> Dict[str, str]:
     env.update({"TERM": "dumb", "NO_COLOR": "1", "COLUMNS": "160", "LINES": "50"})
     env.pop("CLICOLOR_FORCE", None)
     return env
+
+
+def _close_quietly(stream) -> None:
+    if stream is None:
+        return
+    with contextlib.suppress(OSError, ValueError):  # already closed by the other of stop/exec
+        stream.close()
 
 
 def resolve_argv(argv: List[str]) -> List[str]:
@@ -185,7 +201,8 @@ class JobManager:
             job.artifact = plan.artifact
             self.jobs[job.id] = job
             self._prune()
-        threading.Thread(target=self._run, args=(job, plan.steps), name=f"job-{job.id}", daemon=True).start()
+        job.thread = threading.Thread(target=self._run, args=(job, plan.steps), name=f"job-{job.id}", daemon=True)
+        job.thread.start()
         return {"job": job.summary()}
 
     def get(self, job_id: str) -> Job:
@@ -193,6 +210,11 @@ class JobManager:
         if not job:
             raise KeyError(job_id)
         return job
+
+    def running_jobs(self) -> List[Job]:
+        """Snapshot of the jobs still running, safe while other threads start jobs."""
+        with self.lock:
+            return [job for job in self.jobs.values() if job.running]
 
     def list(self) -> List[Dict]:
         return [j.summary() for j in sorted(self.jobs.values(), key=lambda j: j.started, reverse=True)]
@@ -210,11 +232,25 @@ class JobManager:
         with self.lock:
             self.jobs.pop(job_id, None)
 
-    def shutdown(self) -> None:
-        for job in list(self.jobs.values()):
-            if job.running:
-                job.stop_event.set()
-                self._terminate(job, grace=1.0)
+    def shutdown(self, grace: float = STOP_GRACE) -> None:
+        """Stop every running job at once and wait for them, bounded by the signal ladder.
+
+        Each job gets INT, then TERM, then KILL, ``grace`` seconds apart, all jobs in parallel, so
+        shutdown takes at most about ``3 * grace`` however many jobs are running.
+        """
+        running = self.running_jobs()
+        for job in running:
+            job.stop_event.set()
+            job.wake()
+        stoppers = [threading.Thread(target=self._terminate, args=(job, grace), daemon=True) for job in running]
+        for thread in stoppers:
+            thread.start()
+        deadline = time.monotonic() + 3 * grace + 1.0
+        for thread in stoppers + [job.thread for job in running if job.thread]:
+            thread.join(max(0.0, deadline - time.monotonic()))
+        survivors = [job.id for job in running if job.proc and job.proc.poll() is None]
+        if survivors:
+            log.error("jobs still running after shutdown deadline: %s", ", ".join(survivors))
 
     # -- internals ----------------------------------------------------------------
     def _build_params(self, params: Dict, elevated: bool) -> Dict:
@@ -257,19 +293,17 @@ class JobManager:
         if job.elevated:
             argv = self.privilege.wrap(argv)
         log.info("job %s exec: %s", job.id, shlex.join(argv))
-        proc = subprocess.Popen(argv, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
-                                stderr=subprocess.STDOUT, env=_clean_env(), start_new_session=True)
+        # A supervised (pkexec) child is stopped by closing its stdin, so keep the write end.
+        supervised = job.elevated and self.privilege.stops_via_stdin
+        proc = subprocess.Popen(argv, stdin=subprocess.PIPE if supervised else subprocess.DEVNULL,
+                                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=_clean_env(),
+                                start_new_session=True)
         job.proc = proc
-        self._pump(job, proc)
-        while True:
-            try:
-                code = proc.wait(timeout=1)
-                break
-            except subprocess.TimeoutExpired:
-                if job.stop_event.is_set() and job.elevated and not self.privilege.killable:
-                    # Root-owned child we may not signal: it dies on SIGPIPE at its next write.
-                    threading.Thread(target=proc.wait, daemon=True).start()
-                    return None
+        try:
+            self._pump(job, proc)
+            code = proc.wait()
+        finally:
+            _close_quietly(proc.stdin)
         if job.elevated and self.privilege.mode == "pkexec" and code in (126, 127) and not job.stop_event.is_set():
             job.emit("✗ Authorization was cancelled or denied.")
         return code
@@ -282,8 +316,6 @@ class JobManager:
         last_data = time.monotonic()
         try:
             while True:
-                if job.stop_event.is_set() and not self.privilege.killable and job.elevated:
-                    break  # closing the pipe makes the root-owned child exit via SIGPIPE
                 ready, _, _ = select.select([fd], [], [], 0.2)
                 if ready:
                     chunk = os.read(fd, 65536)
@@ -324,9 +356,18 @@ class JobManager:
                     job.close_line()
                 buf = buf[nl + 1:]
 
-    def _terminate(self, job: Job, grace: float = 2.0) -> None:
+    def _terminate(self, job: Job, grace: float = STOP_GRACE) -> None:
         proc = job.proc
         if not proc or proc.poll() is not None:
+            return
+        if proc.stdin:
+            # Supervised elevated child: the root-side supervisor runs the INT/TERM/KILL ladder.
+            _close_quietly(proc.stdin)
+            try:
+                proc.wait(timeout=SUPERVISOR_LADDER + grace)
+            except subprocess.TimeoutExpired:
+                log.error("job %s: elevated process did not stop", job.id)
+                job.emit("✗ The elevated process did not stop. Check it with your system monitor.")
             return
         for sig in (signal.SIGINT, signal.SIGTERM, signal.SIGKILL):
             try:
@@ -334,7 +375,8 @@ class JobManager:
             except ProcessLookupError:
                 return
             except PermissionError:
-                job.emit("… Stopping elevated process (it exits on its next output).")
+                log.error("job %s: not permitted to signal process group %s", job.id, proc.pid)
+                job.emit("✗ NetDeck is not permitted to stop this process.")
                 return
             try:
                 proc.wait(timeout=grace)

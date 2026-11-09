@@ -1,0 +1,5 @@
+{"id": "RD-EXIT-1api", "path": "src/netdeck/server.py",
+ "old": "        self.app.request_shutdown(\"exit requested from the dashboard\")\n",
+ "new": "",
+ "test": ["tests/test_server.py::test_shutdown_endpoint_stops_the_server"],
+ "expect": "serve_forever is still running"}

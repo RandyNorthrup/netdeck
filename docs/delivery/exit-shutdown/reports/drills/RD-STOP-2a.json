@@ -1,0 +1,31 @@
+{
+ "id": "RD-STOP-2a",
+ "ok": true,
+ "log": "docs/delivery/exit-shutdown/reports/drills/RD-STOP-2a.log",
+ "baseline_exit": 0,
+ "mutated_exit": 1,
+ "restored_exit": 0,
+ "observed": "assert 'running' == 'stopped'",
+ "before": {
+  "path": "src/netdeck/runner.py",
+  "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+ },
+ "mutated": {
+  "path": "src/netdeck/runner.py",
+  "sha256": "23b7e2913cd7d52620492241536ad39ed56f88012fc4d6ea1391c0ba831e5899"
+ },
+ "after": {
+  "path": "src/netdeck/runner.py",
+  "sha256": "c81b8f1d97f0d97777ff37e6c5a9d0f0cbd062533d2d51a6c6afe9114d0fe508"
+ },
+ "mutation": "src/netdeck/runner.py: '            # Supervised elevated child: the root-side supervisor runs the INT/TERM/KILL ladder.\\n            _close_quietly(proc.stdin)\\n' -> '            # Supervised elevated child: the root-side supervisor runs the INT/TERM/KILL ladder.\\n'",
+ "command": [
+  "/usr/bin/python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests/test_runner.py::test_unsignalable_elevated_job_is_stopped_through_supervisor"
+ ]
+}

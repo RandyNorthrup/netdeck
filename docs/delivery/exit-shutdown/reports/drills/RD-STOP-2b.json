@@ -1,0 +1,31 @@
+{
+ "id": "RD-STOP-2b",
+ "ok": true,
+ "log": "docs/delivery/exit-shutdown/reports/drills/RD-STOP-2b.log",
+ "baseline_exit": 0,
+ "mutated_exit": 1,
+ "restored_exit": 0,
+ "observed": "assert 'interrupted' in",
+ "before": {
+  "path": "src/netdeck/hostenv.py",
+  "sha256": "afd1c5aa4f7c09afc74283c0fc32fcd78fe5070497c5b8d5f591442091018d00"
+ },
+ "mutated": {
+  "path": "src/netdeck/hostenv.py",
+  "sha256": "0f4e850f15e4d911a3a68688828b37b21b32f98834b046abd2f6bedd0aa322b8"
+ },
+ "after": {
+  "path": "src/netdeck/hostenv.py",
+  "sha256": "afd1c5aa4f7c09afc74283c0fc32fcd78fe5070497c5b8d5f591442091018d00"
+ },
+ "mutation": "src/netdeck/hostenv.py: '( read -r _ <&3; kill -INT' -> '( read -r _; kill -INT'",
+ "command": [
+  "/usr/bin/python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests/test_runner.py::test_unsignalable_elevated_job_is_stopped_through_supervisor"
+ ]
+}

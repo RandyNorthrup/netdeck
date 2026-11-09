@@ -1,0 +1,31 @@
+{
+ "id": "RD-INST-2b",
+ "ok": true,
+ "log": "docs/delivery/exit-shutdown/reports/drills/RD-INST-2b.log",
+ "baseline_exit": 0,
+ "mutated_exit": 1,
+ "restored_exit": 0,
+ "observed": "stale instance.json was not removed",
+ "before": {
+  "path": "src/netdeck/cli.py",
+  "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+ },
+ "mutated": {
+  "path": "src/netdeck/cli.py",
+  "sha256": "26e7624f5e84f525c78e4a914924ddb1d9875dd79ab55e7c619aba8c02970099"
+ },
+ "after": {
+  "path": "src/netdeck/cli.py",
+  "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+ },
+ "mutation": "src/netdeck/cli.py: '        with contextlib.suppress(OSError):\\n            os.unlink(instance_file())\\n' -> ''",
+ "command": [
+  "/usr/bin/python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests/test_cli.py::test_stop_removes_a_stale_instance_file"
+ ]
+}

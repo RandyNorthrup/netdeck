@@ -1,0 +1,5 @@
+{"id": "RD-INST-2a", "path": "src/netdeck/cli.py",
+ "old": "    while time.monotonic() < deadline:\n        if not process_alive(pid):\n",
+ "new": "    while time.monotonic() < deadline:\n        if True:\n",
+ "test": ["tests/test_cli.py::test_every_shutdown_path_stops_jobs_and_cleans_up[netdeck-stop]"],
+ "expect": "netdeck stop returned before the server exited"}

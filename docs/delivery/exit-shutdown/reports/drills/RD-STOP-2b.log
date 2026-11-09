@@ -1,0 +1,84 @@
+# drill RD-STOP-2b: src/netdeck/hostenv.py
+mutation: '( read -r _ <&3; kill -INT' -> '( read -r _; kill -INT'
+result: PASS  observed: "assert 'interrupted' in"
+
+## baseline (original tree)
+exit 0
+..                                                                       [100%]
+2 passed in 0.19s
+
+
+## mutated (disposable copy)
+exit 1
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+______ test_unsignalable_elevated_job_is_stopped_through_supervisor[stop] ______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fdf8dc78fc0>
+how = 'stop'
+
+    @pytest.mark.parametrize("how", ["stop", "shutdown"])
+    def test_unsignalable_elevated_job_is_stopped_through_supervisor(monkeypatch, how):
+        """A root-owned child cannot be signalled; closing the supervisor's stdin must still stop it."""
+        def refuse(pgid, sig):
+            raise PermissionError(1, "Operation not permitted")  # what os.killpg does for a root-owned child
+    
+        monkeypatch.setattr(runner.os, "killpg", refuse)
+        m = JobManager(PolkitLikePrivilege("pkexec"))
+        job = start_python(m, INTERRUPTIBLE, privileged=True)
+        assert job.elevated
+        wait_for_line(job, "up")
+        start = time.monotonic()
+        if how == "stop":
+            m.stop(job.id)
+        else:
+            m.shutdown()
+        wait(job, timeout=8)
+        assert job.status == "stopped", job.lines
+>       assert "interrupted" in job.lines, job.lines
+E       AssertionError: ['up']
+E       assert 'interrupted' in ['up']
+E        +  where ['up'] = <netdeck.runner.Job object at 0x7fdf8dc717f0>.lines
+
+tests/test_runner.py:152: AssertionError
+____ test_unsignalable_elevated_job_is_stopped_through_supervisor[shutdown] ____
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fdf8dc78d60>
+how = 'shutdown'
+
+    @pytest.mark.parametrize("how", ["stop", "shutdown"])
+    def test_unsignalable_elevated_job_is_stopped_through_supervisor(monkeypatch, how):
+        """A root-owned child cannot be signalled; closing the supervisor's stdin must still stop it."""
+        def refuse(pgid, sig):
+            raise PermissionError(1, "Operation not permitted")  # what os.killpg does for a root-owned child
+    
+        monkeypatch.setattr(runner.os, "killpg", refuse)
+        m = JobManager(PolkitLikePrivilege("pkexec"))
+        job = start_python(m, INTERRUPTIBLE, privileged=True)
+        assert job.elevated
+        wait_for_line(job, "up")
+        start = time.monotonic()
+        if how == "stop":
+            m.stop(job.id)
+        else:
+            m.shutdown()
+        wait(job, timeout=8)
+        assert job.status == "stopped", job.lines
+>       assert "interrupted" in job.lines, job.lines
+E       AssertionError: ['up']
+E       assert 'interrupted' in ['up']
+E        +  where ['up'] = <netdeck.runner.Job object at 0x7fdf8dca8a50>.lines
+
+tests/test_runner.py:152: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_runner.py::test_unsignalable_elevated_job_is_stopped_through_supervisor[stop]
+FAILED tests/test_runner.py::test_unsignalable_elevated_job_is_stopped_through_supervisor[shutdown]
+2 failed in 4.21s
+
+
+
+## restored (original tree)
+exit 0
+..                                                                       [100%]
+2 passed in 0.20s
+

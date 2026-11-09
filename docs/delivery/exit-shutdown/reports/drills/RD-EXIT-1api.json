@@ -1,0 +1,31 @@
+{
+ "id": "RD-EXIT-1api",
+ "ok": true,
+ "log": "docs/delivery/exit-shutdown/reports/drills/RD-EXIT-1api.log",
+ "baseline_exit": 0,
+ "mutated_exit": 1,
+ "restored_exit": 0,
+ "observed": "serve_forever is still running",
+ "before": {
+  "path": "src/netdeck/server.py",
+  "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+ },
+ "mutated": {
+  "path": "src/netdeck/server.py",
+  "sha256": "0489f9632ddde7e3d65f22c14133d536a33198430da508a13919244346fb72f7"
+ },
+ "after": {
+  "path": "src/netdeck/server.py",
+  "sha256": "2525de82950e2a85259c4e6396c0cf01995341bf31c49123633d140d32519452"
+ },
+ "mutation": "src/netdeck/server.py: '        self.app.request_shutdown(\"exit requested from the dashboard\")\\n' -> ''",
+ "command": [
+  "/usr/bin/python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests/test_server.py::test_shutdown_endpoint_stops_the_server"
+ ]
+}

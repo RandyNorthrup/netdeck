@@ -1,0 +1,5 @@
+{"id": "RD-STREAM-2", "path": "src/netdeck/static/app.js",
+ "old": "    if (S.stopped) return;\n    S.stopped = true;\n",
+ "new": "    if (S.stopped || reason === \"server\") return;\n    S.stopped = true;\n",
+ "test": ["tests/test_ui_e2e.py::test_stopped_screen_when_server_is_stopped_from_terminal"],
+ "expect": "stopped screen not shown after Ctrl\\+C"}

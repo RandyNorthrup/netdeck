@@ -1,0 +1,31 @@
+{
+ "id": "RD-INST-1",
+ "ok": true,
+ "log": "docs/delivery/exit-shutdown/reports/drills/RD-INST-1.log",
+ "baseline_exit": 0,
+ "mutated_exit": 1,
+ "restored_exit": 0,
+ "observed": "instance.json was left behind",
+ "before": {
+  "path": "src/netdeck/cli.py",
+  "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+ },
+ "mutated": {
+  "path": "src/netdeck/cli.py",
+  "sha256": "67afa10ff3af2d6f5af447aecad38ad68041ce7da0b2f9e084b55787ec52f04b"
+ },
+ "after": {
+  "path": "src/netdeck/cli.py",
+  "sha256": "9143e494df07f31aabc1eb3a53f0e73cccb0a42eff01b7a864e8c3110f3f8135"
+ },
+ "mutation": "src/netdeck/cli.py: '        server.server_close()\\n        remove_instance()\\n' -> '        server.server_close()\\n'",
+ "command": [
+  "/usr/bin/python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests/test_cli.py::test_every_shutdown_path_stops_jobs_and_cleans_up"
+ ]
+}

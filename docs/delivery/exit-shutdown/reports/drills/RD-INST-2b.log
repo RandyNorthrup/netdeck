@@ -1,0 +1,47 @@
+# drill RD-INST-2b: src/netdeck/cli.py
+mutation: '        with contextlib.suppress(OSError):\n            os.unlink(instance_file())\n' -> ''
+result: PASS  observed: 'stale instance.json was not removed'
+
+## baseline (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 0.15s
+
+
+## mutated (disposable copy)
+exit 1
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___________________ test_stop_removes_a_stale_instance_file ____________________
+
+env = {'SHELL': '/bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...}
+
+    def test_stop_removes_a_stale_instance_file(env):
+        dead = subprocess.Popen(["true"])
+        dead.wait()
+        os.makedirs(os.path.dirname(instance_path(env)), mode=0o700, exist_ok=True)
+        with open(instance_path(env), "w", encoding="utf-8") as fh:
+            json.dump({"pid": dead.pid, "port": free_port(), "url": "http://127.0.0.1:1/?token=x"}, fh)
+        result = netdeck(env, "stop")
+        assert result.returncode == 0
+        assert "not running" in result.stdout
+>       assert not os.path.exists(instance_path(env)), "stale instance.json was not removed"
+E       AssertionError: stale instance.json was not removed
+E       assert not True
+E        +  where True = <function exists at 0x7fd50b38ddd0>('/tmp/pytest-of-randy/pytest-83/test_stop_removes_a_stale_inst0/run/netdeck/instance.json')
+E        +    where <function exists at 0x7fd50b38ddd0> = <module 'posixpath' (frozen)>.exists
+E        +      where <module 'posixpath' (frozen)> = os.path
+E        +    and   '/tmp/pytest-of-randy/pytest-83/test_stop_removes_a_stale_inst0/run/netdeck/instance.json' = instance_path({'SHELL': '/bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...})
+
+tests/test_cli.py:133: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_cli.py::test_stop_removes_a_stale_instance_file - Assertion...
+1 failed in 0.23s
+
+
+
+## restored (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 0.17s
+

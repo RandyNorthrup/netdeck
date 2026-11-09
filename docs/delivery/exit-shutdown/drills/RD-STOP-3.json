@@ -1,0 +1,5 @@
+{"id": "RD-STOP-3", "path": "src/netdeck/runner.py",
+ "old": "        for thread in stoppers:\n            thread.start()\n",
+ "new": "        for job in running:\n            self._terminate(job, grace)\n        stoppers = []\n",
+ "test": ["tests/test_runner.py::test_shutdown_stops_jobs_concurrently"],
+ "expect": "shutdown took \\d+\\.\\ds"}

@@ -1,0 +1,116 @@
+# drill RD-INST-1: src/netdeck/cli.py
+mutation: '        server.server_close()\n        remove_instance()\n' -> '        server.server_close()\n'
+result: PASS  observed: 'instance.json was left behind'
+
+## baseline (original tree)
+exit 0
+...                                                                      [100%]
+3 passed in 2.75s
+
+
+## mutated (disposable copy)
+exit 1
+)>.exists
+E            +      where <module 'posixpath' (frozen)> = os.path
+E            +    and   '/tmp/pytest-of-randy/pytest-77/test_every_shutdown_path_stops0/run/netdeck/instance.json' = instance_path({'SHELL': '/bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...})
+
+tests/test_cli.py:115: AssertionError
+_______ test_every_shutdown_path_stops_jobs_and_cleans_up[netdeck-stop] ________
+
+env = {'SHELL': '/bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...}
+tmp_path = PosixPath('/tmp/pytest-of-randy/pytest-77/test_every_shutdown_path_stops1')
+trigger = 'netdeck-stop'
+
+    @pytest.mark.parametrize("trigger", ["exit-button-api", "netdeck-stop", "ctrl-c"])
+    def test_every_shutdown_path_stops_jobs_and_cleans_up(env, tmp_path, trigger):
+        proc, port, token = start_server(env, tmp_path)
+        try:
+            marker = 1000 + os.getpid() % 1000  # unusual packet size identifies our ping
+            status, _ = api(port, token, "POST", "/api/run",
+                            {"tool": "ping", "params": {"host": "127.0.0.1", "count": 0, "interval": "2",
+                                                        "size": marker}})
+            assert status == 200
+            for _ in range(50):
+                if ping_pids(marker):
+                    break
+                time.sleep(0.1)
+            assert ping_pids(marker), "precondition: the ping job never started"
+    
+            if trigger == "exit-button-api":
+                status, data = api(port, token, "POST", "/api/shutdown", {})
+                assert status == 202 and data["ok"] is True
+            elif trigger == "netdeck-stop":
+                result = netdeck(env, "stop")
+                assert result.returncode == 0, result.stderr
+                assert "Stopped NetDeck" in result.stdout
+                assert proc.poll() is not None, "netdeck stop returned before the server exited"
+            else:
+                proc.send_signal(signal.SIGINT)
+    
+            assert proc.wait(timeout=15) == 0
+            assert ping_pids(marker) == [], "the ping job outlived NetDeck"
+>           assert not os.path.exists(instance_path(env)), "instance.json was left behind"
+E           AssertionError: instance.json was left behind
+E           assert not True
+E            +  where True = <function exists at 0x7f479838ddd0>('/tmp/pytest-of-randy/pytest-77/test_every_shutdown_path_stops1/run/netdeck/instance.json')
+E            +    where <function exists at 0x7f479838ddd0> = <module 'posixpath' (frozen)>.exists
+E            +      where <module 'posixpath' (frozen)> = os.path
+E            +    and   '/tmp/pytest-of-randy/pytest-77/test_every_shutdown_path_stops1/run/netdeck/instance.json' = instance_path({'SHELL': '/bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...})
+
+tests/test_cli.py:115: AssertionError
+__________ test_every_shutdown_path_stops_jobs_and_cleans_up[ctrl-c] ___________
+
+env = {'SHELL': '/bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...}
+tmp_path = PosixPath('/tmp/pytest-of-randy/pytest-77/test_every_shutdown_path_stops2')
+trigger = 'ctrl-c'
+
+    @pytest.mark.parametrize("trigger", ["exit-button-api", "netdeck-stop", "ctrl-c"])
+    def test_every_shutdown_path_stops_jobs_and_cleans_up(env, tmp_path, trigger):
+        proc, port, token = start_server(env, tmp_path)
+        try:
+            marker = 1000 + os.getpid() % 1000  # unusual packet size identifies our ping
+            status, _ = api(port, token, "POST", "/api/run",
+                            {"tool": "ping", "params": {"host": "127.0.0.1", "count": 0, "interval": "2",
+                                                        "size": marker}})
+            assert status == 200
+            for _ in range(50):
+                if ping_pids(marker):
+                    break
+                time.sleep(0.1)
+            assert ping_pids(marker), "precondition: the ping job never started"
+    
+            if trigger == "exit-button-api":
+                status, data = api(port, token, "POST", "/api/shutdown", {})
+                assert status == 202 and data["ok"] is True
+            elif trigger == "netdeck-stop":
+                result = netdeck(env, "stop")
+                assert result.returncode == 0, result.stderr
+                assert "Stopped NetDeck" in result.stdout
+                assert proc.poll() is not None, "netdeck stop returned before the server exited"
+            else:
+                proc.send_signal(signal.SIGINT)
+    
+            assert proc.wait(timeout=15) == 0
+            assert ping_pids(marker) == [], "the ping job outlived NetDeck"
+>           assert not os.path.exists(instance_path(env)), "instance.json was left behind"
+E           AssertionError: instance.json was left behind
+E           assert not True
+E            +  where True = <function exists at 0x7f479838ddd0>('/tmp/pytest-of-randy/pytest-77/test_every_shutdown_path_stops2/run/netdeck/instance.json')
+E            +    where <function exists at 0x7f479838ddd0> = <module 'posixpath' (frozen)>.exists
+E            +      where <module 'posixpath' (frozen)> = os.path
+E            +    and   '/tmp/pytest-of-randy/pytest-77/test_every_shutdown_path_stops2/run/netdeck/instance.json' = instance_path({'SHELL': '/bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...})
+
+tests/test_cli.py:115: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_cli.py::test_every_shutdown_path_stops_jobs_and_cleans_up[exit-button-api]
+FAILED tests/test_cli.py::test_every_shutdown_path_stops_jobs_and_cleans_up[netdeck-stop]
+FAILED tests/test_cli.py::test_every_shutdown_path_stops_jobs_and_cleans_up[ctrl-c]
+3 failed in 2.91s
+
+
+
+## restored (original tree)
+exit 0
+...                                                                      [100%]
+3 passed in 2.75s
+

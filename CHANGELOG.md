@@ -5,6 +5,19 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+- **Exit** button (top-right power icon) with a confirmation dialog that lists the tools it will stop, and a
+  "NetDeck has stopped" screen. Open pages also switch to that screen when NetDeck is stopped elsewhere.
+- `POST /api/shutdown`, protected like every other state-changing request.
+
+### Fixed
+- Tools elevated through polkit can now be stopped: they run under a root-side supervisor that interrupts them
+  when NetDeck closes its stdin. Previously Stop and shutdown could leave them running as root.
+- Shutdown stops all running jobs in parallel under one deadline instead of one after another.
+- Live output streams end promptly on shutdown with a goodbye event instead of waiting up to 15 s.
+- `netdeck stop` waits for the server to exit and reports failure if it does not, and a stale `instance.json`
+  left by a crash is removed.
+
 ### Changed
 - Minimum Python is now 3.10 (3.9 is end-of-life and unavailable on current CI runners); CI tests 3.10–3.14.
 - CI actions updated to their Node 24 releases.

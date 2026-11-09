@@ -48,6 +48,7 @@
     pulse: '<path d="M3 12h4l3 8 4-16 3 8h4"/>',
     server: '<rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6 6h.01"/><path d="M6 18h.01"/>',
     link: '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
+    power: '<path d="M12 2v10"/><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/>',
     route: '<circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/>',
   };
   const icon = (name, cls = "") =>
@@ -146,6 +147,7 @@
     meta: null, categories: [], tools: [], byId: {}, system: null,
     lastJob: store.get("lastJob", {}), // toolId -> jobId
     jobs: [], cleanup: [], history: {}, // iface -> [{rx,tx}]
+    stopped: false, exiting: false, unreachable: 0, jobsTimer: 0,
   };
   const STATUS = {
     running: ["run", "Running"], done: ["ok", "Completed"], failed: ["fail", "Failed"],
@@ -433,6 +435,7 @@
       const data = JSON.parse(ev.data);
       for (const [name, card] of Object.entries(live)) if (data.rates[name]) card.update(data.rates[name]);
     });
+    es.addEventListener("bye", () => showStopped("server"));
     onCleanup(() => es.close());
   }
 
@@ -802,6 +805,7 @@
         openIdx = data.open && data.lines.length ? data.lines[data.lines.length - 1][0] : -1;
         if (!raf) raf = requestAnimationFrame(flush);
       });
+      es.addEventListener("bye", () => { es.close(); showStopped("server"); });
       es.addEventListener("end", (ev) => {
         es.close();
         const job = JSON.parse(ev.data);
@@ -996,12 +1000,65 @@
   // ───────────────────────────────── data ──────────────────────────────────
   async function refreshSystem() { S.system = await api("/api/system"); }
   async function refreshJobs() {
+    if (S.stopped) return;
     try {
       S.jobs = (await api("/api/jobs")).jobs;
+      S.unreachable = 0;
       const route = parseRoute();
       renderNav(route);
       if (S.onJobs) S.onJobs();
-    } catch { /* transient */ }
+    } catch (err) {
+      // fetch() rejects with TypeError when nothing answers: two misses in a row means the server is gone.
+      if (err instanceof TypeError && ++S.unreachable >= 2) showStopped("server");
+    }
+  }
+
+  // ───────────────────────────────── exit ──────────────────────────────────
+  async function openExitDialog() {
+    if (S.stopped) return;
+    await refreshJobs();
+    const running = S.jobs.filter((j) => j.status === "running");
+    $("#exit-jobs").hidden = running.length === 0;
+    $("#exit-jobs-title").textContent = running.length === 1
+      ? "1 running tool will be stopped:" : `${running.length} running tools will be stopped:`;
+    const items = running.slice(0, 8).map((j) => h("li", null, j.name));
+    if (running.length > 8) items.push(h("li", null, `…and ${running.length - 8} more`));
+    $("#exit-jobs-list").replaceChildren(...items);
+    const dialog = $("#exit-dialog");
+    dialog.returnValue = "";
+    dialog.showModal();
+  }
+
+  async function exitNetDeck() {
+    S.exiting = true;
+    $("#exit-btn").disabled = true;
+    try {
+      await api("/api/shutdown", { method: "POST" });
+      showStopped("exit");
+    } catch (err) {
+      S.exiting = false;
+      $("#exit-btn").disabled = false;
+      toast("fail", "Couldn't exit NetDeck", err.message);
+    }
+  }
+
+  function showStopped(reason) {
+    if (S.stopped) return;
+    S.stopped = true;
+    clearInterval(S.jobsTimer);
+    runCleanup(); // closes this page's live streams
+    const dialog = $("#exit-dialog");
+    if (dialog.open) dialog.close();
+    const byUser = reason === "exit" || S.exiting;
+    $("#stopped-title").textContent = byUser ? "NetDeck has stopped" : "NetDeck was stopped";
+    $("#stopped-text").textContent = byUser
+      ? "Every running tool was stopped. You can close this window."
+      : "The NetDeck server is no longer running — it was shut down somewhere else, for example from a terminal.";
+    $("#app").inert = true;
+    $("#stopped").hidden = false;
+    $("#stopped-title").focus();
+    // An app window opened by `netdeck` may close itself; a normal tab refuses, and the screen stays.
+    if (byUser) setTimeout(() => window.close(), 1200);
   }
 
   async function boot() {
@@ -1010,6 +1067,9 @@
     $("#search-icon").innerHTML = icon("search", "sm");
     $("#palette-icon").innerHTML = icon("search");
     $("#menu-btn").innerHTML = icon("menu");
+    $("#exit-btn").innerHTML = icon("power");
+    $("#exit-icon").innerHTML = icon("power", "lg");
+    $("#stopped-icon").innerHTML = icon("power");
     try {
       const [meta, tools] = await Promise.all([api("/api/meta"), api("/api/tools"), refreshSystem()]);
       S.meta = meta; S.categories = tools.categories; S.tools = tools.tools;
@@ -1022,7 +1082,12 @@
     window.addEventListener("hashchange", navigate);
     navigate();
     refreshJobs();
-    setInterval(refreshJobs, 3000);
+    S.jobsTimer = setInterval(refreshJobs, 3000);
+
+    $("#exit-btn").addEventListener("click", openExitDialog);
+    $("#exit-dialog").addEventListener("close", () => {
+      if ($("#exit-dialog").returnValue === "exit") exitNetDeck();
+    });
 
     $("#theme-btn").addEventListener("click", () => {
       const dark = document.documentElement.getAttribute("data-theme") === "dark";

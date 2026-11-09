@@ -1,0 +1,11 @@
+============================= test session starts ==============================
+platform linux -- Python 3.14.9, pytest-9.2.0, pluggy-1.7.0 -- /usr/bin/python3
+rootdir: /home/randy/netdeck
+configfile: pyproject.toml
+plugins: platformdirs-4.14.3
+collecting ... collected 2 items
+
+tests/test_ui_e2e.py::test_exit_dialog_cancel_keeps_running_then_confirm_stops PASSED [ 50%]
+tests/test_ui_e2e.py::test_stopped_screen_when_server_is_stopped_from_terminal PASSED [100%]
+
+============================== 2 passed in 5.54s ===============================

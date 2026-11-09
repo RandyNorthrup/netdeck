@@ -26,7 +26,7 @@ classifiers = [
 dependencies = []  # standard library only, by design
 
 [project.optional-dependencies]
-dev = ["pytest>=7", "ruff>=0.5"]
+dev = ["pytest>=7", "ruff>=0.5", "websocket-client>=1.6"]
 
 [project.urls]
 Homepage = "https://github.com/randynorthrup/netdeck"

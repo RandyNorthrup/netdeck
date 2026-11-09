@@ -1,0 +1,25 @@
+============================= test session starts ==============================
+platform linux -- Python 3.14.9, pytest-9.2.0, pluggy-1.7.0 -- /usr/bin/python3
+rootdir: /home/randy/netdeck
+configfile: pyproject.toml
+plugins: platformdirs-4.14.3
+collecting ... collected 16 items
+
+tests/test_server.py::test_requires_auth PASSED                          [  6%]
+tests/test_server.py::test_rejects_foreign_host PASSED                   [ 12%]
+tests/test_server.py::test_post_requires_custom_header PASSED            [ 18%]
+tests/test_server.py::test_post_rejects_cross_origin PASSED              [ 25%]
+tests/test_server.py::test_token_login_sets_cookie PASSED                [ 31%]
+tests/test_server.py::test_security_headers PASSED                       [ 37%]
+tests/test_server.py::test_static_no_traversal PASSED                    [ 43%]
+tests/test_server.py::test_tools_catalog PASSED                          [ 50%]
+tests/test_server.py::test_preview_validation PASSED                     [ 56%]
+tests/test_server.py::test_run_unknown_tool PASSED                       [ 62%]
+tests/test_server.py::test_builtin_job_lifecycle PASSED                  [ 68%]
+tests/test_server.py::test_shutdown_refuses_unauthenticated_or_cross_origin[no-cookie] PASSED [ 75%]
+tests/test_server.py::test_shutdown_refuses_unauthenticated_or_cross_origin[no-header] PASSED [ 81%]
+tests/test_server.py::test_shutdown_refuses_unauthenticated_or_cross_origin[foreign-origin] PASSED [ 87%]
+tests/test_server.py::test_shutdown_endpoint_stops_the_server PASSED     [ 93%]
+tests/test_server.py::test_streams_say_bye_and_close_on_shutdown PASSED  [100%]
+
+============================== 16 passed in 2.11s ==============================

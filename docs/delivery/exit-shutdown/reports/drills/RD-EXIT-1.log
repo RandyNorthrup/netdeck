@@ -1,0 +1,123 @@
+# drill RD-EXIT-1: src/netdeck/static/app.js
+mutation: '      await api("/api/shutdown", { method: "POST" });\n' -> ''
+result: PASS  observed: 'server still running 10 s after Exit'
+
+## baseline (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 3.84s
+
+
+## mutated (disposable copy)
+exit 1
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___________ test_exit_dialog_cancel_keeps_running_then_confirm_stops ___________
+
+proc = <Popen: returncode: None args: ['/usr/bin/python3', '-m', 'netdeck', 'serve'...>
+seconds = 10, what = 'Exit'
+
+    def exit_code_within(proc, seconds, what):
+        try:
+>           return proc.wait(timeout=seconds)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_ui_e2e.py:118: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.14/subprocess.py:1279: in wait
+    return self._wait(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <Popen: returncode: None args: ['/usr/bin/python3', '-m', 'netdeck', 'serve'...>
+timeout = 10
+
+    def _wait(self, timeout):
+        """Internal implementation of wait() on POSIX."""
+        if self.returncode is not None:
+            return self.returncode
+    
+        if timeout is not None:
+            endtime = _time() + timeout
+            # Enter a busy loop if we have a timeout.  This busy loop was
+            # cribbed from Lib/threading.py in Thread.wait() at r71065.
+            delay = 0.0005 # 500 us -> initial delay of 1 ms
+            while True:
+                if self._waitpid_lock.acquire(False):
+                    try:
+                        if self.returncode is not None:
+                            break  # Another thread waited.
+                        (pid, sts) = self._try_wait(os.WNOHANG)
+                        assert pid == self.pid or pid == 0
+                        if pid == self.pid:
+                            self._handle_exitstatus(sts)
+                            break
+                    finally:
+                        self._waitpid_lock.release()
+                remaining = self._remaining_time(endtime)
+                if remaining <= 0:
+>                   raise TimeoutExpired(self.args, timeout)
+E                   subprocess.TimeoutExpired: Command '['/usr/bin/python3', '-m', 'netdeck', 'serve', '--no-browser', '--port', '56585']' timed out after 10 seconds
+
+/usr/lib/python3.14/subprocess.py:2076: TimeoutExpired
+
+During handling of the above exception, another exception occurred:
+
+browser = <test_ui_e2e.Browser object at 0x7f8187fb1400>
+server = (<Popen: returncode: None args: ['/usr/bin/python3', '-m', 'netdeck', 'serve'...>, 56585, 'XN65FdQVMKaFTcU6Z2SYgWVjfII...bin/bash', 'COREPACK_ENABLE_AUTO_PIN': '0', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', ...})
+
+    def test_exit_dialog_cancel_keeps_running_then_confirm_stops(browser, server):
+        proc, port, token, _ = server
+        open_dashboard(browser, port, token)
+        api(port, token, "POST", "/api/run", {"tool": "ping", "params": {"host": "127.0.0.1", "count": 0}})
+    
+        # Cancel with the button, then with Escape: nothing is shut down.
+        browser.js("document.querySelector('#exit-btn').click()")
+        assert browser.wait_for(DIALOG_OPEN), "exit dialog did not open"
+        assert "Exit NetDeck?" in browser.js("document.querySelector('#exit-dialog').innerText")
+        assert browser.wait_for("document.querySelector('#exit-jobs-list').innerText.includes('Ping')"), \
+            "running tool not listed"
+        browser.js("document.querySelector('#exit-cancel').click()")
+        assert browser.wait_for(f"!{DIALOG_OPEN}"), "cancel did not close the dialog"
+        assert_still_running(proc, port, "Cancel")
+        browser.js("document.querySelector('#exit-btn').click()")
+        assert browser.wait_for(DIALOG_OPEN), "exit dialog did not reopen"
+        browser.press_escape()
+        assert browser.wait_for(f"!{DIALOG_OPEN}"), "Escape did not close the dialog"
+        assert_still_running(proc, port, "Escape")
+        assert not browser.js(STOPPED_SHOWN)
+    
+        # Confirm: the page shows the stopped screen and the server exits cleanly.
+        browser.js("document.querySelector('#exit-btn').click()")
+        assert browser.wait_for(DIALOG_OPEN)
+        browser.js("document.querySelector('#exit-confirm').click()")
+        assert browser.wait_for(STOPPED_SHOWN), "stopped screen not shown after Exit"
+        assert browser.js("document.querySelector('#stopped-title').innerText") == "NetDeck has stopped"
+>       assert exit_code_within(proc, 10, "Exit") == 0
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_ui_e2e.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+proc = <Popen: returncode: None args: ['/usr/bin/python3', '-m', 'netdeck', 'serve'...>
+seconds = 10, what = 'Exit'
+
+    def exit_code_within(proc, seconds, what):
+        try:
+            return proc.wait(timeout=seconds)
+        except subprocess.TimeoutExpired:
+>           pytest.fail(f"server still running {seconds} s after {what}")
+E           Failed: server still running 10 s after Exit
+
+tests/test_ui_e2e.py:120: Failed
+=========================== short test summary info ============================
+FAILED tests/test_ui_e2e.py::test_exit_dialog_cancel_keeps_running_then_confirm_stops
+1 failed in 13.67s
+
+
+
+## restored (original tree)
+exit 0
+.                                                                        [100%]
+1 passed in 3.85s
+

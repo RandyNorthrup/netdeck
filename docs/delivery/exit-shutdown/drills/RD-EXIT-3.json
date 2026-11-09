@@ -1,0 +1,5 @@
+{"id": "RD-EXIT-3", "path": "src/netdeck/server.py",
+ "old": "        if self.headers.get(\"X-NetDeck\") != \"1\":\n            return False\n",
+ "new": "",
+ "test": ["tests/test_server.py::test_shutdown_refuses_unauthenticated_or_cross_origin"],
+ "expect": "assert 202 in \\(401, 403\\)"}

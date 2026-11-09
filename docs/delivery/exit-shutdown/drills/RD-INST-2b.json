@@ -1,0 +1,5 @@
+{"id": "RD-INST-2b", "path": "src/netdeck/cli.py",
+ "old": "        with contextlib.suppress(OSError):\n            os.unlink(instance_file())\n",
+ "new": "",
+ "test": ["tests/test_cli.py::test_stop_removes_a_stale_instance_file"],
+ "expect": "stale instance.json was not removed"}

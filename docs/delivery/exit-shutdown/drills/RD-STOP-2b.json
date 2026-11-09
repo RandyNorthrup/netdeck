@@ -1,0 +1,5 @@
+{"id": "RD-STOP-2b", "path": "src/netdeck/hostenv.py",
+ "old": "( read -r _ <&3; kill -INT",
+ "new": "( read -r _; kill -INT",
+ "test": ["tests/test_runner.py::test_unsignalable_elevated_job_is_stopped_through_supervisor"],
+ "expect": "never saw 'up'|assert 'interrupted' in|assert '(failed|done)' == 'stopped'"}

@@ -56,12 +56,51 @@ class App:
         self.privilege = Privilege(config.privilege)
         self.jobs = JobManager(self.privilege, config.terminal)
         self.shutdown = threading.Event()
+        # Called once when shutdown is requested; the owner of serve_forever sets it to stop the loop.
+        self.on_shutdown: Optional[Callable[[], None]] = None
+        self._shutdown_lock = threading.Lock()
+        self._streams = 0
+        self._streams_cond = threading.Condition()
         self.set_port(port)
 
     def set_port(self, port: int) -> None:
         self.port = port
         self.cookie_name = f"netdeck_{port}"
         self.allowed_hosts = {f"{h}:{port}" for h in ("127.0.0.1", "localhost", "[::1]")}
+
+    def request_shutdown(self, reason: str) -> bool:
+        """Begin shutting down (idempotent). Streams are woken so they can say goodbye."""
+        with self._shutdown_lock:
+            if self.shutdown.is_set():
+                return False
+            self.shutdown.set()
+        log.info("shutting down: %s", reason)
+        with self.jobs.lock:
+            jobs = list(self.jobs.jobs.values())
+        for job in jobs:
+            job.wake()
+        if self.on_shutdown:
+            self.on_shutdown()
+        return True
+
+    def close(self, stream_drain: float = 2.0) -> None:
+        """Stop every job and give open streams a moment to send their goodbye."""
+        self.request_shutdown("server closing")
+        self.jobs.shutdown()
+        with self._streams_cond:
+            self._streams_cond.wait_for(lambda: self._streams == 0, timeout=stream_drain)
+
+    @contextlib.contextmanager
+    def stream(self):
+        """Count a live Server-Sent Events stream for the duration of the block."""
+        with self._streams_cond:
+            self._streams += 1
+        try:
+            yield
+        finally:
+            with self._streams_cond:
+                self._streams -= 1
+                self._streams_cond.notify_all()
 
     def reload_privilege(self) -> None:
         self.privilege = Privilege(self.config.privilege)
@@ -368,24 +407,32 @@ class Handler(BaseHTTPRequestHandler):
         last_id = self.headers.get("Last-Event-ID") or self.query.get("resume")
         if last_id and re.fullmatch(r"\d+:\d+", last_id):
             cursor, rev = (int(x) for x in last_id.split(":"))
-        self._sse_open()
-        self._sse("meta", job.summary())
-        while not self.app.shutdown.is_set():
-            was_running = job.running
-            lines, cursor, rev = job.changes_since(cursor, rev)
-            if lines:
-                self._sse("lines", {"lines": lines, "open": job.open_line}, f"{cursor}:{rev}")
-            if not was_running:
-                self._sse("end", job.summary())
-                return
-            with job.cond:
-                changed = job.cond.wait_for(lambda seen=rev: job.rev != seen, timeout=15)
-            if not changed:
-                self.wfile.write(b": keepalive\n\n")
-                self.wfile.flush()
+        with self.app.stream():
+            self._sse_open()
+            self._sse("meta", job.summary())
+            while not self.app.shutdown.is_set():
+                was_running = job.running
+                lines, cursor, rev = job.changes_since(cursor, rev)
+                if lines:
+                    self._sse("lines", {"lines": lines, "open": job.open_line}, f"{cursor}:{rev}")
+                if not was_running:
+                    self._sse("end", job.summary())
+                    return
+                with job.cond:
+                    changed = job.cond.wait_for(
+                        lambda seen=rev: job.rev != seen or self.app.shutdown.is_set(), timeout=15)
+                if not changed:
+                    self.wfile.write(b": keepalive\n\n")
+                    self.wfile.flush()
+            self._sse("bye", {"reason": "shutdown"})
 
     def api_stats_stream(self) -> None:
-        self._sse_open()
+        with self.app.stream():
+            self._sse_open()
+            self._stats_loop()
+            self._sse("bye", {"reason": "shutdown"})
+
+    def _stats_loop(self) -> None:
         prev, prev_t = sysinfo.counters(), time.monotonic()
         while not self.app.shutdown.wait(1.0):
             cur, now = sysinfo.counters(), time.monotonic()
@@ -402,6 +449,12 @@ class Handler(BaseHTTPRequestHandler):
                     }
             self._sse("stats", {"t": time.time(), "rates": rates})
             prev, prev_t = cur, now
+
+    def api_shutdown(self) -> None:
+        running = len(self.app.jobs.running_jobs())
+        self.close_connection = True
+        self._send_json({"ok": True, "stopping_jobs": running}, HTTPStatus.ACCEPTED)
+        self.app.request_shutdown("exit requested from the dashboard")
 
     def api_settings(self) -> None:
         self._send_json(self.app.settings())
@@ -440,6 +493,7 @@ ROUTES: List[Route] = [
     _r("GET", r"/api/stats/stream", Handler.api_stats_stream),
     _r("GET", r"/api/settings", Handler.api_settings),
     _r("POST", r"/api/settings", Handler.api_settings_update),
+    _r("POST", r"/api/shutdown", Handler.api_shutdown),
 ]
 
 
